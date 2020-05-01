@@ -1,0 +1,21 @@
+<idea-plugin>
+    <id>lekanich.Eye-Health</id>
+    <name>Eye Health</name>
+    <vendor email="lekan1992@gmail.com" url="https://github.com/Lekanich/Eye-Health">Aleksandr Zhelezniak</vendor>
+
+    <description><![CDATA[
+    It's a tool to help to manage your staring time to the display.<br>
+    ]]></description>
+
+    <!-- please see https://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
+         on how to target different products -->
+    <depends>com.intellij.modules.platform</depends>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <!-- Add your extensions here -->
+    </extensions>
+
+    <actions>
+        <!-- Add your actions here -->
+    </actions>
+</idea-plugin>
