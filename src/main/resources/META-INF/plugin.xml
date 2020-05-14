@@ -1,21 +1,25 @@
 <idea-plugin>
-    <id>lekanich.Eye-Health</id>
-    <name>Eye Health</name>
-    <vendor email="lekan1992@gmail.com" url="https://github.com/Lekanich/Eye-Health">Aleksandr Zhelezniak</vendor>
+	<id>lekanich.Eye-Health</id>
+	<name>Eye Health</name>
+	<vendor email="lekan1992@gmail.com" url="https://github.com/Lekanich/Eye-Health">Aleksandr Zhelezniak</vendor>
 
-    <description><![CDATA[
+	<description><![CDATA[
     It's a tool to help to manage your staring time to the display.<br>
     ]]></description>
 
-    <!-- please see https://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
-         on how to target different products -->
-    <depends>com.intellij.modules.platform</depends>
+	<!-- please see https://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
+		 on how to target different products -->
+	<depends>com.intellij.modules.platform</depends>
 
-    <extensions defaultExtensionNs="com.intellij">
-        <!-- Add your extensions here -->
-    </extensions>
+	<extensions defaultExtensionNs="com.intellij">
+		<postStartupActivity implementation="lekanich.eye.EyePostStartupActivity"/>
 
-    <actions>
-        <!-- Add your actions here -->
-    </actions>
+		<applicationService serviceImplementation="lekanich.eye.settings.ApplicationSettings"/>
+
+		<applicationConfigurable instance="lekanich.eye.settings.ApplicationSettingsPage"/>
+	</extensions>
+
+	<actions>
+		<action id="lekanich.eyeHelp" class="lekanich.eye.action.EyeHelpAction" text="EyeHelp" description="Start Eye Help"/>
+	</actions>
 </idea-plugin>

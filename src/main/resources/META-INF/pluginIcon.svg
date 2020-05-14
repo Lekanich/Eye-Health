@@ -1,0 +1,12 @@
+<svg width="40" height="40" xmlns="http://www.w3.org/2000/svg">
+	<g>
+		<title>background</title>
+		<rect fill="#fff" id="canvas_background" height="42" width="42" y="-1" x="-1"/>
+	</g>
+	<g>
+		<title>Layer 1</title>
+		<ellipse ry="7" rx="18" id="svg_1" cy="19.965821" cx="19.687503" stroke-width="0.5" stroke="#000" fill="#ffffff"/>
+		<ellipse ry="6" rx="7" id="svg_2" cy="20" cx="20" stroke-width="0.5" stroke="#000" fill="#007f00"/>
+		<ellipse ry="2" rx="2" id="svg_3" cy="20" cx="20" stroke-width="0.5" stroke="#000" fill="#000000"/>
+	</g>
+</svg>
