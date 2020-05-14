@@ -115,7 +115,7 @@ public class EyeHelpDialog extends DialogWrapper {
 
 		ApplicationManager.getApplication().getMessageBus()
 				.syncPublisher(EyeHelpListener.EYE_HELP_TOPIC)
-				.scheduleEyeHelp(TimeUnit.MINUTES.toSeconds(state.getWorkingTimeBetweenShortBreaksMin()));
+				.scheduleEyeHelp(TimeUnit.MINUTES.toSeconds(state.getDurationWorkBeforeBreak()));
 	}
 
 	@Override

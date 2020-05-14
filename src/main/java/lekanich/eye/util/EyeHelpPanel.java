@@ -54,7 +54,7 @@ public class EyeHelpPanel extends JBPanel<EyeHelpPanel> {
 	}
 
 	private void startRefreshSeconds() {
-		secondsToRest.set(component.getState().getShortBreakDurationSec());
+		secondsToRest.set(component.getState().getDurationBreak());
 
 		ScheduledExecutorService service = Executors.newScheduledThreadPool(1);
 		service.scheduleAtFixedRate(new Runnable() {

@@ -54,17 +54,16 @@ public class ApplicationSettings implements PersistentStateComponent<Application
 		 * shift of your eye exercise on that time
 		 * in seconds
 		 */
-		private int postponeTimeSec = 60;
+		private int durationPostpone = 60;
 
 		/**
 		 * in seconds
 		 */
-		private int shortBreakDurationSec = 15;
+		private int durationBreak = 15;
 
 		/**
 		 * in minutes
-		 * TODO: change
 		 */
-		private int workingTimeBetweenShortBreaksMin = 15;
+		private int durationWorkBeforeBreak = 15;
 	}
 }

@@ -20,6 +20,6 @@
 	</extensions>
 
 	<actions>
-		<action id="lekanich.eyeHelp" class="lekanich.eye.action.EyeHelpAction" text="EyeHelp" description="Start Eye Help"/>
+		<action id="lekanich.eyeHelp" class="lekanich.eye.action.EyeHelpAction" text="Enable Eye Help" description="Enable eye help"/>
 	</actions>
 </idea-plugin>

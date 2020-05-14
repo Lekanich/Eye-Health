@@ -70,9 +70,9 @@ public class ApplicationSettingsPage implements SearchableConfigurable {
 
 		return enablePluginCheckBox.isSelected() != state.isEnable()
 				|| allowPostponeTheEyeCheckBox.isSelected() != state.isPostpone()
-				|| !durationOfRestTextField.getText().equals(String.valueOf(state.getShortBreakDurationSec()))
-				|| !durationBetweenRestTextField.getText().equals(String.valueOf(state.getWorkingTimeBetweenShortBreaksMin()))
-				|| !durationPostponeTextField.getText().equals(String.valueOf(state.getPostponeTimeSec()));
+				|| !durationOfRestTextField.getText().equals(String.valueOf(state.getDurationBreak()))
+				|| !durationBetweenRestTextField.getText().equals(String.valueOf(state.getDurationWorkBeforeBreak()))
+				|| !durationPostponeTextField.getText().equals(String.valueOf(state.getDurationPostpone()));
 	}
 
 	@Override
@@ -82,9 +82,9 @@ public class ApplicationSettingsPage implements SearchableConfigurable {
 		state.setEnable(enablePluginCheckBox.isSelected());
 		state.setPostpone(allowPostponeTheEyeCheckBox.isSelected());
 		try {
-			state.setShortBreakDurationSec(Integer.parseInt(durationOfRestTextField.getText()));
-			state.setWorkingTimeBetweenShortBreaksMin(Integer.parseInt(durationBetweenRestTextField.getText()));
-			state.setPostponeTimeSec(Integer.parseInt(durationPostponeTextField.getText()));
+			state.setDurationBreak(Integer.parseInt(durationOfRestTextField.getText()));
+			state.setDurationWorkBeforeBreak(Integer.parseInt(durationBetweenRestTextField.getText()));
+			state.setDurationPostpone(Integer.parseInt(durationPostponeTextField.getText()));
 		} catch (NumberFormatException e) {
 			throw new ConfigurationException("Cannot apply that values", e, "need to check durations");
 		}
@@ -100,9 +100,9 @@ public class ApplicationSettingsPage implements SearchableConfigurable {
 
 		enablePluginCheckBox.setSelected(state.isEnable());
 		allowPostponeTheEyeCheckBox.setSelected(state.isPostpone());
-		durationOfRestTextField.setText(String.valueOf(state.getShortBreakDurationSec()));
-		durationBetweenRestTextField.setText(String.valueOf(state.getWorkingTimeBetweenShortBreaksMin()));
-		durationPostponeTextField.setText(String.valueOf(state.getPostponeTimeSec()));
+		durationOfRestTextField.setText(String.valueOf(state.getDurationBreak()));
+		durationBetweenRestTextField.setText(String.valueOf(state.getDurationWorkBeforeBreak()));
+		durationPostponeTextField.setText(String.valueOf(state.getDurationPostpone()));
 
 		updateStatusLabel(statusPlugin, state.isEnable());
 		updateStatusLabel(statusLabelPostpone, state.isPostpone());
