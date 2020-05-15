@@ -6,7 +6,7 @@
 		<rect width="42" height="42"/>
 		<g fill-rule="nonzero" stroke="#000" stroke-width="2" transform="translate(2 13)">
 			<ellipse cx="18.688" cy="7.966" fill="#F1F1F1" rx="18" ry="7"/>
-			<circle cx="19" cy="8" r="7" fill="#59A869"/>
+			<circle cx="19" cy="8" r="7" fill="#499C54"/>
 			<circle cx="19" cy="8" r="3" fill="#000"/>
 		</g>
 		<use fill="#000" stroke="#000" transform="translate(3 14)" xlink:href="#eye-a"/>
