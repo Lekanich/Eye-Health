@@ -28,7 +28,6 @@ public class EyeHelpSingleton implements EyeHelpListener {
 		return instance;
 	}
 
-
 	@Override
 	public synchronized void scheduleEyeHelp(long delayInSeconds) {
 		if (future != null) {

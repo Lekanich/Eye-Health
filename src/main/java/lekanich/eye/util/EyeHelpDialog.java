@@ -19,6 +19,7 @@ import com.intellij.openapi.wm.ex.WindowManagerEx;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import lekanich.eye.EyeBundle;
+import lekanich.eye.action.TemporaryDisableAction;
 import lekanich.eye.listener.EyeHelpListener;
 import lekanich.eye.settings.ApplicationSettings;
 
@@ -95,6 +96,10 @@ public class EyeHelpDialog extends DialogWrapper {
 			ourInstance.dispose();
 		}
 
+		if (isDisabled(ApplicationSettings.getInstance().getState())) {
+			return;
+		}
+
 		ourInstance = new EyeHelpDialog(w);
 		ourInstance.show();
 	}
@@ -107,15 +112,26 @@ public class EyeHelpDialog extends DialogWrapper {
 			log.warn("Cannot get state component, Thread");
 			return;
 		}
+
 		ApplicationSettings.EyeHelpState state = instance.getState();
-		boolean startNow = state.isEnable();
-		if (!startNow) {
+		if (isDisabled(state)) {
 			return;
 		}
 
 		ApplicationManager.getApplication().getMessageBus()
 				.syncPublisher(EyeHelpListener.EYE_HELP_TOPIC)
 				.scheduleEyeHelp(TimeUnit.MINUTES.toSeconds(state.getDurationWorkBeforeBreak()));
+	}
+
+	private static boolean isDisabled(ApplicationSettings.EyeHelpState state) {
+		// check if it is enabled
+		boolean startNow = state.isEnable();
+		if (!startNow) {
+			return true;
+		}
+
+		// check if is it temporary disabled
+		return TemporaryDisableAction.isTemporaryDisabled();
 	}
 
 	@Override
