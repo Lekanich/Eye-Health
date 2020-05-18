@@ -9,6 +9,7 @@ import org.jetbrains.annotations.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lekanich.eye.action.DisableTemporaryEyeHelpAction;
 
 
 /**
@@ -18,11 +19,11 @@ import lombok.Setter;
 		name = "EyeHelpSettings",
 		storages = {@Storage(value = "lekanich.eye-help.xml")}
 )
-public class ApplicationSettings implements PersistentStateComponent<ApplicationSettings.EyeHelpState> {
+public class PluginSettings implements PersistentStateComponent<PluginSettings.EyeHelpState> {
 	private final EyeHelpState state = new EyeHelpState();
 
-	public static ApplicationSettings getInstance() {
-		return ServiceManager.getService(ApplicationSettings.class);
+	public static PluginSettings getInstance() {
+		return ServiceManager.getService(PluginSettings.class);
 	}
 
 	@NotNull
@@ -65,5 +66,16 @@ public class ApplicationSettings implements PersistentStateComponent<Application
 		 * in minutes
 		 */
 		private int durationWorkBeforeBreak = 15;
+	}
+
+	public static boolean isDisabled() {
+		EyeHelpState state = PluginSettings.getInstance().getState();
+		// check if it is disabled
+		if (!state.isEnable()) {
+			return true;
+		}
+
+		// check if is it temporary disabled
+		return DisableTemporaryEyeHelpAction.isTemporaryDisabled();
 	}
 }

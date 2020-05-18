@@ -19,9 +19,8 @@ import com.intellij.openapi.wm.ex.WindowManagerEx;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import lekanich.eye.EyeBundle;
-import lekanich.eye.action.TemporaryDisableAction;
 import lekanich.eye.listener.EyeHelpListener;
-import lekanich.eye.settings.ApplicationSettings;
+import lekanich.eye.settings.PluginSettings;
 
 
 /**
@@ -96,7 +95,7 @@ public class EyeHelpDialog extends DialogWrapper {
 			ourInstance.dispose();
 		}
 
-		if (isDisabled(ApplicationSettings.getInstance().getState())) {
+		if (PluginSettings.isDisabled()) {
 			return;
 		}
 
@@ -105,33 +104,27 @@ public class EyeHelpDialog extends DialogWrapper {
 	}
 
 	public static void publishNextRestEvent() {
+		publishNextRestEventWithDelay(0);
+	}
+
+	public static void publishNextRestEventWithDelay(long delayInSeconds) {
 		// if disabled start at application start
 		log.warn("try read state component: Thread: " + Thread.currentThread().toString());
-		ApplicationSettings instance = ApplicationSettings.getInstance();
+		PluginSettings instance = PluginSettings.getInstance();
 		if (instance == null) {
 			log.warn("Cannot get state component, Thread");
 			return;
 		}
 
-		ApplicationSettings.EyeHelpState state = instance.getState();
-		if (isDisabled(state)) {
+		PluginSettings.EyeHelpState state = instance.getState();
+		// check if it is disabled
+		if (!state.isEnable()) {
 			return;
 		}
 
 		ApplicationManager.getApplication().getMessageBus()
 				.syncPublisher(EyeHelpListener.EYE_HELP_TOPIC)
-				.scheduleEyeHelp(TimeUnit.MINUTES.toSeconds(state.getDurationWorkBeforeBreak()));
-	}
-
-	private static boolean isDisabled(ApplicationSettings.EyeHelpState state) {
-		// check if it is enabled
-		boolean startNow = state.isEnable();
-		if (!startNow) {
-			return true;
-		}
-
-		// check if is it temporary disabled
-		return TemporaryDisableAction.isTemporaryDisabled();
+				.scheduleEyeHelp(TimeUnit.MINUTES.toSeconds(state.getDurationWorkBeforeBreak() + delayInSeconds));
 	}
 
 	@Override

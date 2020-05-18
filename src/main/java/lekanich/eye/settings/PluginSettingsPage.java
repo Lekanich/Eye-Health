@@ -15,15 +15,16 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import lombok.RequiredArgsConstructor;
 import lekanich.eye.EyeBundle;
+import lekanich.eye.util.EyeHelpDialog;
 
 
 /**
  * @author Lekanich
  */
 @RequiredArgsConstructor
-public class ApplicationSettingsPage implements SearchableConfigurable {
+public class PluginSettingsPage implements SearchableConfigurable {
 	private static final String NAME = "Eye Help";
-	private final ApplicationSettings settings;
+	private final PluginSettings settings;
 	private JTextField durationBetweenRestTextField;
 	private JCheckBox enablePluginCheckBox;
 	private JPanel mainPanel;
@@ -66,7 +67,7 @@ public class ApplicationSettingsPage implements SearchableConfigurable {
 
 	@Override
 	public boolean isModified() {
-		ApplicationSettings.EyeHelpState state = settings.getState();
+		PluginSettings.EyeHelpState state = settings.getState();
 
 		return enablePluginCheckBox.isSelected() != state.isEnable()
 				|| allowPostponeTheEyeCheckBox.isSelected() != state.isPostpone()
@@ -77,7 +78,11 @@ public class ApplicationSettingsPage implements SearchableConfigurable {
 
 	@Override
 	public void apply() throws ConfigurationException {
-		ApplicationSettings.EyeHelpState state = settings.getState();
+		PluginSettings.EyeHelpState state = settings.getState();
+
+		if (state.isEnable() != enablePluginCheckBox.isSelected()) {
+			notifyAboutTurnOn();
+		}
 
 		state.setEnable(enablePluginCheckBox.isSelected());
 		state.setPostpone(allowPostponeTheEyeCheckBox.isSelected());
@@ -93,10 +98,14 @@ public class ApplicationSettingsPage implements SearchableConfigurable {
 		updateStatusLabel(statusLabelPostpone, state.isPostpone());
 	}
 
+	private void notifyAboutTurnOn() {
+		EyeHelpDialog.publishNextRestEvent();
+	}
+
 	@Override
 	public void reset() {
 		// init from config
-		ApplicationSettings.EyeHelpState state = settings.getState();
+		PluginSettings.EyeHelpState state = settings.getState();
 
 		enablePluginCheckBox.setSelected(state.isEnable());
 		allowPostponeTheEyeCheckBox.setSelected(state.isPostpone());

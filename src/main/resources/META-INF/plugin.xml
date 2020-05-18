@@ -14,16 +14,20 @@
 	<extensions defaultExtensionNs="com.intellij">
 		<postStartupActivity implementation="lekanich.eye.EyePostStartupActivity"/>
 
-		<applicationService serviceImplementation="lekanich.eye.settings.ApplicationSettings"/>
+		<statusBarWidgetFactory implementation="lekanich.eye.EyeHelpTemporaryStatusBarWidgetFactory"/>
 
-		<applicationConfigurable instance="lekanich.eye.settings.ApplicationSettingsPage"/>
+		<applicationService serviceImplementation="lekanich.eye.settings.PluginSettings"/>
+
+		<applicationConfigurable instance="lekanich.eye.settings.PluginSettingsPage"/>
 	</extensions>
 
 	<actions>
 		<action id="lekanich.eyeHelp" class="lekanich.eye.action.EyeHelpAction"
+				icon="EyeHelpIcons.EYE_ON"
 				text="Enable Eye Help" description="Enable eye help"/>
 
-		<action id="lekanich.eyeHelp.temporary.disable" class="lekanich.eye.action.TemporaryDisableAction"
-				text="Turn of Until End of the Day" description="Turn of Until the End of the Day"/>
+		<action id="lekanich.eyeHelp.temporary.disable" class="lekanich.eye.action.DisableTemporaryEyeHelpAction"
+				icon="EyeHelpIcons.EYE_OFF"
+				text="Temporary Disable Eye Help" description="Turn off until the end of the day"/>
 	</actions>
 </idea-plugin>

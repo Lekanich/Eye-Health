@@ -2,7 +2,10 @@ package lekanich.eye.action;
 
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
-import lekanich.eye.settings.ApplicationSettings;
+import com.intellij.openapi.application.ApplicationManager;
+import org.jetbrains.annotations.NotNull;
+import lekanich.eye.listener.EyeHelpStatusListener;
+import lekanich.eye.settings.PluginSettings;
 import lekanich.eye.util.EyeHelpDialog;
 
 
@@ -12,12 +15,24 @@ import lekanich.eye.util.EyeHelpDialog;
 public class EyeHelpAction extends AnAction {
 
 	@Override
-	public void actionPerformed(AnActionEvent e) {
+	public void actionPerformed(@NotNull AnActionEvent e) {
 		// automatic enable functionality
-		ApplicationSettings.getInstance()
+		PluginSettings.getInstance()
 				.getState()
 				.setEnable(true);
 
 		EyeHelpDialog.publishNextRestEvent();
+
+		// notify about temporary disabling
+		ApplicationManager.getApplication().getMessageBus()
+				.syncPublisher(EyeHelpStatusListener.EYE_HELP_STATUS_TOPIC)
+				.statusChanged(EyeHelpStatusListener.Status.ACTIVE);
+	}
+
+	@Override
+	public void update(@NotNull AnActionEvent e) {
+		super.update(e);
+
+		e.getPresentation().setEnabled(PluginSettings.isDisabled());
 	}
 }

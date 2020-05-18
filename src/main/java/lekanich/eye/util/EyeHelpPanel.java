@@ -15,7 +15,7 @@ import com.intellij.util.ui.JBUI;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import lekanich.eye.EyeBundle;
-import lekanich.eye.settings.ApplicationSettings;
+import lekanich.eye.settings.PluginSettings;
 import static java.beans.EventHandler.create;
 
 
@@ -25,7 +25,7 @@ import static java.beans.EventHandler.create;
 @Slf4j
 public class EyeHelpPanel extends JBPanel<EyeHelpPanel> {
 	private final EyeHelpDialog parent;
-	private final ApplicationSettings component;
+	private final PluginSettings component;
 	private final JBLabel exerciseLabel;
 	private final JBLabel timerInfoLabel;
 	private final JBLabel timerLabel;
@@ -34,7 +34,7 @@ public class EyeHelpPanel extends JBPanel<EyeHelpPanel> {
 	public EyeHelpPanel(EyeHelpDialog eyeHelpDialog) {
 		setLayout(new VerticalLayout(10, SwingConstants.CENTER));
 
-		this.component = ApplicationSettings.getInstance();
+		this.component = PluginSettings.getInstance();
 		this.parent = eyeHelpDialog;
 
 		this.exerciseLabel = new JBLabel(EyeBundle.message("eye.dialog.info.exercise"));
