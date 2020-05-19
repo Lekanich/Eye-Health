@@ -13,7 +13,6 @@ import com.intellij.ui.components.panels.VerticalLayout;
 import com.intellij.util.concurrency.EdtExecutorService;
 import com.intellij.util.ui.JBUI;
 import lombok.SneakyThrows;
-import lombok.extern.slf4j.Slf4j;
 import lekanich.eye.EyeBundle;
 import lekanich.eye.settings.PluginSettings;
 import static java.beans.EventHandler.create;
@@ -22,7 +21,6 @@ import static java.beans.EventHandler.create;
 /**
  * @author Lekanich
  */
-@Slf4j
 public class EyeHelpPanel extends JBPanel<EyeHelpPanel> {
 	private final EyeHelpDialog parent;
 	private final PluginSettings component;
@@ -37,7 +35,7 @@ public class EyeHelpPanel extends JBPanel<EyeHelpPanel> {
 		this.component = PluginSettings.getInstance();
 		this.parent = eyeHelpDialog;
 
-		this.exerciseLabel = new JBLabel(EyeBundle.message("eye.dialog.info.exercise"));
+		this.exerciseLabel = new JBLabel(EyeBundle.message("eye.dialog.exercise.1"));
 		this.exerciseLabel.setBorder(JBUI.Borders.empty(8, 21));
 		this.timerInfoLabel = new JBLabel(EyeBundle.message("eye.dialog.timer.topic.label"));
 		this.timerLabel = new JBLabel(EyeBundle.message("eye.dialog.timer.body.label", secondsToRest.get()));
