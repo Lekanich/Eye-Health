@@ -11,7 +11,7 @@ import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.application.ApplicationManager;
 import org.jetbrains.annotations.NotNull;
 import lekanich.eye.listener.EyeHelpStatusListener;
-import lekanich.eye.util.EyeHelpDialog;
+import lekanich.eye.ui.EyeHelpDialog;
 
 
 /**

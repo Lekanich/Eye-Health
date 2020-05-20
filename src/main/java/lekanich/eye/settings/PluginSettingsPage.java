@@ -15,7 +15,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import lombok.RequiredArgsConstructor;
 import lekanich.eye.EyeBundle;
-import lekanich.eye.util.EyeHelpDialog;
+import lekanich.eye.ui.EyeHelpDialog;
 
 
 /**

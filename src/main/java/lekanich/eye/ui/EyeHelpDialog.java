@@ -1,4 +1,4 @@
-package lekanich.eye.util;
+package lekanich.eye.ui;
 
 import java.awt.Window;
 import java.util.Objects;
@@ -109,7 +109,6 @@ public class EyeHelpDialog extends DialogWrapper {
 
 	public static void publishNextRestEventWithDelay(long delayInSeconds) {
 		// if disabled start at application start
-		log.warn("try read state component: Thread: " + Thread.currentThread().toString());
 		PluginSettings instance = PluginSettings.getInstance();
 		if (instance == null) {
 			log.warn("Cannot get state component, Thread");

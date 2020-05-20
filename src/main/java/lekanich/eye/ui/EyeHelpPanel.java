@@ -1,4 +1,4 @@
-package lekanich.eye.util;
+package lekanich.eye.ui;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -7,6 +7,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import javax.swing.SwingConstants;
+import com.intellij.ui.JBColor;
 import com.intellij.ui.components.JBLabel;
 import com.intellij.ui.components.JBPanel;
 import com.intellij.ui.components.panels.VerticalLayout;
@@ -39,6 +40,9 @@ public class EyeHelpPanel extends JBPanel<EyeHelpPanel> {
 		this.exerciseLabel.setBorder(JBUI.Borders.empty(8, 21));
 		this.timerInfoLabel = new JBLabel(EyeBundle.message("eye.dialog.timer.topic.label"));
 		this.timerLabel = new JBLabel(EyeBundle.message("eye.dialog.timer.body.label", secondsToRest.get()));
+
+
+		this.timerLabel.setBorder(JBUI.Borders.customLine(JBColor.gray, 2));
 
 		add(exerciseLabel, VerticalLayout.TOP);
 		add(timerInfoLabel, VerticalLayout.CENTER);

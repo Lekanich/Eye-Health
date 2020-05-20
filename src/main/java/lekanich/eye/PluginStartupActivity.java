@@ -1,5 +1,6 @@
 package lekanich.eye;
 
+import java.util.concurrent.TimeUnit;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.extensions.ExtensionNotApplicableException;
 import com.intellij.openapi.project.Project;
@@ -8,15 +9,15 @@ import org.jetbrains.annotations.NotNull;
 import lombok.SneakyThrows;
 import lekanich.eye.listener.EyeHelpListener;
 import lekanich.eye.listener.EyeHelpSingleton;
-import lekanich.eye.util.EyeHelpDialog;
+import lekanich.eye.ui.EyeHelpDialog;
 
 
 /**
  * @author Lekanich
  */
-public class EyePostStartupActivity implements StartupActivity, StartupActivity.Background {
+public class PluginStartupActivity implements StartupActivity, StartupActivity.Background {
 
-	public EyePostStartupActivity() {
+	public PluginStartupActivity() {
 		if (ApplicationManager.getApplication().isUnitTestMode()) {
 			throw ExtensionNotApplicableException.INSTANCE;
 		}

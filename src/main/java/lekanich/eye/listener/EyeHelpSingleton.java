@@ -12,7 +12,7 @@ import com.intellij.util.concurrency.EdtScheduledExecutorService;
 import org.jetbrains.annotations.NotNull;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import lekanich.eye.util.EyeHelpDialog;
+import lekanich.eye.ui.EyeHelpDialog;
 
 
 /**
