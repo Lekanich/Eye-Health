@@ -1,5 +1,6 @@
 package lekanich.eye;
 
+import java.util.Optional;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.extensions.ExtensionNotApplicableException;
 import com.intellij.openapi.project.Project;
@@ -31,6 +32,14 @@ public class PluginStartupActivity implements StartupActivity, StartupActivity.B
 	@SneakyThrows
 	@Override
 	public void runActivity(@NotNull Project project) {
-		EyeHelpDialog.publishNextRestEvent();
+		if (Optional.ofNullable(System.getProperty("eye.debug.run"))
+				.filter(value -> Boolean.TRUE.toString().toLowerCase().equals(value.toLowerCase()))
+				.isPresent()) {
+			ApplicationManager.getApplication().getMessageBus()
+					.syncPublisher(EyeHelpListener.EYE_HELP_TOPIC)
+					.scheduleEyeHelp(5);
+		} else {
+			EyeHelpDialog.publishNextRestEvent();
+		}
 	}
 }
