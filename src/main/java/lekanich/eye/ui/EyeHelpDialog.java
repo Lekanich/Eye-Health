@@ -1,7 +1,6 @@
 package lekanich.eye.ui;
 
 import java.awt.Window;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Stream;
@@ -75,14 +74,12 @@ public class EyeHelpDialog extends DialogWrapper {
 	@Nullable
 	private static Project getActiveProject() {
 		@NotNull Project[] projects = ProjectManager.getInstance().getOpenProjects();
-		log.warn("Has opened " + projects.length + " projects.");
 		return Stream.of(projects)
 				.filter(project -> Optional.ofNullable(
 						WindowManager.getInstance().getFrame(project))
 						.map(JFrame::isActive)
 						.orElse(false)
 				)
-				.peek(project -> log.warn(Objects.toString(project)))
 				.findAny()
 				.orElse(null);
 	}
@@ -103,6 +100,13 @@ public class EyeHelpDialog extends DialogWrapper {
 		ourInstance.show();
 	}
 
+	public static void hideForProject() {
+		if (ourInstance != null) {
+			ourInstance.dispose();
+			ourInstance = null;
+		}
+	}
+
 	public static void publishNextRestEvent() {
 		publishNextRestEventWithDelay(0);
 	}
@@ -111,7 +115,7 @@ public class EyeHelpDialog extends DialogWrapper {
 		// if disabled start at application start
 		PluginSettings instance = PluginSettings.getInstance();
 		if (instance == null) {
-			log.warn("Cannot get state component, Thread");
+			log.warn("Cannot get state component, Thread: " + Thread.currentThread().toString());
 			return;
 		}
 
@@ -129,5 +133,6 @@ public class EyeHelpDialog extends DialogWrapper {
 	@Override
 	protected void dispose() {
 		super.dispose();
+		ourInstance = null;
 	}
 }

@@ -31,4 +31,5 @@ patchPluginXml {
 
 runIde {
 	jvmArgs '-Didea.ProcessCanceledException=disabled'
+	systemProperty 'idea.auto.reload.plugins', false
 }

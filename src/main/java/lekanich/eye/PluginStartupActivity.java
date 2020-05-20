@@ -1,10 +1,10 @@
 package lekanich.eye;
 
-import java.util.concurrent.TimeUnit;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.extensions.ExtensionNotApplicableException;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.startup.StartupActivity;
+import com.intellij.util.messages.MessageBus;
 import org.jetbrains.annotations.NotNull;
 import lombok.SneakyThrows;
 import lekanich.eye.listener.EyeHelpListener;
@@ -23,8 +23,8 @@ public class PluginStartupActivity implements StartupActivity, StartupActivity.B
 		}
 
 		// register topic and subscribe listener to do payload
-		ApplicationManager.getApplication().getMessageBus()
-				.connect()
+		MessageBus messageBus = ApplicationManager.getApplication().getMessageBus();
+		messageBus.connect()
 				.subscribe(EyeHelpListener.EYE_HELP_TOPIC, EyeHelpSingleton.getInstance());
 	}
 

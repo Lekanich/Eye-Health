@@ -44,7 +44,6 @@ public class EyeHelpSingleton implements EyeHelpListener {
 					}
 
 					Disposer.dispose(disposable);
-					// TODO: PropertiesComponent.getInstance().getLong(LAST_TIME_TIPS_WERE_SHOWN, 0) temporary storage
 					if (application.isDisposed()) {
 						return;
 					}
