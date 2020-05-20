@@ -1,15 +1,17 @@
 package lekanich.eye.ui;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
-import javax.swing.border.Border;
+import com.intellij.ui.ColorUtil;
 import com.intellij.ui.IdeBorderFactory;
 import com.intellij.ui.JBColor;
 import com.intellij.ui.RoundedLineBorder;
@@ -19,6 +21,7 @@ import com.intellij.ui.components.panels.VerticalLayout;
 import com.intellij.util.concurrency.EdtExecutorService;
 import com.intellij.util.ui.JBUI;
 import com.intellij.util.ui.UIUtil;
+import org.jetbrains.annotations.NotNull;
 import lombok.SneakyThrows;
 import lekanich.eye.EyeBundle;
 import lekanich.eye.settings.PluginSettings;
@@ -36,23 +39,23 @@ public class EyeHelpPanel extends JBPanel<EyeHelpPanel> {
 
 	private static final class JClockPanel extends JPanel {
 		private final JBLabel counterLabel;
+		private final RoundedLineBorder roundedBorder;
+		private final double dColorBalance;
 		private int secondsToRest;
 
 		public JClockPanel(int secondsToRest) {
 			this.secondsToRest = secondsToRest;
 
 			setLayout(new BorderLayout());
-			setBorder(createBorder());
+
+			this.dColorBalance = 1.0 / secondsToRest;
+			this.roundedBorder = IdeBorderFactory.createRoundedBorder(60, 3);
+			this.roundedBorder.setColor(createCurrentTickColor());
+			setBorder(JBUI.Borders.merge(roundedBorder, JBUI.Borders.empty(10, 4), true));
 
 			this.counterLabel = new JBLabel(UIUtil.ComponentStyle.LARGE);
-			this.counterLabel.setBorder(JBUI.Borders.empty(13, 14));
+			this.counterLabel.setBorder(JBUI.Borders.empty(13, 15));
 			add(counterLabel, BorderLayout.CENTER);
-		}
-
-		private Border createBorder() {
-			RoundedLineBorder roundedBorder = IdeBorderFactory.createRoundedBorder(60, 2);
-			roundedBorder.setColor(JBColor.gray);
-			return JBUI.Borders.merge(roundedBorder, JBUI.Borders.empty(10, 4), true);
 		}
 
 		/**
@@ -60,12 +63,18 @@ public class EyeHelpPanel extends JBPanel<EyeHelpPanel> {
 		 */
 		public boolean tick() {
 			if (secondsToRest > 0) {
-				counterLabel.setText(String.valueOf(--secondsToRest));
+				counterLabel.setText(String.valueOf(secondsToRest--));
+				roundedBorder.setColor(createCurrentTickColor());
 				counterLabel.updateUI();
 				return true;
 			} else {
 				return false;
 			}
+		}
+
+		@NotNull
+		private Color createCurrentTickColor() {
+			return ColorUtil.mix(JBColor.black, JBColor.foreground(), 1 - secondsToRest * dColorBalance);
 		}
 
 		public boolean isUp() {
@@ -78,7 +87,7 @@ public class EyeHelpPanel extends JBPanel<EyeHelpPanel> {
 
 		this.parent = eyeHelpDialog;
 
-		this.exerciseLabel = new JBLabel(EyeBundle.message("eye.dialog.exercise.1"));
+		this.exerciseLabel = new JBLabel(findExerciseMessage());
 		this.exerciseLabel.setBorder(JBUI.Borders.empty(8, 21));
 		this.timerInfoLabel = new JBLabel(EyeBundle.message("eye.dialog.timer.topic.label"));
 
@@ -94,6 +103,12 @@ public class EyeHelpPanel extends JBPanel<EyeHelpPanel> {
 		parent.addKeyListener(create(KeyListener.class, this, "closeParent", "keyCode", "keyPressed"));
 
 		startRefreshSeconds();
+	}
+
+	@NotNull
+	private String findExerciseMessage() {
+		List<String> exercises = EyeBundle.getExercises();
+		return exercises.get((int) (exercises.size() * Math.random()));
 	}
 
 	private void startRefreshSeconds() {
