@@ -55,12 +55,12 @@ public class PluginSettings implements PersistentStateComponent<PluginSettings.E
 		 * shift of your eye exercise on that time
 		 * in seconds
 		 */
-		private int durationPostpone = 60;
+		private int durationPostpone = 120;
 
 		/**
 		 * in seconds
 		 */
-		private int durationBreak = 15;
+		private int durationBreak = 20;
 
 		/**
 		 * in minutes
