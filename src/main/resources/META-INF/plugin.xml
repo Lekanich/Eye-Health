@@ -1,5 +1,5 @@
 <idea-plugin>
-	<id>lekanich.Eye-Health</id>
+	<id>lekanich.eye-health</id>
 	<name>Eye Health</name>
 	<vendor email="lekan1992@gmail.com" url="https://github.com/Lekanich/Eye-Health">Aleksandr Zhelezniak</vendor>
 
@@ -19,6 +19,23 @@
 		<applicationService serviceImplementation="lekanich.eye.settings.PluginSettings"/>
 
 		<applicationConfigurable instance="lekanich.eye.settings.PluginSettingsPage"/>
+	</extensions>
+
+	<extensionPoints>
+		<extensionPoint name="exercises" beanClass="lekanich.eye.EyeExercise" dynamic="true"/>
+	</extensionPoints>
+
+	<extensions defaultExtensionNs="lekanich.eye-health">
+		<exercises file="eye-press.html"/>
+		<exercises file="eye-roll.html"/>
+		<exercises file="figure-eights.html"/>
+		<exercises file="palm-eye.html"/>
+		<exercises file="palming-title.html"/>
+		<exercises file="rule-20-20-20.html"/>
+		<exercises file="simple.html"/>
+		<exercises file="slow-blink.html"/>
+		<exercises file="writing-messages-on-the-wall.html"/>
+		<exercises file="zooming.html"/>
 	</extensions>
 
 	<actions>

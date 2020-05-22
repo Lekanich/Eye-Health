@@ -2,6 +2,7 @@ package lekanich.eye.ui;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.List;
@@ -10,20 +11,27 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
+import com.intellij.ide.util.TipUIUtil;
 import com.intellij.ui.ColorUtil;
 import com.intellij.ui.IdeBorderFactory;
 import com.intellij.ui.JBColor;
 import com.intellij.ui.RoundedLineBorder;
+import com.intellij.ui.ScrollPaneFactory;
 import com.intellij.ui.components.JBLabel;
 import com.intellij.ui.components.JBPanel;
 import com.intellij.ui.components.panels.VerticalLayout;
+import com.intellij.uiDesigner.core.GridConstraints;
+import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.util.concurrency.EdtExecutorService;
+import com.intellij.util.ui.JBDimension;
 import com.intellij.util.ui.JBUI;
 import com.intellij.util.ui.UIUtil;
 import org.jetbrains.annotations.NotNull;
 import lombok.SneakyThrows;
 import lekanich.eye.EyeBundle;
+import lekanich.eye.EyeExercise;
 import lekanich.eye.settings.PluginSettings;
 import static java.beans.EventHandler.create;
 
@@ -32,12 +40,13 @@ import static java.beans.EventHandler.create;
  * @author Lekanich
  */
 public class EyeHelpPanel extends JBPanel<EyeHelpPanel> {
+	private static final JBColor DIVIDER_COLOR = new JBColor(0xd9d9d9, 0x515151);
+	private static final int DEFAULT_WIDTH = 400;
+	private static final int DEFAULT_HEIGHT = 200;
 	private final EyeHelpDialog parent;
-	private final JBLabel exerciseLabel;
-	private final JBLabel timerInfoLabel;
 	private final JClockPanel clockPanel;
 
-	private static final class JClockPanel extends JPanel {
+	private static final class JClockPanel extends JBPanel<JClockPanel> {
 		private final JBLabel counterLabel;
 		private final RoundedLineBorder roundedBorder;
 		private final double dColorBalance;
@@ -63,9 +72,10 @@ public class EyeHelpPanel extends JBPanel<EyeHelpPanel> {
 		 */
 		public boolean tick() {
 			if (secondsToRest > 0) {
-				counterLabel.setText(String.valueOf(secondsToRest--));
+				String value = ((secondsToRest / 10 == 0) ? " " : "") + secondsToRest--;
+				counterLabel.setText(value);
 				roundedBorder.setColor(createCurrentTickColor());
-				counterLabel.updateUI();
+				updateUI();
 				return true;
 			} else {
 				return false;
@@ -83,22 +93,44 @@ public class EyeHelpPanel extends JBPanel<EyeHelpPanel> {
 	}
 
 	public EyeHelpPanel(EyeHelpDialog eyeHelpDialog) {
-		setLayout(new VerticalLayout(10, SwingConstants.CENTER));
-
 		this.parent = eyeHelpDialog;
+		setLayout(new GridLayoutManager(3, 1));
 
-		this.exerciseLabel = new JBLabel(findExerciseMessage());
-		this.exerciseLabel.setBorder(JBUI.Borders.empty(8, 21));
-		this.timerInfoLabel = new JBLabel(EyeBundle.message("eye.dialog.timer.topic.label"));
+		String exercise = findExerciseMessage();
+
+		// configure exercise panel
+		TipUIUtil.Browser browser = TipUIUtil.createBrowser();
+		browser.setText(exercise);
+		browser.getComponent().setBorder(JBUI.Borders.empty(8, 12));
+		JScrollPane scrollPane = ScrollPaneFactory.createScrollPane(browser.getComponent(), true);
+		scrollPane.setBorder(JBUI.Borders.customLine(DIVIDER_COLOR, 0, 0, 1, 0));
+
+		JBLabel timerInfoLabel = new JBLabel(EyeBundle.message("eye.dialog.timer.topic.label"));
 
 		this.clockPanel = new JClockPanel(Optional.ofNullable(PluginSettings.getInstance())
 				.map(PluginSettings::getState)
 				.map(PluginSettings.EyeHelpState::getDurationBreak)
 				.orElse(0));
 
-		add(exerciseLabel, VerticalLayout.TOP);
-		add(timerInfoLabel, VerticalLayout.CENTER);
-		add(clockPanel, VerticalLayout.BOTTOM);
+		add(scrollPane, new GridConstraints(0, 0, 2, 1,
+				GridConstraints.ALIGN_CENTER,
+				GridConstraints.FILL_BOTH,
+				GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW,
+				GridConstraints.SIZEPOLICY_FIXED,
+				null, null, null
+		));
+
+		JPanel panel = new JPanel();
+		panel.setLayout(new VerticalLayout(10, SwingConstants.CENTER));
+		panel.add(timerInfoLabel, VerticalLayout.TOP);
+		panel.add(clockPanel, VerticalLayout.BOTTOM);
+		add(panel, new GridConstraints(2, 0, 1, 1,
+				GridConstraints.ALIGN_CENTER,
+				GridConstraints.FILL_HORIZONTAL,
+				GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW,
+				GridConstraints.SIZEPOLICY_FIXED,
+				null, null, null
+		));
 
 		parent.addKeyListener(create(KeyListener.class, this, "closeParent", "keyCode", "keyPressed"));
 
@@ -107,8 +139,8 @@ public class EyeHelpPanel extends JBPanel<EyeHelpPanel> {
 
 	@NotNull
 	private String findExerciseMessage() {
-		List<String> exercises = EyeBundle.getExercises();
-		return exercises.get((int) (exercises.size() * Math.random()));
+		List<EyeExercise> exercises = EyeExercise.findExercises();
+		return exercises.get((int) (exercises.size() * Math.random())).getExerciseText();
 	}
 
 	private void startRefreshSeconds() {
@@ -129,6 +161,11 @@ public class EyeHelpPanel extends JBPanel<EyeHelpPanel> {
 				}
 			}
 		}, 0, 1, TimeUnit.SECONDS);
+	}
+
+	@Override
+	public Dimension getPreferredSize() {
+		return new JBDimension(DEFAULT_WIDTH, DEFAULT_HEIGHT);
 	}
 
 	public void closeParent(Integer keyCode) {
