@@ -141,6 +141,10 @@ public class EyeHelpPanel extends JBPanel<EyeHelpPanel> {
 	@NotNull
 	private String findExerciseMessage() {
 		List<EyeExercise> exercises = EyeExercise.findExercises();
+		if (exercises.isEmpty()) {
+			return EyeBundle.message("eye.dialog.exercises.dummy");
+		}
+
 		int index = DeveloperUtil.isDebugMode() ? 0 : (int) (exercises.size() * Math.random());
 		return exercises.get(index).getExerciseText();
 	}
