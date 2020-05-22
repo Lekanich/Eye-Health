@@ -1,6 +1,5 @@
 package lekanich.eye;
 
-import java.util.Optional;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.extensions.ExtensionNotApplicableException;
 import com.intellij.openapi.project.Project;
@@ -8,6 +7,7 @@ import com.intellij.openapi.startup.StartupActivity;
 import com.intellij.util.messages.MessageBus;
 import org.jetbrains.annotations.NotNull;
 import lombok.SneakyThrows;
+import lekanich.DeveloperUtil;
 import lekanich.eye.listener.EyeHelpListener;
 import lekanich.eye.listener.EyeHelpSingleton;
 import lekanich.eye.ui.EyeHelpDialog;
@@ -32,9 +32,7 @@ public class PluginStartupActivity implements StartupActivity, StartupActivity.B
 	@SneakyThrows
 	@Override
 	public void runActivity(@NotNull Project project) {
-		if (Optional.ofNullable(System.getProperty("eye.debug.run"))
-				.filter(value -> Boolean.TRUE.toString().toLowerCase().equals(value.toLowerCase()))
-				.isPresent()) {
+		if (DeveloperUtil.isDebugMode()) {
 			ApplicationManager.getApplication().getMessageBus()
 					.syncPublisher(EyeHelpListener.EYE_HELP_TOPIC)
 					.scheduleEyeHelp(5);

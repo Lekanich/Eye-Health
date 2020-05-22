@@ -30,6 +30,7 @@ import com.intellij.util.ui.JBUI;
 import com.intellij.util.ui.UIUtil;
 import org.jetbrains.annotations.NotNull;
 import lombok.SneakyThrows;
+import lekanich.DeveloperUtil;
 import lekanich.eye.EyeBundle;
 import lekanich.eye.EyeExercise;
 import lekanich.eye.settings.PluginSettings;
@@ -140,7 +141,8 @@ public class EyeHelpPanel extends JBPanel<EyeHelpPanel> {
 	@NotNull
 	private String findExerciseMessage() {
 		List<EyeExercise> exercises = EyeExercise.findExercises();
-		return exercises.get((int) (exercises.size() * Math.random())).getExerciseText();
+		int index = DeveloperUtil.isDebugMode() ? 0 : (int) (exercises.size() * Math.random());
+		return exercises.get(index).getExerciseText();
 	}
 
 	private void startRefreshSeconds() {
