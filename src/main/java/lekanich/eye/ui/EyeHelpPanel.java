@@ -10,6 +10,7 @@ import java.util.Optional;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
@@ -73,8 +74,9 @@ public class EyeHelpPanel extends JBPanel<EyeHelpPanel> {
 		 */
 		public boolean tick() {
 			if (secondsToRest > 0) {
-				String value = ((secondsToRest / 10 == 0) ? " " : "") + secondsToRest--;
+				String value = String.valueOf(secondsToRest--);
 				counterLabel.setText(value);
+				counterLabel.setAlignmentX(JComponent.CENTER_ALIGNMENT);
 				roundedBorder.setColor(createCurrentTickColor());
 				updateUI();
 				return true;
@@ -85,7 +87,7 @@ public class EyeHelpPanel extends JBPanel<EyeHelpPanel> {
 
 		@NotNull
 		private Color createCurrentTickColor() {
-			return ColorUtil.mix(JBColor.black, JBColor.foreground(), 1 - secondsToRest * dColorBalance);
+			return ColorUtil.mix(JBColor.black, getBackground(), 1 - secondsToRest * dColorBalance);
 		}
 
 		public boolean isUp() {

@@ -60,7 +60,7 @@ public class PluginSettings implements PersistentStateComponent<PluginSettings.E
 		/**
 		 * in seconds
 		 */
-		private int durationBreak = 20;
+		private int durationBreak = 30;
 
 		/**
 		 * in minutes
