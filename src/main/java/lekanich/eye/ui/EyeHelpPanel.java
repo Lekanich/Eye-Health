@@ -103,6 +103,7 @@ public class EyeHelpPanel extends JBPanel<EyeHelpPanel> {
 		TipUIUtil.Browser browser = TipUIUtil.createBrowser();
 		browser.setText(exercise);
 		browser.getComponent().setBorder(JBUI.Borders.empty(8, 12));
+		browser.getComponent().setBackground(UIUtil.getPanelBackground());
 		JScrollPane scrollPane = ScrollPaneFactory.createScrollPane(browser.getComponent(), true);
 		scrollPane.setBorder(JBUI.Borders.customLine(DIVIDER_COLOR, 0, 0, 1, 0));
 

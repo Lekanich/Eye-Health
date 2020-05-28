@@ -14,11 +14,13 @@ import com.intellij.util.ResourceUtil;
 import com.intellij.util.ui.StartupUiUtil;
 import com.intellij.util.ui.UIUtil;
 import com.intellij.util.xmlb.annotations.Attribute;
+import lombok.ToString;
 
 
 /**
  * @author Lekanich
  */
+@ToString
 public class EyeExercise extends AbstractExtensionPointBean {
 	public static final ExtensionPointName<EyeExercise> EP_NAME = ExtensionPointName.create("lekanich.eye-health.exercises");
 
