@@ -62,7 +62,7 @@ public class EyeHelpPanel extends JBPanel<EyeHelpPanel> {
 			this.dColorBalance = 1.0 / secondsToRest;
 			this.roundedBorder = IdeBorderFactory.createRoundedBorder(60, 3);
 			this.roundedBorder.setColor(createCurrentTickColor());
-			setBorder(JBUI.Borders.merge(roundedBorder, JBUI.Borders.empty(10, 4), true));
+			setBorder(JBUI.Borders.merge(roundedBorder, JBUI.Borders.empty(4), true));
 
 			this.counterLabel = new JBLabel(UIUtil.ComponentStyle.LARGE);
 			this.counterLabel.setBorder(JBUI.Borders.empty(13, 15));
