@@ -10,7 +10,7 @@
 	<g fill="none" fill-rule="evenodd">
 		<rect width="42" height="42"/>
 		<g fill-rule="nonzero" stroke="#000" stroke-width="2" transform="translate(2 13)">
-			<ellipse cx="18.688" cy="7.966" fill="#F1F1F1" rx="18" ry="7"/>
+			<ellipse cx="18.688" cy="7.966" fill="#D5D5D5" rx="18" ry="7"/>
 			<circle cx="19" cy="8" r="7" fill="url(#eye-color)"/>
 			<circle cx="19" cy="8" r="3" fill="#000"/>
 		</g>
