@@ -1,7 +1,6 @@
 package lekanich.eye.ui;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -15,10 +14,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
 import com.intellij.ide.util.TipUIUtil;
-import com.intellij.ui.ColorUtil;
-import com.intellij.ui.IdeBorderFactory;
 import com.intellij.ui.JBColor;
-import com.intellij.ui.RoundedLineBorder;
 import com.intellij.ui.ScrollPaneFactory;
 import com.intellij.ui.components.JBLabel;
 import com.intellij.ui.components.JBPanel;
@@ -50,8 +46,6 @@ public class EyeHelpPanel extends JBPanel<EyeHelpPanel> {
 
 	private static final class JClockPanel extends JBPanel<JClockPanel> {
 		private final JBLabel counterLabel;
-		private final RoundedLineBorder roundedBorder;
-		private final double dColorBalance;
 		private int secondsToRest;
 
 		public JClockPanel(int secondsToRest) {
@@ -59,13 +53,8 @@ public class EyeHelpPanel extends JBPanel<EyeHelpPanel> {
 
 			setLayout(new BorderLayout());
 
-			this.dColorBalance = 1.0 / secondsToRest;
-			this.roundedBorder = IdeBorderFactory.createRoundedBorder(60, 3);
-			this.roundedBorder.setColor(createCurrentTickColor());
-			setBorder(JBUI.Borders.merge(roundedBorder, JBUI.Borders.empty(4), true));
-
 			this.counterLabel = new JBLabel(UIUtil.ComponentStyle.LARGE);
-			this.counterLabel.setBorder(JBUI.Borders.empty(13, 15));
+			this.counterLabel.setBorder(JBUI.Borders.empty(0, 4, 20, 4));
 			add(counterLabel, BorderLayout.CENTER);
 		}
 
@@ -77,17 +66,11 @@ public class EyeHelpPanel extends JBPanel<EyeHelpPanel> {
 				String value = String.valueOf(secondsToRest--);
 				counterLabel.setText(value);
 				counterLabel.setAlignmentX(JComponent.CENTER_ALIGNMENT);
-				roundedBorder.setColor(createCurrentTickColor());
 				updateUI();
 				return true;
 			} else {
 				return false;
 			}
-		}
-
-		@NotNull
-		private Color createCurrentTickColor() {
-			return ColorUtil.mix(JBColor.black, getBackground(), 1 - secondsToRest * dColorBalance);
 		}
 
 		public boolean isUp() {
