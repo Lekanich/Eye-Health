@@ -85,7 +85,7 @@ public class EyeHelpPanel extends JBPanel<EyeHelpPanel> {
 		String exercise = findExerciseMessage();
 
 		// configure exercise panel
-		TipUIUtil.Browser browser = TipUIUtil.createBrowser();
+		TipUIUtil.Browser browser = createBrowser();
 		browser.setText(exercise);
 		browser.getComponent().setBorder(JBUI.Borders.empty(8, 12));
 		browser.getComponent().setBackground(UIUtil.getPanelBackground());
@@ -164,5 +164,9 @@ public class EyeHelpPanel extends JBPanel<EyeHelpPanel> {
 		if (KeyEvent.VK_ESCAPE == keyCode) {
 			parent.doCancelAction();
 		}
+	}
+
+	private TipUIUtil.Browser createBrowser() {
+		return new SwingBrowser();
 	}
 }
