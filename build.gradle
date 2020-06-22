@@ -1,10 +1,10 @@
 plugins {
 	id 'java'
-	id 'org.jetbrains.intellij' version '0.4.20'
+	id 'org.jetbrains.intellij' version '0.4.21'
 }
 
 group 'lekanich'
-version '0.1.1'
+version '0.1.2'
 
 repositories {
 	mavenCentral()
