@@ -119,7 +119,7 @@ public class EyeHelpDialog extends DialogWrapper {
 			return;
 		}
 
-		PluginSettings.EyeHelpState state = instance.getState();
+		PluginSettings.PluginAppState state = instance.getState();
 		// check if it is disabled
 		if (!state.isEnable()) {
 			return;

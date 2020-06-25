@@ -67,7 +67,7 @@ public class PluginSettingsPage implements SearchableConfigurable {
 
 	@Override
 	public boolean isModified() {
-		PluginSettings.EyeHelpState state = settings.getState();
+		PluginSettings.PluginAppState state = settings.getState();
 
 		return enablePluginCheckBox.isSelected() != state.isEnable()
 				|| allowPostponeTheEyeCheckBox.isSelected() != state.isPostpone()
@@ -78,7 +78,7 @@ public class PluginSettingsPage implements SearchableConfigurable {
 
 	@Override
 	public void apply() throws ConfigurationException {
-		PluginSettings.EyeHelpState state = settings.getState();
+		PluginSettings.PluginAppState state = settings.getState();
 
 		if (state.isEnable() != enablePluginCheckBox.isSelected()) {
 			notifyAboutTurnOn();
@@ -105,7 +105,7 @@ public class PluginSettingsPage implements SearchableConfigurable {
 	@Override
 	public void reset() {
 		// init from config
-		PluginSettings.EyeHelpState state = settings.getState();
+		PluginSettings.PluginAppState state = settings.getState();
 
 		enablePluginCheckBox.setSelected(state.isEnable());
 		allowPostponeTheEyeCheckBox.setSelected(state.isPostpone());

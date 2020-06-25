@@ -19,8 +19,8 @@ import lekanich.eye.action.DisableTemporaryEyeHelpAction;
 		name = "EyeHelpSettings",
 		storages = {@Storage(value = "lekanich.eye-help.xml")}
 )
-public class PluginSettings implements PersistentStateComponent<PluginSettings.EyeHelpState> {
-	private final EyeHelpState state = new EyeHelpState();
+public class PluginSettings implements PersistentStateComponent<PluginSettings.PluginAppState> {
+	private final PluginAppState state = new PluginAppState();
 
 	public static PluginSettings getInstance() {
 		return ServiceManager.getService(PluginSettings.class);
@@ -28,19 +28,19 @@ public class PluginSettings implements PersistentStateComponent<PluginSettings.E
 
 	@NotNull
 	@Override
-	public EyeHelpState getState() {
+	public PluginSettings.PluginAppState getState() {
 		return state;
 	}
 
 	@Override
-	public void loadState(@NotNull EyeHelpState state) {
+	public void loadState(@NotNull PluginSettings.PluginAppState state) {
 		XmlSerializerUtil.copyBean(state, this.state);
 	}
 
 	@Getter
 	@Setter
 	@NoArgsConstructor
-	public static class EyeHelpState {
+	public static class PluginAppState {
 		/**
 		 * turn on\off Eye Help
 		 */
@@ -69,7 +69,7 @@ public class PluginSettings implements PersistentStateComponent<PluginSettings.E
 	}
 
 	public static boolean isDisabled() {
-		EyeHelpState state = PluginSettings.getInstance().getState();
+		PluginAppState state = PluginSettings.getInstance().getState();
 		// check if it is disabled
 		if (!state.isEnable()) {
 			return true;

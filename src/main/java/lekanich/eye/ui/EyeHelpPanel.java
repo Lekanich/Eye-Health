@@ -96,7 +96,7 @@ public class EyeHelpPanel extends JBPanel<EyeHelpPanel> {
 
 		this.clockPanel = new JClockPanel(Optional.ofNullable(PluginSettings.getInstance())
 				.map(PluginSettings::getState)
-				.map(PluginSettings.EyeHelpState::getDurationBreak)
+				.map(PluginSettings.PluginAppState::getDurationBreak)
 				.orElse(0));
 
 		add(scrollPane, new GridConstraints(0, 0, 2, 1,
