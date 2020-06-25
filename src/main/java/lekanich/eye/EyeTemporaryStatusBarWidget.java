@@ -16,8 +16,8 @@ import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import icons.EyeHelpIcons;
-import lekanich.eye.action.DisableTemporaryEyeHelpAction;
 import lekanich.eye.listener.EyeHelpStatusListener;
+import lekanich.eye.settings.PluginSettings;
 
 
 /**
@@ -52,7 +52,7 @@ public class EyeTemporaryStatusBarWidget implements StatusBarWidget, StatusBarWi
 	@Override
 	public void statusChanged(Status status) {
 		if (status == Status.ACTIVE) {
-			DisableTemporaryEyeHelpAction.removeTemporaryStopTime();
+			PluginSettings.TemporaryDisableEyeHelpSetting.removeTemporaryStopTime();
 		}
 
 		update();
@@ -82,10 +82,10 @@ public class EyeTemporaryStatusBarWidget implements StatusBarWidget, StatusBarWi
 	public @Nullable Consumer<MouseEvent> getClickConsumer() {
 		return mouseEvent -> {
 			try {
-				if (DisableTemporaryEyeHelpAction.isTemporaryDisabled()) {
-					DisableTemporaryEyeHelpAction.removeTemporaryStopTime();
+				if (PluginSettings.TemporaryDisableEyeHelpSetting.isTemporaryDisabled()) {
+					PluginSettings.TemporaryDisableEyeHelpSetting.removeTemporaryStopTime();
 				} else {
-					DisableTemporaryEyeHelpAction.disableTemporaryEyeHelp();
+					PluginSettings.TemporaryDisableEyeHelpSetting.disableTemporaryEyeHelp();
 				}
 
 				update();
@@ -97,14 +97,14 @@ public class EyeTemporaryStatusBarWidget implements StatusBarWidget, StatusBarWi
 
 	@Override
 	public @Nullable @Nls(capitalization = Nls.Capitalization.Sentence) String getTooltipText() {
-		return DisableTemporaryEyeHelpAction.isTemporaryDisabled()
+		return PluginSettings.TemporaryDisableEyeHelpSetting.isTemporaryDisabled()
 				? EyeBundle.message("eye.widget.temporary.enable")
 				: EyeBundle.message("eye.widget.temporary.disable");
 	}
 
 	@Override
 	public @NotNull Icon getIcon() {
-		return DisableTemporaryEyeHelpAction.isTemporaryDisabled()
+		return PluginSettings.TemporaryDisableEyeHelpSetting.isTemporaryDisabled()
 				? EyeHelpIcons.EYE_OFF
 				: EyeHelpIcons.EYE_ON;
 	}
