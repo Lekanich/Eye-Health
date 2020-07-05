@@ -1,5 +1,6 @@
 package lekanich.eye.settings;
 
+import java.util.concurrent.TimeUnit;
 import javax.swing.InputVerifier;
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
@@ -23,7 +24,8 @@ import lekanich.eye.ui.EyeHelpDialog;
  */
 @RequiredArgsConstructor
 public class PluginSettingsPage implements SearchableConfigurable {
-	private static final String NAME = "Eye Help";
+	private static final String PAGE_NAME = "Eye Help";
+	private static final IntegerNumberVerifier POSITIVE_INTEGER_VERIFIER = new IntegerNumberVerifier();
 	private final PluginSettings settings;
 	private JTextField durationBetweenRestTextField;
 	private JCheckBox enablePluginCheckBox;
@@ -33,6 +35,7 @@ public class PluginSettingsPage implements SearchableConfigurable {
 	private JLabel statusPlugin;
 	private JTextField durationPostponeTextField;
 	private JTextField durationOfRestTextField;
+	private JTextField idleTextField;
 
 	@Override
 	public @NotNull String getId() {
@@ -41,16 +44,23 @@ public class PluginSettingsPage implements SearchableConfigurable {
 
 	@Override
 	public @Nls(capitalization = Nls.Capitalization.Title) String getDisplayName() {
-		return NAME;
+		return PAGE_NAME;
 	}
 
 	@Override
 	public @Nullable JComponent createComponent() {
 		reset();
 
-		durationPostponeTextField.setInputVerifier(new IntegerNumberVerifier());
-		durationBetweenRestTextField.setInputVerifier(new IntegerNumberVerifier());
-		durationOfRestTextField.setInputVerifier(new IntegerNumberVerifier());
+		durationPostponeTextField.setInputVerifier(POSITIVE_INTEGER_VERIFIER);
+		durationBetweenRestTextField.setInputVerifier(POSITIVE_INTEGER_VERIFIER);
+		durationOfRestTextField.setInputVerifier(POSITIVE_INTEGER_VERIFIER);
+		idleTextField.setInputVerifier(new InputVerifier() {
+			@Override
+			public boolean verify(JComponent input) {
+				return POSITIVE_INTEGER_VERIFIER.verify(input)
+						&& Long.parseLong(durationBetweenRestTextField.getText()) > Long.parseLong(((JTextField) input).getText());
+			}
+		});
 
 		return mainPanel;
 	}
@@ -72,8 +82,9 @@ public class PluginSettingsPage implements SearchableConfigurable {
 		return enablePluginCheckBox.isSelected() != state.isEnable()
 				|| allowPostponeTheEyeCheckBox.isSelected() != state.isPostpone()
 				|| !durationOfRestTextField.getText().equals(String.valueOf(state.getDurationBreak()))
-				|| !durationBetweenRestTextField.getText().equals(String.valueOf(state.getDurationWorkBeforeBreak()))
-				|| !durationPostponeTextField.getText().equals(String.valueOf(state.getDurationPostpone()));
+				|| !durationBetweenRestTextField.getText().equals(String.valueOf(TimeUnit.SECONDS.toMinutes(state.getDurationWorkBeforeBreak())))
+				|| !durationPostponeTextField.getText().equals(String.valueOf(state.getDurationPostpone()))
+				|| !idleTextField.getText().equals(String.valueOf(TimeUnit.SECONDS.toMinutes(state.getIdleTime())));
 	}
 
 	@Override
@@ -87,9 +98,10 @@ public class PluginSettingsPage implements SearchableConfigurable {
 		state.setEnable(enablePluginCheckBox.isSelected());
 		state.setPostpone(allowPostponeTheEyeCheckBox.isSelected());
 		try {
-			state.setDurationBreak(Integer.parseInt(durationOfRestTextField.getText()));
-			state.setDurationWorkBeforeBreak(Integer.parseInt(durationBetweenRestTextField.getText()));
-			state.setDurationPostpone(Integer.parseInt(durationPostponeTextField.getText()));
+			state.setDurationBreak(Long.parseLong(durationOfRestTextField.getText()));
+			state.setDurationWorkBeforeBreak(TimeUnit.MINUTES.toSeconds(Long.parseLong(durationBetweenRestTextField.getText())));
+			state.setDurationPostpone(Long.parseLong(durationPostponeTextField.getText()));
+			state.setIdleTime(TimeUnit.MINUTES.toSeconds(Long.parseLong(idleTextField.getText())));
 		} catch (NumberFormatException e) {
 			throw new ConfigurationException("Cannot apply that values", e, "need to check durations");
 		}
@@ -110,8 +122,9 @@ public class PluginSettingsPage implements SearchableConfigurable {
 		enablePluginCheckBox.setSelected(state.isEnable());
 		allowPostponeTheEyeCheckBox.setSelected(state.isPostpone());
 		durationOfRestTextField.setText(String.valueOf(state.getDurationBreak()));
-		durationBetweenRestTextField.setText(String.valueOf(state.getDurationWorkBeforeBreak()));
+		durationBetweenRestTextField.setText(String.valueOf(TimeUnit.SECONDS.toMinutes(state.getDurationWorkBeforeBreak())));
 		durationPostponeTextField.setText(String.valueOf(state.getDurationPostpone()));
+		idleTextField.setText(String.valueOf(TimeUnit.SECONDS.toMinutes(state.getIdleTime())));
 
 		updateStatusLabel(statusPlugin, state.isEnable());
 		updateStatusLabel(statusLabelPostpone, state.isPostpone());

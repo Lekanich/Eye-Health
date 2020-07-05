@@ -52,7 +52,9 @@ public class EyeTemporaryStatusBarWidget implements StatusBarWidget, StatusBarWi
 	@Override
 	public void statusChanged(Status status) {
 		if (status == Status.ACTIVE) {
-			PluginSettings.TemporaryDisableEyeHelpSetting.removeTemporaryStopTime();
+			PluginSettings.TemporaryDisableEyeHelpSetting.reactivate();
+		} else if (status == Status.TEMPORARY_DISABLED) {
+			PluginSettings.TemporaryDisableEyeHelpSetting.deactivateEyeHelp();
 		}
 
 		update();
@@ -82,13 +84,14 @@ public class EyeTemporaryStatusBarWidget implements StatusBarWidget, StatusBarWi
 	public @Nullable Consumer<MouseEvent> getClickConsumer() {
 		return mouseEvent -> {
 			try {
+				// notify about temporary disabling
+				EyeHelpStatusListener publisher = ApplicationManager.getApplication().getMessageBus()
+						.syncPublisher(EyeHelpStatusListener.EYE_HELP_STATUS_TOPIC);
 				if (PluginSettings.TemporaryDisableEyeHelpSetting.isTemporaryDisabled()) {
-					PluginSettings.TemporaryDisableEyeHelpSetting.removeTemporaryStopTime();
+					publisher.statusChanged(Status.ACTIVE);
 				} else {
-					PluginSettings.TemporaryDisableEyeHelpSetting.disableTemporaryEyeHelp();
+					publisher.statusChanged(Status.TEMPORARY_DISABLED);
 				}
-
-				update();
 			} catch (Exception e) {
 				Messages.showMessageDialog(getProject(), e.getMessage(), UIBundle.message("error.dialog.title"), Messages.getErrorIcon());
 			}

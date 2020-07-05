@@ -172,7 +172,7 @@ public class SwingBrowser extends JEditorPane implements TipUIUtil.Browser {
 		setEditorKit(kit);
 	}
 
-	private URL cssResource() {
+	protected URL cssResource() {
 //		String cssFileName =  StartupUiUtil.isUnderDarcula() ? "tips_darcula.css" : "tips.css";
 		String cssFileName = "exercise.css";
 		return ResourceUtil.getResource(SwingBrowser.class, "/exercises/css/", cssFileName);

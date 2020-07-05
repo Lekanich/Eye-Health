@@ -5,8 +5,8 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
+import java.util.concurrent.TimeUnit;
 import com.intellij.ide.util.PropertiesComponent;
-import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.components.PersistentStateComponent;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.components.State;
@@ -16,7 +16,7 @@ import org.jetbrains.annotations.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lekanich.eye.listener.EyeHelpStatusListener;
+import lekanich.DeveloperUtil;
 import lekanich.eye.ui.EyeHelpDialog;
 
 
@@ -63,17 +63,31 @@ public class PluginSettings implements PersistentStateComponent<PluginSettings.P
 		 * shift of your eye exercise on that time
 		 * in seconds
 		 */
-		private int durationPostpone = 120;
+		private long durationPostpone = TimeUnit.MINUTES.toSeconds(2);
 
 		/**
 		 * in seconds
 		 */
-		private int durationBreak = 30;
+		private long durationBreak = 30;
 
 		/**
-		 * in minutes
+		 * It should be less then durationWorkBeforeBreak
+		 * in seconds
 		 */
-		private int durationWorkBeforeBreak = 15;
+		private long idleTime = TimeUnit.MINUTES.toSeconds(10);
+
+		/**
+		 * in seconds
+		 */
+		private long durationWorkBeforeBreak = TimeUnit.MINUTES.toSeconds(15);
+
+		public long getDurationWorkBeforeBreak() {
+			return DeveloperUtil.isDebugMode() ? 30 : durationWorkBeforeBreak;
+		}
+
+		public long getIdleTime() {
+			return DeveloperUtil.isDebugMode() ? 5 : idleTime;
+		}
 	}
 
 	public static boolean isDisabled() {
@@ -91,13 +105,15 @@ public class PluginSettings implements PersistentStateComponent<PluginSettings.P
 		@NotNull
 		private static final String STOP_UNTIL_THE_END_OF_THE_DAY = "stopUntilTheTime";
 
-		public static void removeTemporaryStopTime() {
+		public static void reactivate() {
 			// set properties to end of the date so we can set end of the day in your timezone
 			PropertiesComponent.getInstance()
 					.setValue(STOP_UNTIL_THE_END_OF_THE_DAY, null);
+
+			EyeHelpDialog.publishNextRestEvent();
 		}
 
-		public static void disableTemporaryEyeHelp() {
+		public static void deactivateEyeHelp() {
 			long untilTimeUTC = calcMidnightTodaySeconds();
 
 			// set properties to end of the date so we can set end of the day in your timezone
@@ -106,14 +122,9 @@ public class PluginSettings implements PersistentStateComponent<PluginSettings.P
 
 			// invoke eye help after the midnight
 			EyeHelpDialog.publishNextRestEventWithDelay(untilTimeUTC - nowSeconds());
-
-			// notify about temporary disabling
-			ApplicationManager.getApplication().getMessageBus()
-					.syncPublisher(EyeHelpStatusListener.EYE_HELP_STATUS_TOPIC)
-					.statusChanged(EyeHelpStatusListener.Status.TEMPORARY_DISABLED);
 		}
 
-		public static long calcMidnightTodaySeconds() {
+		private static long calcMidnightTodaySeconds() {
 			LocalDate today = LocalDate.now(ZoneId.systemDefault());
 			LocalDateTime todayMidnight = LocalDateTime.of(today, LocalTime.MIDNIGHT).plusDays(1);
 			return todayMidnight.toEpochSecond(ZoneOffset.UTC);

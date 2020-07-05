@@ -46,9 +46,9 @@ public class EyeHelpPanel extends JBPanel<EyeHelpPanel> {
 
 	private static final class JClockPanel extends JBPanel<JClockPanel> {
 		private final JBLabel counterLabel;
-		private int secondsToRest;
+		private long secondsToRest;
 
-		public JClockPanel(int secondsToRest) {
+		public JClockPanel(long secondsToRest) {
 			this.secondsToRest = secondsToRest;
 
 			setLayout(new BorderLayout());
@@ -97,7 +97,7 @@ public class EyeHelpPanel extends JBPanel<EyeHelpPanel> {
 		this.clockPanel = new JClockPanel(Optional.ofNullable(PluginSettings.getInstance())
 				.map(PluginSettings::getState)
 				.map(PluginSettings.PluginAppState::getDurationBreak)
-				.orElse(0));
+				.orElse(0L));
 
 		add(scrollPane, new GridConstraints(0, 0, 2, 1,
 				GridConstraints.ALIGN_CENTER,

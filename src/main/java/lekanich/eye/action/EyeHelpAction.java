@@ -6,7 +6,6 @@ import com.intellij.openapi.application.ApplicationManager;
 import org.jetbrains.annotations.NotNull;
 import lekanich.eye.listener.EyeHelpStatusListener;
 import lekanich.eye.settings.PluginSettings;
-import lekanich.eye.ui.EyeHelpDialog;
 
 
 /**
@@ -20,8 +19,6 @@ public class EyeHelpAction extends AnAction {
 		PluginSettings.getInstance()
 				.getState()
 				.setEnable(true);
-
-		EyeHelpDialog.publishNextRestEvent();
 
 		// notify about temporary disabling
 		ApplicationManager.getApplication().getMessageBus()

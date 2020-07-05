@@ -2,7 +2,6 @@ package lekanich.eye.ui;
 
 import java.awt.Window;
 import java.util.Optional;
-import java.util.concurrent.TimeUnit;
 import java.util.stream.Stream;
 import javax.swing.Action;
 import javax.swing.JComponent;
@@ -127,7 +126,7 @@ public class EyeHelpDialog extends DialogWrapper {
 
 		ApplicationManager.getApplication().getMessageBus()
 				.syncPublisher(EyeHelpListener.EYE_HELP_TOPIC)
-				.scheduleEyeHelp(TimeUnit.MINUTES.toSeconds(state.getDurationWorkBeforeBreak() + delayInSeconds));
+				.scheduleEyeHelp(state.getDurationWorkBeforeBreak() + delayInSeconds);
 	}
 
 	@Override
