@@ -25,12 +25,13 @@ intellij {
 
 patchPluginXml {
 	changeNotes """
-      Added ten different exercises with 30 seconds on it.<br>
+      * added idle observer <br/>
+      * added ten different exercises with 30 seconds on it.<br/>
       """
 }
 
 runIde {
 	jvmArgs '-Didea.ProcessCanceledException=disabled'
 	systemProperty 'idea.auto.reload.plugins', false
-	systemProperty 'eye.debug.run', true
+	systemProperty 'eye.debug.run', false
 }
