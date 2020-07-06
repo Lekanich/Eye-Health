@@ -33,5 +33,5 @@ patchPluginXml {
 runIde {
 	jvmArgs '-Didea.ProcessCanceledException=disabled'
 	systemProperty 'idea.auto.reload.plugins', false
-	systemProperty 'eye.debug.run', false
+	systemProperty 'eye.debug.run', true
 }
