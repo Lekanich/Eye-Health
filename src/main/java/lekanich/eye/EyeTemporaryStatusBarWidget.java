@@ -62,7 +62,7 @@ public class EyeTemporaryStatusBarWidget implements StatusBarWidget, StatusBarWi
 
 	private void update() {
 		EdtExecutorService.getInstance()
-				.execute(() -> Optional.of(statusBar).ifPresent(bar -> bar.updateWidget(ID())));
+				.execute(() -> Optional.ofNullable(statusBar).ifPresent(bar -> bar.updateWidget(ID())));
 	}
 
 	@Override
