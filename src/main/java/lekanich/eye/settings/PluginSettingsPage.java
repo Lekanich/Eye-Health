@@ -22,7 +22,6 @@ import lekanich.eye.ui.EyeHelpDialog;
 /**
  * @author Lekanich
  */
-@RequiredArgsConstructor
 public class PluginSettingsPage implements SearchableConfigurable {
 	private static final String PAGE_NAME = "Eye Help";
 	private static final IntegerNumberVerifier POSITIVE_INTEGER_VERIFIER = new IntegerNumberVerifier();
@@ -36,6 +35,10 @@ public class PluginSettingsPage implements SearchableConfigurable {
 	private JTextField durationPostponeTextField;
 	private JTextField durationOfRestTextField;
 	private JTextField idleTextField;
+
+	public PluginSettingsPage() {
+		this.settings = PluginSettings.getInstance();
+	}
 
 	@Override
 	public @NotNull String getId() {
