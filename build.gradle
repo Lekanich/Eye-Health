@@ -11,7 +11,7 @@ println "CI: ${System.getenv('CI')}"
 // specified the last version
 def ideaVersion = '2020.2'
 if (project.hasProperty("intellijIdeaVersion")) {
-    ideaVersion = intellijIdeaVersion
+    ideaVersion = project.property("intellijIdeaVersion")
 }
 println "IdeaVersion is : ${ideaVersion}"
 
