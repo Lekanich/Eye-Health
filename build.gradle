@@ -4,7 +4,7 @@ plugins {
 }
 
 group 'lekanich'
-String pluginVersion = '0.1.4'
+String pluginVersion = '0.1.5'
 
 println "CI: ${System.getenv('CI')}"
 
