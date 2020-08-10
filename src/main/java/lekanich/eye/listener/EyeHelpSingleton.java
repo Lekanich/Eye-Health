@@ -23,7 +23,6 @@ import lekanich.eye.ui.EyeHelpDialog;
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class EyeHelpSingleton implements EyeHelpListener {
-	private static final Logger log = Logger.getInstance(EyeHelpSingleton.class);
 	private static final long EVENT_MASK = AWTEvent.MOUSE_EVENT_MASK
 			| AWTEvent.MOUSE_MOTION_EVENT_MASK
 			| AWTEvent.MOUSE_WHEEL_EVENT_MASK
@@ -58,7 +57,7 @@ public class EyeHelpSingleton implements EyeHelpListener {
 					}
 
 					long idleInMS = TimeUnit.SECONDS.toMillis(PluginSettings.getInstance().getState().getIdleTime());
-					IDLE_LISTENER.testIdleAndDisableIfNeed(idleInMS);
+					IDLE_LISTENER.checkIdleAndDisableIfNeed(idleInMS);
 
 					EyeHelpDialog.showForProject();
 				}, delayInSeconds, TimeUnit.SECONDS);

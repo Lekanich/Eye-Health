@@ -29,7 +29,7 @@ public class IdleListener implements AWTEventListener {
 	/**
 	 * @param idleTimeMs time after which plugin decide that it was idle time (in ms)
 	 */
-	public void testIdleAndDisableIfNeed(long idleTimeMs) {
+	public void checkIdleAndDisableIfNeed(long idleTimeMs) {
 		long dTimeInMs = System.currentTimeMillis() - lastEventTime;
 		boolean isIdle = dTimeInMs > idleTimeMs;
 		if (isIdle && !PluginSettings.isDisabled()) {

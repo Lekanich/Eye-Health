@@ -14,6 +14,7 @@ import com.intellij.openapi.project.ProjectManager;
 import com.intellij.openapi.ui.DialogWrapper;
 import com.intellij.openapi.wm.WindowManager;
 import com.intellij.openapi.wm.ex.WindowManagerEx;
+import lekanich.eye.listener.EyeHelpStatusListener;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import lekanich.eye.EyeBundle;
@@ -65,6 +66,11 @@ public class EyeHelpDialog extends DialogWrapper {
 
 	@Override
 	public void show() {
+		// se widget to active since we back to show "exercise message"
+		ApplicationManager.getApplication().getMessageBus()
+				.syncPublisher(EyeHelpStatusListener.EYE_HELP_STATUS_TOPIC)
+				.statusChanged(EyeHelpStatusListener.Status.ACTIVE);
+
 		PropertiesComponent.getInstance()
 				.setValue(LAST_TIME_EYE_HELP_SHOWN, String.valueOf(System.currentTimeMillis()));
 		super.show();
