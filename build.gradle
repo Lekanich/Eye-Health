@@ -55,6 +55,7 @@ patchPluginXml {
 	changeNotes """
       [0.1.6] <br/>
       * fixed status widget bar when it activates after midnight <br/>
+      * increased work duration from 15 minutes to 30 <br/>
       [0.1.4] <br/>
       * fixed status widget bar <br/>
       [0.1.3] <br/>
