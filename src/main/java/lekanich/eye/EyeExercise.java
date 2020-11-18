@@ -3,17 +3,17 @@ package lekanich.eye;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 import java.util.List;
-import java.util.Optional;
-import com.intellij.openapi.extensions.AbstractExtensionPointBean;
-import com.intellij.openapi.extensions.ExtensionPointName;
-import com.intellij.openapi.extensions.PluginDescriptor;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.ui.ColorUtil;
 import com.intellij.util.ResourceUtil;
 import com.intellij.util.ui.StartupUiUtil;
 import com.intellij.util.ui.UIUtil;
 import com.intellij.util.xmlb.annotations.Attribute;
+import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 
 
@@ -21,14 +21,23 @@ import lombok.ToString;
  * @author Lekanich
  */
 @ToString
-public class EyeExercise extends AbstractExtensionPointBean {
-	public static final ExtensionPointName<EyeExercise> EP_NAME = ExtensionPointName.create("lekanich.eye-health.exercises");
-
+@RequiredArgsConstructor
+public class EyeExercise {
+    private static final String MAIN_FOLDER = "/exercises";
 	@Attribute("file")
-	public String fileName;
+	public final String fileName;
 
 	public static List<EyeExercise> findExercises() {
-		return EP_NAME.getExtensionList();
+		String text;
+		try {
+			URL resource = ResourceUtil.getResource(EyeExercise.class, MAIN_FOLDER, "list.txt");
+			text = ResourceUtil.loadText(resource);
+		} catch (IOException e) {
+			text = "";
+		}
+		return Stream.of(text.split("\\s"))
+				.map(EyeExercise::new)
+				.collect(Collectors.toList());
 	}
 
 	public String getExerciseText() {
@@ -42,17 +51,12 @@ public class EyeExercise extends AbstractExtensionPointBean {
 				cssText = FileUtil.loadFile(new File(file.getParentFile(), StartupUiUtil.isUnderDarcula()
 						? "css/tips_darcula.css" : "css/tips.css"));
 			} else {
-				PluginDescriptor pluginDescriptor = getPluginDescriptor();
-				ClassLoader loader = Optional.ofNullable(pluginDescriptor)
-						.map(PluginDescriptor::getPluginClassLoader)
-						.orElse(getClass().getClassLoader());
-
-				InputStream stream = ResourceUtil.getResourceAsStream(loader, "exercises", fileName);
+				InputStream stream = ResourceUtil.getResourceAsStream(getClass(), MAIN_FOLDER, fileName);
 				if (stream == null) {
 					return dummyMessage;
 				}
 				text.append(ResourceUtil.loadText(stream));
-				InputStream cssResourceStream = ResourceUtil.getResourceAsStream(loader, "/tips/", StartupUiUtil.isUnderDarcula()
+				InputStream cssResourceStream = ResourceUtil.getResourceAsStream(getClass(), "/tips/", StartupUiUtil.isUnderDarcula()
 						? "css/tips_darcula.css" : "css/tips.css");
 				cssText = cssResourceStream != null ? ResourceUtil.loadText(cssResourceStream) : "";
 			}
