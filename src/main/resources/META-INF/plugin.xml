@@ -4,7 +4,9 @@
 	<vendor email="lekan1992@gmail.com" url="https://github.com/Lekanich/Eye-Health">Aleksandr Zhelezniak</vendor>
 
 	<description><![CDATA[
-    It's a tool to help to manage your staring time to the display.<br>
+    This tool will help you manage your staring time to the display.<br/>
+    It suggests a few exercises. You can configured duration of your work time and the following rest.<br/>
+    It will help you remember that you may want to take a break and do small exercises for you eyes.
     ]]></description>
 
 	<!-- please see https://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
@@ -19,23 +21,6 @@
 		<applicationService serviceImplementation="lekanich.eye.settings.PluginSettings"/>
 
 		<applicationConfigurable instance="lekanich.eye.settings.PluginSettingsPage"/>
-	</extensions>
-
-	<extensionPoints>
-		<extensionPoint name="exercises" beanClass="lekanich.eye.EyeExercise" dynamic="true"/>
-	</extensionPoints>
-
-	<extensions defaultExtensionNs="lekanich.eye-health">
-		<exercises file="eye-press.html"/>
-		<exercises file="eye-roll.html"/>
-		<exercises file="figure-eights.html"/>
-		<exercises file="palm-eye.html"/>
-		<exercises file="palming-title.html"/>
-		<exercises file="rule-20-20-20.html"/>
-		<exercises file="simple.html"/>
-		<exercises file="slow-blink.html"/>
-		<exercises file="writing-messages-on-the-wall.html"/>
-		<exercises file="zooming.html"/>
 	</extensions>
 
 	<actions>
