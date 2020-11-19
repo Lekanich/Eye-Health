@@ -82,7 +82,7 @@ public class PluginSettings implements PersistentStateComponent<PluginSettings.P
 		private long durationWorkBeforeBreak = TimeUnit.MINUTES.toSeconds(30);
 
 		public long getDurationWorkBeforeBreak() {
-			return DeveloperUtil.isDebugMode() ? 30 : durationWorkBeforeBreak;
+			return DeveloperUtil.isDebugMode() ? 8 : durationWorkBeforeBreak;
 		}
 
 		public long getIdleTime() {

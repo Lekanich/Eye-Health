@@ -4,16 +4,23 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.net.URL;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import javax.swing.JComponent;
+import javax.swing.JEditorPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
+import javax.swing.text.EditorKit;
+import javax.swing.text.html.HTMLEditorKit;
+import com.intellij.codeInsight.template.emmet.tokens.OperationToken;
 import com.intellij.ide.util.TipUIUtil;
+import com.intellij.ide.util.TipUIUtil.Browser;
+import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.ui.JBColor;
 import com.intellij.ui.ScrollPaneFactory;
 import com.intellij.ui.components.JBLabel;
@@ -21,6 +28,7 @@ import com.intellij.ui.components.JBPanel;
 import com.intellij.ui.components.panels.VerticalLayout;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
+import com.intellij.util.ResourceUtil;
 import com.intellij.util.concurrency.EdtExecutorService;
 import com.intellij.util.ui.JBDimension;
 import com.intellij.util.ui.JBUI;
@@ -38,135 +46,152 @@ import static java.beans.EventHandler.create;
  * @author Lekanich
  */
 public class EyeHelpPanel extends JBPanel<EyeHelpPanel> {
-	private static final JBColor DIVIDER_COLOR = new JBColor(0xd9d9d9, 0x515151);
-	private static final int DEFAULT_WIDTH = 400;
-	private static final int DEFAULT_HEIGHT = 200;
-	private final EyeHelpDialog parent;
-	private final JClockPanel clockPanel;
+    private static final Logger log = Logger.getInstance(EyeHelpPanel.class);
+    private static final JBColor DIVIDER_COLOR = new JBColor(0xd9d9d9, 0x515151);
+    private static final int DEFAULT_WIDTH = 400;
+    private static final int DEFAULT_HEIGHT = 200;
+    private final EyeHelpDialog parent;
+    private final JClockPanel clockPanel;
 
-	private static final class JClockPanel extends JBPanel<JClockPanel> {
-		private final JBLabel counterLabel;
-		private long secondsToRest;
+    private static final class JClockPanel extends JBPanel<JClockPanel> {
+        private final JBLabel counterLabel;
+        private long secondsToRest;
 
-		public JClockPanel(long secondsToRest) {
-			this.secondsToRest = secondsToRest;
+        public JClockPanel(long secondsToRest) {
+            this.secondsToRest = secondsToRest;
 
-			setLayout(new BorderLayout());
+            setLayout(new BorderLayout());
 
-			this.counterLabel = new JBLabel(UIUtil.ComponentStyle.LARGE);
-			this.counterLabel.setBorder(JBUI.Borders.empty(0, 4, 20, 4));
-			add(counterLabel, BorderLayout.CENTER);
-		}
+            this.counterLabel = new JBLabel(UIUtil.ComponentStyle.LARGE);
+            this.counterLabel.setBorder(JBUI.Borders.empty(0, 4, 20, 4));
+            add(counterLabel, BorderLayout.CENTER);
+        }
 
-		/**
-		 * @return true if timer isn't equal to zero
-		 */
-		public boolean tick() {
-			if (secondsToRest > 0) {
-				String value = String.valueOf(secondsToRest--);
-				counterLabel.setText(value);
-				counterLabel.setAlignmentX(JComponent.CENTER_ALIGNMENT);
-				updateUI();
-				return true;
-			} else {
-				return false;
-			}
-		}
+        /**
+         * @return true if timer isn't equal to zero
+         */
+        public boolean tick() {
+            if (secondsToRest > 0) {
+                String value = String.valueOf(secondsToRest--);
+                counterLabel.setText(value);
+                counterLabel.setAlignmentX(JComponent.CENTER_ALIGNMENT);
+                updateUI();
+                return true;
+            } else {
+                return false;
+            }
+        }
 
-		public boolean isUp() {
-			return secondsToRest > 0;
-		}
-	}
+        public boolean isUp() {
+            return secondsToRest > 0;
+        }
+    }
 
-	public EyeHelpPanel(EyeHelpDialog eyeHelpDialog) {
-		this.parent = eyeHelpDialog;
-		setLayout(new GridLayoutManager(3, 1));
+    public EyeHelpPanel(EyeHelpDialog eyeHelpDialog) {
+        this.parent = eyeHelpDialog;
+        setLayout(new GridLayoutManager(3, 1));
 
-		String exercise = findExerciseMessage();
+        String exercise = findExerciseMessage();
 
-		// configure exercise panel
-		TipUIUtil.Browser browser = createBrowser();
-		browser.setText(exercise);
-		browser.getComponent().setBorder(JBUI.Borders.empty(8, 12));
-		browser.getComponent().setBackground(UIUtil.getPanelBackground());
-		JScrollPane scrollPane = ScrollPaneFactory.createScrollPane(browser.getComponent(), true);
-		scrollPane.setBorder(JBUI.Borders.customLine(DIVIDER_COLOR, 0, 0, 1, 0));
+        // configure exercise panel
+        TipUIUtil.Browser browser = createBrowser();
+        browser.setText(exercise);
+        browser.getComponent().setBorder(JBUI.Borders.empty(8, 12));
+        browser.getComponent().setBackground(UIUtil.getPanelBackground());
+        JScrollPane scrollPane = ScrollPaneFactory.createScrollPane(browser.getComponent(), true);
+        scrollPane.setBorder(JBUI.Borders.customLine(DIVIDER_COLOR, 0, 0, 1, 0));
 
-		JBLabel timerInfoLabel = new JBLabel(EyeBundle.message("eye.dialog.timer.topic.label"));
+        JBLabel timerInfoLabel = new JBLabel(EyeBundle.message("eye.dialog.timer.topic.label"));
 
-		this.clockPanel = new JClockPanel(Optional.ofNullable(PluginSettings.getInstance())
-				.map(PluginSettings::getState)
-				.map(PluginSettings.PluginAppState::getDurationBreak)
-				.orElse(0L));
+        this.clockPanel = new JClockPanel(Optional.ofNullable(PluginSettings.getInstance())
+                .map(PluginSettings::getState)
+                .map(PluginSettings.PluginAppState::getDurationBreak)
+                .orElse(0L));
 
-		add(scrollPane, new GridConstraints(0, 0, 2, 1,
-				GridConstraints.ALIGN_CENTER,
-				GridConstraints.FILL_BOTH,
-				GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW,
-				GridConstraints.SIZEPOLICY_FIXED,
-				null, null, null
-		));
+        add(scrollPane, new GridConstraints(0, 0, 2, 1,
+                GridConstraints.ALIGN_CENTER,
+                GridConstraints.FILL_BOTH,
+                GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW,
+                GridConstraints.SIZEPOLICY_FIXED,
+                null, null, null
+        ));
 
-		JPanel panel = new JPanel();
-		panel.setLayout(new VerticalLayout(10, SwingConstants.CENTER));
-		panel.add(timerInfoLabel, VerticalLayout.TOP);
-		panel.add(clockPanel, VerticalLayout.BOTTOM);
-		add(panel, new GridConstraints(2, 0, 1, 1,
-				GridConstraints.ALIGN_CENTER,
-				GridConstraints.FILL_HORIZONTAL,
-				GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW,
-				GridConstraints.SIZEPOLICY_FIXED,
-				null, null, null
-		));
+        JPanel panel = new JPanel();
+        panel.setLayout(new VerticalLayout(10, SwingConstants.CENTER));
+        panel.add(timerInfoLabel, VerticalLayout.TOP);
+        panel.add(clockPanel, VerticalLayout.BOTTOM);
+        add(panel, new GridConstraints(2, 0, 1, 1,
+                GridConstraints.ALIGN_CENTER,
+                GridConstraints.FILL_HORIZONTAL,
+                GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW,
+                GridConstraints.SIZEPOLICY_FIXED,
+                null, null, null
+        ));
 
-		parent.addKeyListener(create(KeyListener.class, this, "closeParent", "keyCode", "keyPressed"));
+        parent.addKeyListener(create(KeyListener.class, this, "closeParent", "keyCode", "keyPressed"));
 
-		startRefreshSeconds();
-	}
+        startRefreshSeconds();
+    }
 
-	@NotNull
-	private String findExerciseMessage() {
-		List<EyeExercise> exercises = EyeExercise.findExercises();
-		if (exercises.isEmpty()) {
-			return EyeBundle.message("eye.dialog.exercises.dummy");
-		}
+    @NotNull
+    private String findExerciseMessage() {
+        List<EyeExercise> exercises = EyeExercise.findExercises();
+        if (exercises.isEmpty()) {
+            return EyeBundle.message("eye.dialog.exercises.dummy");
+        }
 
-		int index = DeveloperUtil.isDebugMode() ? 0 : (int) (exercises.size() * Math.random());
-		return exercises.get(index).getExerciseText();
-	}
+        int index = DeveloperUtil.isDebugMode() ? 0 : (int) (exercises.size() * Math.random());
+        return exercises.get(index).getExerciseText();
+    }
 
-	private void startRefreshSeconds() {
-		if (!clockPanel.isUp()) {
-			return;
-		}
+    private void startRefreshSeconds() {
+        if (!clockPanel.isUp()) {
+            return;
+        }
 
-		ScheduledExecutorService service = Executors.newScheduledThreadPool(1);
-		service.scheduleAtFixedRate(new Runnable() {
-			@SneakyThrows
-			@Override
-			public void run() {
-				if (!clockPanel.tick()) {
-					// close dialog after counter is down
-					EdtExecutorService.getInstance()
-							.execute(parent::doCancelAction);
-					service.shutdown();
-				}
-			}
-		}, 0, 1, TimeUnit.SECONDS);
-	}
+        ScheduledExecutorService service = Executors.newScheduledThreadPool(1);
+        service.scheduleAtFixedRate(new Runnable() {
+            @SneakyThrows
+            @Override
+            public void run() {
+                if (!clockPanel.tick()) {
+                    // close dialog after counter is down
+                    EdtExecutorService.getInstance()
+                            .execute(parent::doCancelAction);
+                    service.shutdown();
+                }
+            }
+        }, 0, 1, TimeUnit.SECONDS);
+    }
 
-	@Override
-	public Dimension getPreferredSize() {
-		return new JBDimension(DEFAULT_WIDTH, DEFAULT_HEIGHT);
-	}
+    @Override
+    public Dimension getPreferredSize() {
+        return new JBDimension(DEFAULT_WIDTH, DEFAULT_HEIGHT);
+    }
 
-	public void closeParent(Integer keyCode) {
-		if (KeyEvent.VK_ESCAPE == keyCode) {
-			parent.doCancelAction();
-		}
-	}
+    public void closeParent(Integer keyCode) {
+        if (KeyEvent.VK_ESCAPE == keyCode) {
+            parent.doCancelAction();
+        }
+    }
 
-	private TipUIUtil.Browser createBrowser() {
-		return new SwingBrowser();
-	}
+    private TipUIUtil.Browser createBrowser() {
+        Browser browser = TipUIUtil.createBrowser();
+        EditorKit kit = ((JEditorPane) browser.getComponent()).getEditorKit();
+        if (kit instanceof HTMLEditorKit) {
+            Optional.ofNullable(cssResource())
+                    .ifPresent(resource -> ((HTMLEditorKit) kit).getStyleSheet().addStyleSheet(UIUtil.loadStyleSheet(resource)));
+        } else {
+            log.warn("Kit inside internal browser wasn't HTML. It was: " + kit.getClass().getCanonicalName());
+        }
+
+        return browser;
+    }
+
+    protected URL cssResource() {
+//		String cssFileName =  StartupUiUtil.isUnderDarcula() ? "tips_darcula.css" : "tips.css";
+        String cssFileName = "exercise.css";
+        return ResourceUtil.getResource(EyeHelpPanel.class, "/exercises/css/", cssFileName);
+    }
+
 }
