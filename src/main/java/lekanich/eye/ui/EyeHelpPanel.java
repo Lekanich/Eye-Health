@@ -17,7 +17,6 @@ import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
 import javax.swing.text.EditorKit;
 import javax.swing.text.html.HTMLEditorKit;
-import com.intellij.codeInsight.template.emmet.tokens.OperationToken;
 import com.intellij.ide.util.TipUIUtil;
 import com.intellij.ide.util.TipUIUtil.Browser;
 import com.intellij.openapi.diagnostic.Logger;
