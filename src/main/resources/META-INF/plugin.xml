@@ -1,7 +1,7 @@
 <idea-plugin>
 	<id>lekanich.eye-health</id>
 	<name>Eye Health</name>
-	<vendor email="lekan1992@gmail.com" url="https://github.com/Lekanich/Eye-Health">Aleksandr Zhelezniak</vendor>
+	<vendor email="lekan1992@gmail.com">Aleksandr Zhelezniak</vendor>
 
 	<description><![CDATA[
     This tool will help you manage your staring time to the display.<br/>
