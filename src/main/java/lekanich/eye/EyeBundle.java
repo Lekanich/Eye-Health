@@ -1,6 +1,5 @@
 package lekanich.eye;
 
-import java.util.ResourceBundle;
 import com.intellij.AbstractBundle;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.PropertyKey;
@@ -9,7 +8,7 @@ import org.jetbrains.annotations.PropertyKey;
 /**
  * @author Lekanich
  */
-public class EyeBundle {
+public class EyeBundle extends AbstractBundle {
 	/**
 	 * The {@link java.util.ResourceBundle} path.
 	 */
@@ -19,9 +18,13 @@ public class EyeBundle {
 	/**
 	 * The {@link java.util.ResourceBundle} instance.
 	 */
-	private static final ResourceBundle BUNDLE = ResourceBundle.getBundle(BUNDLE_NAME);
+	private static final EyeBundle BUNDLE = new EyeBundle();
+
+	private EyeBundle() {
+		super(BUNDLE_NAME);
+	}
 
 	public static String message(@PropertyKey(resourceBundle = BUNDLE_NAME) String key, Object... params) {
-		return AbstractBundle.message(BUNDLE, key, params);
+		return BUNDLE.getMessage(key, params);
 	}
 }
