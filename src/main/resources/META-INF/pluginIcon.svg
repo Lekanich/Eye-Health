@@ -5,6 +5,10 @@
 			<stop offset="35%" stop-color="#59A869" stop-opacity=".9"/>
 			<stop offset="100%" stop-color="#DB5860"/>
 		</linearGradient>
+		<radialGradient id="pluginiconeye-b" cx="82.36%" cy="25.716%" r="144.737%" fx="82.36%" fy="25.716%" gradientTransform="rotate(16.284 .813 .256) scale(1 .98815)">
+			<stop offset="0%" stop-color="#FFF"/>
+			<stop offset="100%"/>
+		</radialGradient>
 	</defs>
 	<g fill="none" fill-rule="evenodd">
 		<rect width="40" height="40"/>
@@ -13,6 +17,7 @@
 			<circle cx="18.095" cy="10.476" r="9.524" fill="url(#eyehealthpluginicon-a)"/>
 			<circle cx="18.095" cy="10.476" r="2.857" fill="#000"/>
 		</g>
+		<ellipse cx="22" cy="18.5" rx="1" ry="1.5" fill="url(#pluginiconeye-b)" fill-opacity=".91"/>
 		<path fill="#000" fill-rule="nonzero" stroke="#000" d="M0,8.57142857 C0.0196967173,7.08463035 1.6274047,5.2114295 4.82312394,2.95182603 C9.19115079,-0.136683245 15.5513641,0.000921122694 17.479208,0.000921122694 C19.3305377,0.000918513046 26.5940088,0.073720528 30.1037797,2.95182603 C32.8917361,5.23802447 34.2857143,7.11122532 34.2857143,8.57142857 C34.2857143,7.70492842 33.5005497,6.88863541 31.9302205,6.12254951 C29.7748218,4.86905186 20.3796741,4.26535285 17.479208,4.26535285 C15.0635453,4.26535285 7.41264501,4.9099838 3.05279676,6.12254951 C1.01759892,6.68858092 0,7.50487395 0,8.57142857 Z" transform="translate(2.857 11.429)"/>
 	</g>
 </svg>
