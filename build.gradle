@@ -1,16 +1,16 @@
 plugins {
-	id 'java'
-	id 'org.jetbrains.intellij' version '0.6.4'
+    id 'java'
+    id 'org.jetbrains.intellij' version '0.6.5'
 }
 
 group 'lekanich'
 // the last digits it's the version of plugin in scope of IDEA version
-String pluginVersion = '2020.2.02'
+String pluginVersion = '2020.3.01'
 
 println "CI: ${System.getenv('CI')}"
 
 // specified the last version
-def ideaVersion = '2020.2'
+def ideaVersion = '2020.3'
 if (project.hasProperty("intellijIdeaVersion")) {
     ideaVersion = project.property("intellijIdeaVersion")
 }
@@ -21,39 +21,42 @@ println "ArtifactVersion is : ${artifactVersion}"
 
 version artifactVersion
 
-sourceCompatibility = JavaVersion.VERSION_11
-targetCompatibility = JavaVersion.VERSION_11
+sourceCompatibility = JavaVersion.VERSION_1_8
+targetCompatibility = JavaVersion.VERSION_1_8
 tasks.withType(JavaCompile) { options.encoding = 'UTF-8' }
 
 repositories {
-	mavenCentral()
+    mavenCentral()
 }
 
 dependencies {
-	compileOnly group: 'org.projectlombok', name: 'lombok', version: '1.18.16'
-	annotationProcessor 'org.projectlombok:lombok:1.18.16'
+    compileOnly group: 'org.projectlombok', name: 'lombok', version: '1.18.16'
+    annotationProcessor 'org.projectlombok:lombok:1.18.16'
 
-	testCompile group: 'junit', name: 'junit', version: '4.13.1'
-	testCompile group: 'org.hamcrest', name: 'hamcrest', version: '2.2'
+    testCompile group: 'junit', name: 'junit', version: '4.13.1'
+    testCompile group: 'org.hamcrest', name: 'hamcrest', version: '2.2'
 }
 
 // See https://github.com/JetBrains/gradle-intellij-plugin/
 intellij {
-	version ideaVersion
-	println "Building for version: ${version}"
+    version ideaVersion
+    println "Building for version: ${version}"
 }
 
 if (project.hasProperty("intellijPublishToken")) {
-	publishPlugin {
-		token intellijPublishToken
-	}
+    publishPlugin {
+        token intellijPublishToken
+    }
 }
 
 patchPluginXml {
 //    version pluginVersion
     sinceBuild '201'
 //    untilBuild '202.*'
-	changeNotes """
+    changeNotes """
+		[2020.3.01] <br/>
+		* new versioning <br/>
+		* IDEA update <br/>
       [0.1.6] <br/>
       * fixed status widget bar when it activates after midnight <br/>
       * increased work duration from 15 minutes to 30 <br/>
@@ -66,12 +69,12 @@ patchPluginXml {
 }
 
 runIde {
-	jvmArgs '-Didea.ProcessCanceledException=disabled'
-	systemProperty 'idea.auto.reload.plugins', false
-	systemProperty 'eye.debug.run', true
+    jvmArgs '-Didea.ProcessCanceledException=disabled'
+    systemProperty 'idea.auto.reload.plugins', false
+    systemProperty 'eye.debug.run', true
 }
 
 //https://data.services.jetbrains.com/products?fields=code,name,releases.downloads,releases.version,releases.build,releases.type&code=DG,PS,DL,MPS,MPSIIP,RDCPPP,WS,AC,IIC,IIE,GO,CL,PCD,PCC,RD,PCE,IIU,RM,PCP
 runPluginVerifier {
-    ideVersions = "2020.1.4, 2020.2.3"
+    ideVersions = "2020.1.4, 2020.2.3, 2020.3"
 }
