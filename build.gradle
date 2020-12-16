@@ -5,7 +5,7 @@ plugins {
 
 group 'lekanich'
 // the last digits it's the version of plugin in scope of IDEA version
-String pluginVersion = '2020.3.02'
+String pluginVersion = '2020.3.03'
 
 println "CI: ${System.getenv('CI')}"
 
