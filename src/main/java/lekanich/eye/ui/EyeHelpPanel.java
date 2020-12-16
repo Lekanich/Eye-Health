@@ -140,7 +140,7 @@ public class EyeHelpPanel extends JBPanel<EyeHelpPanel> {
             return EyeBundle.message("eye.dialog.exercises.dummy");
         }
 
-        int index = DeveloperUtil.isDebugMode() ? 0 : (int) (exercises.size() * Math.random());
+        int index = DeveloperUtil.isDebugMode() ? 2 : (int) (exercises.size() * Math.random());
         return exercises.get(index).getExerciseText();
     }
 
