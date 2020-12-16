@@ -31,13 +31,14 @@ import com.intellij.util.ResourceUtil;
 import com.intellij.util.concurrency.EdtExecutorService;
 import com.intellij.util.ui.JBDimension;
 import com.intellij.util.ui.JBUI;
+import com.intellij.util.ui.StartupUiUtil;
 import com.intellij.util.ui.UIUtil;
-import org.jetbrains.annotations.NotNull;
-import lombok.SneakyThrows;
 import lekanich.DeveloperUtil;
 import lekanich.eye.EyeBundle;
 import lekanich.eye.EyeExercise;
 import lekanich.eye.settings.PluginSettings;
+import lombok.SneakyThrows;
+import org.jetbrains.annotations.NotNull;
 import static java.beans.EventHandler.create;
 
 
@@ -188,8 +189,7 @@ public class EyeHelpPanel extends JBPanel<EyeHelpPanel> {
     }
 
     protected URL cssResource() {
-//		String cssFileName =  StartupUiUtil.isUnderDarcula() ? "tips_darcula.css" : "tips.css";
-        String cssFileName = "exercise.css";
+        String cssFileName = StartupUiUtil.isUnderDarcula() ? "exercise_darcula.css" : "exercise.css";
         return ResourceUtil.getResource(EyeHelpPanel.class, "/exercises/css/", cssFileName);
     }
 
