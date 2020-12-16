@@ -7,6 +7,7 @@ import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.util.concurrent.TimeUnit;
 import com.intellij.ide.util.PropertiesComponent;
+import com.intellij.openapi.Disposable;
 import com.intellij.openapi.components.PersistentStateComponent;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.components.State;
@@ -27,7 +28,7 @@ import lekanich.eye.ui.EyeHelpDialog;
 		name = "EyeHelpSettings",
 		storages = {@Storage(value = "lekanich.eye-help.xml")}
 )
-public class PluginSettings implements PersistentStateComponent<PluginSettings.PluginAppState> {
+public class PluginSettings implements PersistentStateComponent<PluginSettings.PluginAppState>, Disposable {
 	private final PluginAppState state = new PluginAppState();
 
 	public static PluginSettings getInstance() {
@@ -44,6 +45,9 @@ public class PluginSettings implements PersistentStateComponent<PluginSettings.P
 	public void loadState(@NotNull PluginSettings.PluginAppState state) {
 		XmlSerializerUtil.copyBean(state, this.state);
 	}
+
+	@Override
+	public void dispose() { }
 
 	@Getter
 	@Setter

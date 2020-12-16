@@ -42,7 +42,7 @@ public class EyeHelpSingleton implements EyeHelpListener {
 			future.cancel(false);
 		}
 
-		@NotNull Application application = ApplicationManager.getApplication();
+		@NotNull Disposable parent = PluginSettings.getInstance();
 		AtomicReference<Disposable> disposableRef = new AtomicReference<>();
 		future = EdtScheduledExecutorService.getInstance()
 				.schedule(() -> {
@@ -52,7 +52,7 @@ public class EyeHelpSingleton implements EyeHelpListener {
 					}
 
 					Disposer.dispose(disposable);
-					if (application.isDisposed()) {
+					if (Disposer.isDisposed(parent)) {
 						return;
 					}
 
@@ -70,6 +70,6 @@ public class EyeHelpSingleton implements EyeHelpListener {
 		};
 		disposableRef.set(disposable);
 		UIUtil.addAwtListener(IDLE_LISTENER, EVENT_MASK, disposable);
-		Disposer.register(application, disposable);
+		Disposer.register(parent, disposable);
 	}
 }
