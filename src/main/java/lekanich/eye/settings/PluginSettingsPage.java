@@ -14,7 +14,6 @@ import com.intellij.ui.JBColor;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import lombok.RequiredArgsConstructor;
 import lekanich.eye.EyeBundle;
 import lekanich.eye.ui.EyeHelpDialog;
 
@@ -106,7 +105,7 @@ public class PluginSettingsPage implements SearchableConfigurable {
 			state.setDurationPostpone(Long.parseLong(durationPostponeTextField.getText()));
 			state.setIdleTime(TimeUnit.MINUTES.toSeconds(Long.parseLong(idleTextField.getText())));
 		} catch (NumberFormatException e) {
-			throw new ConfigurationException("Cannot apply that values", e, "need to check durations");
+			throw new ConfigurationException("Cannot apply that values", e, EyeBundle.message("eye.settings.config.error.duration"));
 		}
 
 		updateStatusLabel(statusPlugin, state.isEnable());

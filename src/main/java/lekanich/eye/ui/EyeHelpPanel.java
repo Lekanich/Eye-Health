@@ -1,6 +1,7 @@
 package lekanich.eye.ui;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -10,7 +11,6 @@ import java.util.Optional;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
-import javax.swing.JComponent;
 import javax.swing.JEditorPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -50,7 +50,7 @@ public class EyeHelpPanel extends JBPanel<EyeHelpPanel> {
     private static final JBColor DIVIDER_COLOR = new JBColor(0xd9d9d9, 0x515151);
     private static final int DEFAULT_WIDTH = 400;
     private static final int DEFAULT_HEIGHT = 200;
-    private final EyeHelpDialog parent;
+    private final EyeHelpDialog dialog;
     private final JClockPanel clockPanel;
 
     private static final class JClockPanel extends JBPanel<JClockPanel> {
@@ -74,7 +74,7 @@ public class EyeHelpPanel extends JBPanel<EyeHelpPanel> {
             if (secondsToRest > 0) {
                 String value = String.valueOf(secondsToRest--);
                 counterLabel.setText(value);
-                counterLabel.setAlignmentX(JComponent.CENTER_ALIGNMENT);
+                counterLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
                 updateUI();
                 return true;
             } else {
@@ -88,7 +88,7 @@ public class EyeHelpPanel extends JBPanel<EyeHelpPanel> {
     }
 
     public EyeHelpPanel(EyeHelpDialog eyeHelpDialog) {
-        this.parent = eyeHelpDialog;
+        this.dialog = eyeHelpDialog;
         setLayout(new GridLayoutManager(3, 1));
 
         String exercise = findExerciseMessage();
@@ -128,7 +128,7 @@ public class EyeHelpPanel extends JBPanel<EyeHelpPanel> {
                 null, null, null
         ));
 
-        parent.addKeyListener(create(KeyListener.class, this, "closeParent", "keyCode", "keyPressed"));
+        dialog.addKeyListener(create(KeyListener.class, this, "closeParent", "keyCode", "keyPressed"));
 
         startRefreshSeconds();
     }
@@ -149,8 +149,6 @@ public class EyeHelpPanel extends JBPanel<EyeHelpPanel> {
             return;
         }
 
-        // TODO: need to shutdown
-        // disposable?
         ScheduledExecutorService service = Executors.newScheduledThreadPool(1);
         service.scheduleAtFixedRate(new Runnable() {
             @SneakyThrows
@@ -159,7 +157,7 @@ public class EyeHelpPanel extends JBPanel<EyeHelpPanel> {
                 if (!clockPanel.tick()) {
                     // close dialog after counter is down
                     EdtExecutorService.getInstance()
-                            .execute(parent::doCancelAction);
+                            .execute(dialog::doCancelAction);
                     service.shutdown();
                 }
             }
@@ -173,7 +171,7 @@ public class EyeHelpPanel extends JBPanel<EyeHelpPanel> {
 
     public void closeParent(Integer keyCode) {
         if (KeyEvent.VK_ESCAPE == keyCode) {
-            parent.doCancelAction();
+            dialog.doCancelAction();
         }
     }
 
