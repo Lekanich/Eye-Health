@@ -99,6 +99,10 @@ public class EyeHelpDialog extends DialogWrapper {
             ourInstance.dispose();
         }
 
+        if (w == null) {
+            return;
+        }
+
         if (PluginSettings.isDisabled()) {
             return;
         }

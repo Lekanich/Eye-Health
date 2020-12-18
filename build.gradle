@@ -54,6 +54,8 @@ patchPluginXml {
     sinceBuild '201'
 //    untilBuild '202.*'
     changeNotes """
+		[2020.3.03] <br/>
+		* update look of the emphasize words <br/>
 		[2020.3.02] <br/>
 		* change the way how to choose the window when no active project is selected <br/>
 		[2020.3.01] <br/>

@@ -149,6 +149,8 @@ public class EyeHelpPanel extends JBPanel<EyeHelpPanel> {
             return;
         }
 
+        // TODO: need to shutdown
+        // disposable?
         ScheduledExecutorService service = Executors.newScheduledThreadPool(1);
         service.scheduleAtFixedRate(new Runnable() {
             @SneakyThrows
