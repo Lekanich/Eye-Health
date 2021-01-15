@@ -19,7 +19,9 @@ import javax.swing.text.EditorKit;
 import javax.swing.text.html.HTMLEditorKit;
 import com.intellij.ide.util.TipUIUtil;
 import com.intellij.ide.util.TipUIUtil.Browser;
+import com.intellij.openapi.Disposable;
 import com.intellij.openapi.diagnostic.Logger;
+import com.intellij.openapi.util.Disposer;
 import com.intellij.ui.JBColor;
 import com.intellij.ui.ScrollPaneFactory;
 import com.intellij.ui.components.JBLabel;
@@ -37,7 +39,6 @@ import lekanich.DeveloperUtil;
 import lekanich.eye.EyeBundle;
 import lekanich.eye.EyeExercise;
 import lekanich.eye.settings.PluginSettings;
-import lombok.SneakyThrows;
 import org.jetbrains.annotations.NotNull;
 import static java.beans.EventHandler.create;
 
@@ -45,7 +46,7 @@ import static java.beans.EventHandler.create;
 /**
  * @author Lekanich
  */
-public class EyeHelpPanel extends JBPanel<EyeHelpPanel> {
+public class EyeHelpPanel extends JBPanel<EyeHelpPanel> implements Disposable {
     private static final Logger log = Logger.getInstance(EyeHelpPanel.class);
     private static final JBColor DIVIDER_COLOR = new JBColor(0xd9d9d9, 0x515151);
     private static final int DEFAULT_WIDTH = 400;
@@ -133,6 +134,11 @@ public class EyeHelpPanel extends JBPanel<EyeHelpPanel> {
         startRefreshSeconds();
     }
 
+    @Override
+    public void dispose() {
+        /*NOP*/
+    }
+
     @NotNull
     private String findExerciseMessage() {
         List<EyeExercise> exercises = EyeExercise.findExercises();
@@ -149,19 +155,18 @@ public class EyeHelpPanel extends JBPanel<EyeHelpPanel> {
             return;
         }
 
+        // should be stopped if dialog is not visible
         ScheduledExecutorService service = Executors.newScheduledThreadPool(1);
-        service.scheduleAtFixedRate(new Runnable() {
-            @SneakyThrows
-            @Override
-            public void run() {
-                if (!clockPanel.tick()) {
-                    // close dialog after counter is down
-                    EdtExecutorService.getInstance()
-                            .execute(dialog::doCancelAction);
-                    service.shutdown();
-                }
+        service.scheduleAtFixedRate(() -> {
+            if (!clockPanel.tick()) {
+                // close dialog after counter is down
+                EdtExecutorService.getInstance()
+                        .execute(dialog::doCancelAction);
+                service.shutdown();
             }
         }, 0, 1, TimeUnit.SECONDS);
+
+        Disposer.register(this, service::shutdown);
     }
 
     @Override
@@ -192,5 +197,4 @@ public class EyeHelpPanel extends JBPanel<EyeHelpPanel> {
         String cssFileName = StartupUiUtil.isUnderDarcula() ? "exercise_darcula.css" : "exercise.css";
         return ResourceUtil.getResource(EyeHelpPanel.class, "/exercises/css/", cssFileName);
     }
-
 }
