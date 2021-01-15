@@ -27,7 +27,7 @@ public class EyeHelpSingleton implements EyeHelpListener {
 			| AWTEvent.FOCUS_EVENT_MASK;
 	private static final EyeHelpSingleton instance = new EyeHelpSingleton();
 	private static final IdleListener IDLE_LISTENER = new IdleListener();
-	private volatile ScheduledFuture<?> future = null;
+	private final AtomicReference<ScheduledFuture<?>> future = new AtomicReference<>(null);
 
 	public static EyeHelpSingleton getInstance() {
 		return instance;
@@ -35,13 +35,13 @@ public class EyeHelpSingleton implements EyeHelpListener {
 
 	@Override
 	public synchronized void scheduleEyeHelp(long delayInSeconds) {
-		if (future != null) {
-			future.cancel(false);
+		if (future.get() != null) {
+			future.get().cancel(false);
 		}
 
 		@NotNull Disposable parent = PluginSettings.getInstance();
 		AtomicReference<Disposable> disposableRef = new AtomicReference<>();
-		future = EdtScheduledExecutorService.getInstance()
+		future.set(EdtScheduledExecutorService.getInstance()
 				.schedule(() -> {
 					Disposable disposable = disposableRef.getAndSet(null);
 					if (disposable == null) {
@@ -57,12 +57,12 @@ public class EyeHelpSingleton implements EyeHelpListener {
 					IDLE_LISTENER.checkIdleAndDisableIfNeed(idleInMS);
 
 					EyeHelpDialog.showForProject();
-				}, delayInSeconds, TimeUnit.SECONDS);
+				}, delayInSeconds, TimeUnit.SECONDS));
 
 		Disposable disposable = () -> {
 			disposableRef.set(null);
-			if (future != null) {
-				future.cancel(false);
+			if (future.get() != null) {
+				future.get().cancel(false);
 			}
 		};
 		disposableRef.set(disposable);

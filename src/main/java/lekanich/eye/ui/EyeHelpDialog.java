@@ -12,12 +12,14 @@ import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.project.ProjectManager;
 import com.intellij.openapi.ui.DialogWrapper;
+import com.intellij.openapi.util.Disposer;
 import com.intellij.openapi.wm.WindowManager;
 import com.intellij.openapi.wm.ex.WindowManagerEx;
 import lekanich.eye.EyeBundle;
 import lekanich.eye.listener.EyeHelpListener;
 import lekanich.eye.listener.EyeHelpStatusListener;
 import lekanich.eye.settings.PluginSettings;
+import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -36,6 +38,8 @@ public class EyeHelpDialog extends DialogWrapper {
         setModal(false);
         setTitle(EyeBundle.message("eye.dialog.title"));
         this.centralPanel = new EyeHelpPanel(this);
+        Optional.ofNullable(PluginSettings.getInstance())
+                .ifPresent(it -> Disposer.register(it, centralPanel));
         setCancelButtonText(EyeBundle.message("eye.dialog.later.button.txt"));
         init();
     }
@@ -76,8 +80,8 @@ public class EyeHelpDialog extends DialogWrapper {
         super.show();
     }
 
-    @Nullable
-    private static Project getActiveProject() {
+    @NonNls
+    private static Optional<Project> getActiveProject() {
         @NotNull Project[] projects = ProjectManager.getInstance().getOpenProjects();
         return Stream.of(projects)
                 .filter(project -> Optional.ofNullable(
@@ -85,13 +89,12 @@ public class EyeHelpDialog extends DialogWrapper {
                         .map(JFrame::isActive)
                         .orElse(false)
                 )
-                .findAny()
-                .orElse(null);
+                .findAny();
     }
 
     public static void showForProject() {
-        Project project = getActiveProject();
-        Window w = Optional.ofNullable(WindowManagerEx.getInstanceEx().suggestParentWindow(project))
+        Window w = getActiveProject()
+                .map(project -> WindowManagerEx.getInstanceEx().suggestParentWindow(project))
                 .orElseGet(() -> Optional.ofNullable(WindowManagerEx.getInstanceEx().getMostRecentFocusedWindow())
                         .orElseGet(() -> WindowManagerEx.getInstanceEx().findVisibleFrame())
                 );
