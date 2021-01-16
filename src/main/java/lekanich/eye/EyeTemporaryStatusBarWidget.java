@@ -12,12 +12,13 @@ import com.intellij.openapi.wm.StatusBarWidget;
 import com.intellij.ui.UIBundle;
 import com.intellij.util.Consumer;
 import com.intellij.util.concurrency.EdtExecutorService;
+import icons.EyeHelpIcons;
+import icons.EyeHelpIcons.EyeType;
+import lekanich.eye.listener.EyeHelpStatusListener;
+import lekanich.eye.settings.PluginSettings;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import icons.EyeHelpIcons;
-import lekanich.eye.listener.EyeHelpStatusListener;
-import lekanich.eye.settings.PluginSettings;
 
 
 /**
@@ -56,7 +57,7 @@ public class EyeTemporaryStatusBarWidget implements StatusBarWidget, StatusBarWi
 		} else if (status == Status.TEMPORARY_DISABLED) {
 			PluginSettings.TemporaryDisableEyeHelpSetting.deactivateEyeHelp();
 		}
-
+		// ICON_CHANGE (just refresh)
 		update();
 	}
 
@@ -109,6 +110,10 @@ public class EyeTemporaryStatusBarWidget implements StatusBarWidget, StatusBarWi
 	public @NotNull Icon getIcon() {
 		return PluginSettings.TemporaryDisableEyeHelpSetting.isTemporaryDisabled()
 				? EyeHelpIcons.EYE_OFF
-				: EyeHelpIcons.EYE_ON;
+				: Optional.ofNullable(PluginSettings.getInstance())
+					.map(PluginSettings::getState)
+					.map(PluginSettings.PluginAppState::getEyeType)
+					.map(EyeType::getIcon)
+					.orElse(EyeHelpIcons.EYE_ON);
 	}
 }

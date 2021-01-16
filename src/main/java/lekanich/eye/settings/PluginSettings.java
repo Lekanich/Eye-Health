@@ -13,6 +13,7 @@ import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.components.State;
 import com.intellij.openapi.components.Storage;
 import com.intellij.util.xmlb.XmlSerializerUtil;
+import icons.EyeHelpIcons.EyeType;
 import org.jetbrains.annotations.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -84,6 +85,11 @@ public class PluginSettings implements PersistentStateComponent<PluginSettings.P
 		 * in seconds
 		 */
 		private long durationWorkBeforeBreak = TimeUnit.MINUTES.toSeconds(30);
+
+		/**
+		 * Look and feel of eye icon
+		 */
+		private EyeType eyeType = EyeType.DEFAULT;
 
 		public long getDurationWorkBeforeBreak() {
 			return DeveloperUtil.isDebugMode() ? 8 : durationWorkBeforeBreak;

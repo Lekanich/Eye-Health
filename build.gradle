@@ -54,6 +54,8 @@ patchPluginXml {
     sinceBuild '201'
 //    untilBuild '202.*'
     changeNotes """
+		[2020.3.04] <br/>
+		* add new eye icon for the right bottom corner <br/>
 		[2020.3.03] <br/>
 		* update look of the emphasize words <br/>
 		[2020.3.02] <br/>
@@ -75,7 +77,7 @@ patchPluginXml {
 runIde {
     jvmArgs '-Didea.ProcessCanceledException=disabled'
     systemProperty 'idea.auto.reload.plugins', false
-    systemProperty 'eye.debug.run', true
+//    systemProperty 'eye.debug.run', true
 }
 
 //https://data.services.jetbrains.com/products?fields=code,name,releases.downloads,releases.version,releases.build,releases.type&code=DG,PS,DL,MPS,MPSIIP,RDCPPP,WS,AC,IIC,IIE,GO,CL,PCD,PCC,RD,PCE,IIU,RM,PCP

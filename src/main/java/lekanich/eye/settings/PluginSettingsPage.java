@@ -1,21 +1,23 @@
 package lekanich.eye.settings;
 
+import java.awt.Component;
 import java.util.concurrent.TimeUnit;
-import javax.swing.InputVerifier;
-import javax.swing.JCheckBox;
-import javax.swing.JComponent;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
+import java.util.stream.Stream;
+import javax.swing.*;
+import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.openapi.options.SearchableConfigurable;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.ui.JBColor;
+import icons.EyeHelpIcons;
+import icons.EyeHelpIcons.EyeType;
+import lekanich.eye.EyeBundle;
+import lekanich.eye.listener.EyeHelpStatusListener;
+import lekanich.eye.ui.EyeHelpDialog;
+import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import lekanich.eye.EyeBundle;
-import lekanich.eye.ui.EyeHelpDialog;
 
 
 /**
@@ -34,6 +36,7 @@ public class PluginSettingsPage implements SearchableConfigurable {
 	private JTextField durationPostponeTextField;
 	private JTextField durationOfRestTextField;
 	private JTextField idleTextField;
+	private JComboBox<EyeType> iconComboBox;
 
 	public PluginSettingsPage() {
 		this.settings = PluginSettings.getInstance();
@@ -51,6 +54,12 @@ public class PluginSettingsPage implements SearchableConfigurable {
 
 	@Override
 	public @Nullable JComponent createComponent() {
+		// status bar icons
+		iconComboBox.removeAllItems();
+		Stream.of(EyeHelpIcons.EyeType.values())
+				.forEach(iconComboBox::addItem);
+		iconComboBox.setRenderer(new IconTextDecorator(iconComboBox.getRenderer()));
+
 		reset();
 
 		durationPostponeTextField.setInputVerifier(POSITIVE_INTEGER_VERIFIER);
@@ -86,7 +95,8 @@ public class PluginSettingsPage implements SearchableConfigurable {
 				|| !durationOfRestTextField.getText().equals(String.valueOf(state.getDurationBreak()))
 				|| !durationBetweenRestTextField.getText().equals(String.valueOf(TimeUnit.SECONDS.toMinutes(state.getDurationWorkBeforeBreak())))
 				|| !durationPostponeTextField.getText().equals(String.valueOf(state.getDurationPostpone()))
-				|| !idleTextField.getText().equals(String.valueOf(TimeUnit.SECONDS.toMinutes(state.getIdleTime())));
+				|| !idleTextField.getText().equals(String.valueOf(TimeUnit.SECONDS.toMinutes(state.getIdleTime())))
+				|| iconComboBox.getSelectedItem() != state.getEyeType();
 	}
 
 	@Override
@@ -97,6 +107,14 @@ public class PluginSettingsPage implements SearchableConfigurable {
 			notifyAboutTurnOn();
 		}
 
+		if (state.getEyeType() != iconComboBox.getSelectedItem()) {
+			// notify about widget icon change
+			ApplicationManager.getApplication().getMessageBus()
+					.syncPublisher(EyeHelpStatusListener.EYE_HELP_STATUS_TOPIC)
+					.statusChanged(EyeHelpStatusListener.Status.ICON_CHANGE);
+		}
+
+		state.setEyeType((EyeType) iconComboBox.getSelectedItem());
 		state.setEnable(enablePluginCheckBox.isSelected());
 		state.setPostpone(allowPostponeTheEyeCheckBox.isSelected());
 		try {
@@ -121,6 +139,7 @@ public class PluginSettingsPage implements SearchableConfigurable {
 		// init from config
 		PluginSettings.PluginAppState state = settings.getState();
 
+		iconComboBox.setSelectedItem(state.getEyeType());
 		enablePluginCheckBox.setSelected(state.isEnable());
 		allowPostponeTheEyeCheckBox.setSelected(state.isPostpone());
 		durationOfRestTextField.setText(String.valueOf(state.getDurationBreak()));
@@ -137,6 +156,21 @@ public class PluginSettingsPage implements SearchableConfigurable {
 		@Override
 		public boolean verify(JComponent input) {
 			return StringUtil.isNotNegativeNumber(((JTextField) input).getText());
+		}
+	}
+
+	@RequiredArgsConstructor
+	private static class IconTextDecorator implements ListCellRenderer<EyeHelpIcons.EyeType> {
+		private final ListCellRenderer<? super EyeHelpIcons.EyeType> delegate;
+
+		@Override
+		public Component getListCellRendererComponent(final JList<? extends EyeType> list, final EyeType value, final int index, final boolean isSelected, final boolean cellHasFocus) {
+			Component component = delegate.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+			if (component instanceof JLabel) {
+				((JLabel) component).setIcon(value.getIcon());
+				((JLabel) component).setText(value.toString().toLowerCase());
+			}
+			return component;
 		}
 	}
 }

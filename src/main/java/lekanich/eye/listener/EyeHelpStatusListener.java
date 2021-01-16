@@ -12,6 +12,6 @@ public interface EyeHelpStatusListener {
 	void statusChanged(Status status);
 
 	enum Status {
-		ACTIVE, TEMPORARY_DISABLED, DISABLED
+		ACTIVE, TEMPORARY_DISABLED, DISABLED, ICON_CHANGE
 	}
 }
