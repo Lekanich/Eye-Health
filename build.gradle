@@ -1,16 +1,16 @@
 plugins {
     id 'java'
-    id 'org.jetbrains.intellij' version '0.6.5'
+    id 'org.jetbrains.intellij' version '0.7.2'
 }
 
 group 'lekanich'
 // the last digits it's the version of plugin in scope of IDEA version
-String pluginVersion = '2020.3.04'
+String pluginVersion = '2021.1.01'
 
 println "CI: ${System.getenv('CI')}"
 
 // specified the last version
-def ideaVersion = '2020.3.1'
+def ideaVersion = '2021.1'
 if (project.hasProperty("intellijIdeaVersion")) {
     ideaVersion = project.property("intellijIdeaVersion")
 }
@@ -54,23 +54,25 @@ patchPluginXml {
     sinceBuild '201'
 //    untilBuild '202.*'
     changeNotes """
-		[2020.3.04] <br/>
-		* add new eye icon for the right bottom corner <br/>
-		[2020.3.03] <br/>
-		* update look of the emphasize words <br/>
-		[2020.3.02] <br/>
-		* change the way how to choose the window when no active project is selected <br/>
-		[2020.3.01] <br/>
-		* new versioning <br/>
-		* IDEA update <br/>
-      [0.1.6] <br/>
-      * fixed status widget bar when it activates after midnight <br/>
-      * increased work duration from 15 minutes to 30 <br/>
-      [0.1.4] <br/>
-      * fixed status widget bar <br/>
-      [0.1.3] <br/>
-      * added idle observer <br/>
-      * added ten different exercises with 30 seconds on it.<br/>
+        [2021.1.01] <br/>
+        * IDEA update <br/>
+        [2020.3.04] <br/>
+        * add new eye icon for the right bottom corner <br/>
+        [2020.3.03] <br/>
+        * update look of the emphasize words <br/>
+        [2020.3.02] <br/>
+        * change the way how to choose the window when no active project is selected <br/>
+        [2020.3.01] <br/>
+        * new versioning <br/>
+        * IDEA update <br/>
+        [0.1.6] <br/>
+        * fixed status widget bar when it activates after midnight <br/>
+        * increased work duration from 15 minutes to 30 <br/>
+        [0.1.4] <br/>
+        * fixed status widget bar <br/>
+        [0.1.3] <br/>
+        * added idle observer <br/>
+        * added ten different exercises with 30 seconds on it.<br/>
       """
 }
 
@@ -83,5 +85,5 @@ runIde {
 //https://data.services.jetbrains.com/products?fields=code,name,releases.downloads,releases.version,releases.build,releases.type&code=DG,PS,DL,MPS,MPSIIP,RDCPPP,WS,AC,IIC,IIE,GO,CL,PCD,PCC,RD,PCE,IIU,RM,PCP
 //https://data.services.jetbrains.com/products?fields=code,name,releases.downloads,releases.version,releases.build,releases.type&code=IIC,IIU
 runPluginVerifier {
-    ideVersions = "2020.1.4, 2020.2.3, 2020.3, 2020.3.1"
+    ideVersions = "2020.1.4, 2020.2.3, 2020.3.2, 2021.1"
 }
