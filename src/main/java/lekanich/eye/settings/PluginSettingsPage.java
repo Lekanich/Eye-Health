@@ -37,6 +37,8 @@ public class PluginSettingsPage implements SearchableConfigurable {
 	private JTextField durationOfRestTextField;
 	private JTextField idleTextField;
 	private JComboBox<EyeType> iconComboBox;
+	private JCheckBox showMinimizedCheckBox;
+	private JLabel statusLabelMinimized;
 
 	public PluginSettingsPage() {
 		this.settings = PluginSettings.getInstance();
@@ -96,7 +98,8 @@ public class PluginSettingsPage implements SearchableConfigurable {
 				|| !durationBetweenRestTextField.getText().equals(String.valueOf(TimeUnit.SECONDS.toMinutes(state.getDurationWorkBeforeBreak())))
 				|| !durationPostponeTextField.getText().equals(String.valueOf(state.getDurationPostpone()))
 				|| !idleTextField.getText().equals(String.valueOf(TimeUnit.SECONDS.toMinutes(state.getIdleTime())))
-				|| iconComboBox.getSelectedItem() != state.getEyeType();
+				|| iconComboBox.getSelectedItem() != state.getEyeType()
+				|| showMinimizedCheckBox.isSelected() != state.isShowWhenMinimized();
 	}
 
 	@Override
@@ -116,6 +119,7 @@ public class PluginSettingsPage implements SearchableConfigurable {
 
 		state.setEyeType((EyeType) iconComboBox.getSelectedItem());
 		state.setEnable(enablePluginCheckBox.isSelected());
+		state.setShowWhenMinimized(showMinimizedCheckBox.isSelected());
 		state.setPostpone(allowPostponeTheEyeCheckBox.isSelected());
 		try {
 			state.setDurationBreak(Long.parseLong(durationOfRestTextField.getText()));
@@ -128,6 +132,7 @@ public class PluginSettingsPage implements SearchableConfigurable {
 
 		updateStatusLabel(statusPlugin, state.isEnable());
 		updateStatusLabel(statusLabelPostpone, state.isPostpone());
+		updateStatusLabel(statusLabelMinimized, state.isShowWhenMinimized());
 	}
 
 	private void notifyAboutTurnOn() {
@@ -141,6 +146,7 @@ public class PluginSettingsPage implements SearchableConfigurable {
 
 		iconComboBox.setSelectedItem(state.getEyeType());
 		enablePluginCheckBox.setSelected(state.isEnable());
+		showMinimizedCheckBox.setSelected(state.isShowWhenMinimized());
 		allowPostponeTheEyeCheckBox.setSelected(state.isPostpone());
 		durationOfRestTextField.setText(String.valueOf(state.getDurationBreak()));
 		durationBetweenRestTextField.setText(String.valueOf(TimeUnit.SECONDS.toMinutes(state.getDurationWorkBeforeBreak())));
@@ -149,6 +155,7 @@ public class PluginSettingsPage implements SearchableConfigurable {
 
 		updateStatusLabel(statusPlugin, state.isEnable());
 		updateStatusLabel(statusLabelPostpone, state.isPostpone());
+		updateStatusLabel(statusLabelMinimized, state.isShowWhenMinimized());
 	}
 
 	private static class IntegerNumberVerifier extends InputVerifier {

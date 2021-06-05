@@ -14,12 +14,12 @@ import com.intellij.openapi.components.State;
 import com.intellij.openapi.components.Storage;
 import com.intellij.util.xmlb.XmlSerializerUtil;
 import icons.EyeHelpIcons.EyeType;
-import org.jetbrains.annotations.NotNull;
+import lekanich.DeveloperUtil;
+import lekanich.eye.ui.EyeHelpDialog;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lekanich.DeveloperUtil;
-import lekanich.eye.ui.EyeHelpDialog;
+import org.jetbrains.annotations.NotNull;
 
 
 /**
@@ -48,7 +48,8 @@ public class PluginSettings implements PersistentStateComponent<PluginSettings.P
 	}
 
 	@Override
-	public void dispose() { }
+	public void dispose() {
+	}
 
 	@Getter
 	@Setter
@@ -91,6 +92,11 @@ public class PluginSettings implements PersistentStateComponent<PluginSettings.P
 		 */
 		private EyeType eyeType = EyeType.DEFAULT;
 
+		/**
+		 * Show when the window of IDE is minimized
+		 */
+		private boolean showWhenMinimized = true;
+
 		public long getDurationWorkBeforeBreak() {
 			return DeveloperUtil.isDebugMode() ? 8 : durationWorkBeforeBreak;
 		}
@@ -109,6 +115,10 @@ public class PluginSettings implements PersistentStateComponent<PluginSettings.P
 
 		// check if is it temporary disabled
 		return TemporaryDisableEyeHelpSetting.isTemporaryDisabled();
+	}
+
+	public static boolean isActiveWhenMinimized() {
+		return PluginSettings.getInstance().getState().isShowWhenMinimized();
 	}
 
 	public static final class TemporaryDisableEyeHelpSetting {

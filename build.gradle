@@ -10,7 +10,7 @@ String pluginVersion = '2021.1.02'
 println "CI: ${System.getenv('CI')}"
 
 // specified the last version
-def ideaVersion = '2021.1'
+def ideaVersion = '2021.1.2'
 if (project.hasProperty("intellijIdeaVersion")) {
     ideaVersion = project.property("intellijIdeaVersion")
 }
@@ -54,6 +54,9 @@ patchPluginXml {
     sinceBuild '201'
 //    untilBuild '202.*'
     changeNotes """
+        [2021.1.02] <br/>
+        * IDEA update to 2021.1.2 <br/>
+        * Add checkbox to discard showing of the window when IDE is not active. 
         [2021.1.01] <br/>
         * IDEA update <br/>
         [2020.3.04] <br/>
@@ -79,7 +82,7 @@ patchPluginXml {
 runIde {
     jvmArgs '-Didea.ProcessCanceledException=disabled'
     systemProperty 'idea.auto.reload.plugins', false
-//    systemProperty 'eye.debug.run', true
+    systemProperty 'eye.debug.run', true
 }
 
 //https://data.services.jetbrains.com/products?fields=code,name,releases.downloads,releases.version,releases.build,releases.type&code=DG,PS,DL,MPS,MPSIIP,RDCPPP,WS,AC,IIC,IIE,GO,CL,PCD,PCC,RD,PCE,IIU,RM,PCP

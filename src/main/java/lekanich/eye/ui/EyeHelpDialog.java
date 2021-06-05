@@ -32,11 +32,14 @@ public class EyeHelpDialog extends DialogWrapper {
     private static final String LAST_TIME_EYE_HELP_SHOWN = "lastTimeEyeHelpWereShown";
     private static EyeHelpDialog ourInstance;
     private final EyeHelpPanel centralPanel;
+    private final boolean show;
 
     public EyeHelpDialog(@NotNull Window parent) {
         super(parent, true);
         setModal(false);
         setTitle(EyeBundle.message("eye.dialog.title"));
+        this.show = parent.isActive() || PluginSettings.isActiveWhenMinimized();
+        log.warn("Window '" + parent.getName() + "' is " + this.show);
         this.centralPanel = new EyeHelpPanel(this);
         Optional.ofNullable(PluginSettings.getInstance())
                 .ifPresent(it -> Disposer.register(it, centralPanel));
@@ -77,7 +80,10 @@ public class EyeHelpDialog extends DialogWrapper {
 
         PropertiesComponent.getInstance()
                 .setValue(LAST_TIME_EYE_HELP_SHOWN, String.valueOf(System.currentTimeMillis()));
-        super.show();
+
+        if (show) {
+            super.show();
+        }
     }
 
     @NonNls
