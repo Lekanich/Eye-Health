@@ -5,12 +5,12 @@ plugins {
 
 group 'lekanich'
 // the last digits it's the version of plugin in scope of IDEA version
-String pluginVersion = '2021.1.02'
+String pluginVersion = '2021.2.01'
 
 println "CI: ${System.getenv('CI')}"
 
 // specified the last version
-def ideaVersion = '2021.1.2'
+def ideaVersion = '2021.2'
 if (project.hasProperty("intellijIdeaVersion")) {
     ideaVersion = project.property("intellijIdeaVersion")
 }
@@ -54,6 +54,8 @@ patchPluginXml {
     sinceBuild '201'
 //    untilBuild '202.*'
     changeNotes """
+        [2021.2.01] <br/>
+        * IDEA update to 2021.2 <br/>
         [2021.1.02] <br/>
         * IDEA update to 2021.1.2 <br/>
         * Add checkbox to discard showing of the window when IDE is not active. 
