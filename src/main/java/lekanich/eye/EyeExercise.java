@@ -10,6 +10,7 @@ import java.util.stream.Stream;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.ui.ColorUtil;
 import com.intellij.util.ResourceUtil;
+import com.intellij.util.io.URLUtil;
 import com.intellij.util.ui.StartupUiUtil;
 import com.intellij.util.ui.UIUtil;
 import com.intellij.util.xmlb.annotations.Attribute;
@@ -30,8 +31,8 @@ public class EyeExercise {
 	public static List<EyeExercise> findExercises() {
 		String text;
 		try {
-			URL resource = ResourceUtil.getResource(EyeExercise.class, MAIN_FOLDER, "list.txt");
-			text = ResourceUtil.loadText(resource);
+			URL resource = ResourceUtil.getResource(EyeExercise.class.getClassLoader(), MAIN_FOLDER, "list.txt");
+			text = ResourceUtil.loadText(URLUtil.openStream(resource));
 		} catch (IOException e) {
 			text = "";
 		}
@@ -48,15 +49,15 @@ public class EyeExercise {
 			File file = new File(fileName);
 			if (file.isAbsolute() && file.exists()) {
 				text.append(FileUtil.loadFile(file));
-				cssText = FileUtil.loadFile(new File(file.getParentFile(), StartupUiUtil.isUnderDarcula()
-						? "css/tips_darcula.css" : "css/tips.css"));
+				URL cssResource = cssResource();
+				cssText = ResourceUtil.loadText(URLUtil.openStream(cssResource));
 			} else {
-				InputStream stream = ResourceUtil.getResourceAsStream(getClass(), MAIN_FOLDER, fileName);
+				InputStream stream = ResourceUtil.getResourceAsStream(getClass().getClassLoader(), MAIN_FOLDER, fileName);
 				if (stream == null) {
 					return dummyMessage;
 				}
 				text.append(ResourceUtil.loadText(stream));
-				InputStream cssResourceStream = ResourceUtil.getResourceAsStream(getClass(), "/tips/", StartupUiUtil.isUnderDarcula()
+				InputStream cssResourceStream = ResourceUtil.getResourceAsStream(getClass().getClassLoader(), "/tips/", StartupUiUtil.isUnderDarcula()
 						? "css/tips_darcula.css" : "css/tips.css");
 				cssText = cssResourceStream != null ? ResourceUtil.loadText(cssResourceStream) : "";
 			}
@@ -68,4 +69,8 @@ public class EyeExercise {
 		}
 	}
 
+	public static URL cssResource() {
+		String cssFileName = StartupUiUtil.isUnderDarcula() ? "exercise_darcula.css" : "exercise.css";
+		return ResourceUtil.getResource(EyeExercise.class.getClassLoader(), "/exercises/css/", cssFileName);
+	}
 }

@@ -8,8 +8,8 @@ import java.time.ZoneOffset;
 import java.util.concurrent.TimeUnit;
 import com.intellij.ide.util.PropertiesComponent;
 import com.intellij.openapi.Disposable;
+import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.components.PersistentStateComponent;
-import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.components.State;
 import com.intellij.openapi.components.Storage;
 import com.intellij.util.xmlb.XmlSerializerUtil;
@@ -33,7 +33,7 @@ public class PluginSettings implements PersistentStateComponent<PluginSettings.P
 	private final PluginAppState state = new PluginAppState();
 
 	public static PluginSettings getInstance() {
-		return ServiceManager.getService(PluginSettings.class);
+		return ApplicationManager.getApplication().getService(PluginSettings.class);
 	}
 
 	@NotNull
@@ -49,6 +49,7 @@ public class PluginSettings implements PersistentStateComponent<PluginSettings.P
 
 	@Override
 	public void dispose() {
+		/*NOP*/
 	}
 
 	@Getter

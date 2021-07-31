@@ -5,7 +5,6 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.net.URL;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.Executors;
@@ -29,11 +28,9 @@ import com.intellij.ui.components.JBPanel;
 import com.intellij.ui.components.panels.VerticalLayout;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
-import com.intellij.util.ResourceUtil;
 import com.intellij.util.concurrency.EdtExecutorService;
 import com.intellij.util.ui.JBDimension;
 import com.intellij.util.ui.JBUI;
-import com.intellij.util.ui.StartupUiUtil;
 import com.intellij.util.ui.UIUtil;
 import lekanich.DeveloperUtil;
 import lekanich.eye.EyeBundle;
@@ -184,17 +181,12 @@ public class EyeHelpPanel extends JBPanel<EyeHelpPanel> implements Disposable {
         Browser browser = TipUIUtil.createBrowser();
         EditorKit kit = ((JEditorPane) browser.getComponent()).getEditorKit();
         if (kit instanceof HTMLEditorKit) {
-            Optional.ofNullable(cssResource())
+            Optional.ofNullable(EyeExercise.cssResource())
                     .ifPresent(resource -> ((HTMLEditorKit) kit).getStyleSheet().addStyleSheet(UIUtil.loadStyleSheet(resource)));
         } else {
             log.warn("Kit inside internal browser wasn't HTML. It was: " + kit.getClass().getCanonicalName());
         }
 
         return browser;
-    }
-
-    protected URL cssResource() {
-        String cssFileName = StartupUiUtil.isUnderDarcula() ? "exercise_darcula.css" : "exercise.css";
-        return ResourceUtil.getResource(EyeHelpPanel.class, "/exercises/css/", cssFileName);
     }
 }
