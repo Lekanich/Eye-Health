@@ -30,7 +30,7 @@ repositories {
     mavenCentral()
 }
 dependencies {
-    detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.17.1")
+    detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.18.0")
     compileOnly("org.projectlombok:lombok:1.18.20")
     annotationProcessor("org.projectlombok:lombok:1.18.20")
 
