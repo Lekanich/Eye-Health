@@ -6,7 +6,11 @@
 
 <!-- ## [2021.2.2] -->
 ### Changed
-- Versioning back to pure Semver
+- Just IDEA version bump
+
+## [2021.3.1]
+### Changed
+- IDEA update to 2021.3
 
 ## [2021.1.2]
 ### Changed
