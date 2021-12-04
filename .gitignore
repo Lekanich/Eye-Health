@@ -22,3 +22,6 @@
 hs_err_pid*
 
 /token.txt
+/build/
+/.idea/
+/.gradle/

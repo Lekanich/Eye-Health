@@ -3,8 +3,6 @@
 # Eye Health Plugin Changelog
 
 ## [Unreleased]
-
-<!-- ## [2021.2.2] -->
 ### Changed
 - Just IDEA version bump
 
