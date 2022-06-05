@@ -19,7 +19,7 @@ public class PluginStartupActivity implements StartupActivity, StartupActivity.B
 
 	public PluginStartupActivity() {
 		if (ApplicationManager.getApplication().isUnitTestMode()) {
-			throw ExtensionNotApplicableException.INSTANCE;
+			throw ExtensionNotApplicableException.create();
 		}
 
 		// register topic and subscribe listener to do payload
