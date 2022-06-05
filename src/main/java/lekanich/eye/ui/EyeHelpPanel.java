@@ -6,7 +6,9 @@ import java.awt.Dimension;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.Executors;
@@ -18,6 +20,7 @@ import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
 import javax.swing.text.EditorKit;
 import javax.swing.text.html.HTMLEditorKit;
+import javax.swing.text.html.StyleSheet;
 import com.intellij.ide.util.TipUIUtil;
 import com.intellij.ide.util.TipUIUtil.Browser;
 import com.intellij.openapi.Disposable;
@@ -33,7 +36,6 @@ import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.util.concurrency.EdtExecutorService;
 import com.intellij.util.ui.JBDimension;
 import com.intellij.util.ui.JBUI;
-import com.intellij.util.ui.StyleSheetUtil;
 import com.intellij.util.ui.UIUtil;
 import lekanich.DeveloperUtil;
 import lekanich.eye.EyeBundle;
@@ -171,9 +173,7 @@ public class EyeHelpPanel extends JBPanel<EyeHelpPanel> implements Disposable {
 			URL cssResource = EyeExercise.cssResource();
 			if (cssResource != null) {
 				try {
-					((HTMLEditorKit) kit).getStyleSheet().addStyleSheet(
-							StyleSheetUtil.loadStyleSheet(cssResource.openStream(), cssResource)
-					);
+					((HTMLEditorKit) kit).getStyleSheet().addStyleSheet(loadStyleSheet(cssResource));
 				} catch (IOException e) {
 					log.warn(e);
 				}
@@ -183,5 +183,11 @@ public class EyeHelpPanel extends JBPanel<EyeHelpPanel> implements Disposable {
 		}
 
 		return browser;
+	}
+
+	private static StyleSheet loadStyleSheet(URL url) throws IOException {
+		StyleSheet result = new StyleSheet();
+		result.loadRules(new InputStreamReader(url.openStream(), StandardCharsets.UTF_8), url);
+		return result;
 	}
 }
