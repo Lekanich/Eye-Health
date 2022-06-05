@@ -6,6 +6,10 @@
 ### Changed
 - Just IDEA version bump
 
+## [2022.1.1]
+### Changed
+- IDEA update to 2022.1
+
 ## [2021.3.1]
 ### Changed
 - IDEA update to 2021.3
@@ -13,7 +17,7 @@
 ## [2021.1.2]
 ### Changed
 - IDEA update to 2021.1.2
-  
+
 ### Added
 - Add checkbox to discard showing of the window when IDE is not active.
 
@@ -42,6 +46,7 @@
 ### Fixed
 - A status widget bar when it activates after midnight
   
+
 ### Changed
 - Increase work duration from 15 minutes to 30
 
@@ -53,5 +58,3 @@
 ### Added
 - An idle observer
 - Ten different exercises with 30 seconds on it
-
-
