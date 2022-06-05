@@ -97,29 +97,28 @@ tasks {
 
         // Extract the <!-- Plugin description --> section from README.md and provide for the plugin's manifest
         pluginDescription.set(
-                File(projectDir, "README.MD").readText().lines().run {
-                    val start = "<!-- Plugin description -->"
-                    val end = "<!-- Plugin description end -->"
+            File(projectDir, "README.MD").readText().lines().run {
+                val start = "<!-- Plugin description -->"
+                val end = "<!-- Plugin description end -->"
 
-                    if (!containsAll(listOf(start, end))) {
-                        throw GradleException("Plugin description section not found in README.md:\n$start ... $end")
-                    }
-                    subList(indexOf(start) + 1, indexOf(end))
-                }.joinToString("\n").run { markdownToHTML(this) }
+                if (!containsAll(listOf(start, end))) {
+                    throw GradleException("Plugin description section not found in README.md:\n$start ... $end")
+                }
+                subList(indexOf(start) + 1, indexOf(end))
+            }.joinToString("\n").run { markdownToHTML(this) }
         )
 
         // Get the latest available change notes from the changelog file
         changeNotes.set(provider {
             changelog.getAll().filterKeys { it != "[Unreleased]" }
-                    .values.joinToString("") { it.withHeader(true).toHTML() }
+                .values.joinToString("") { it.withHeader(true).toHTML() }
         })
     }
 
     runIde {
 //        jvmArgs.add("-Didea.ProcessCanceledException=disabled")
 //        systemProperty 'idea.auto.reload.plugins', false
-//        systemProperty 'eye.debug.run', true
-
+//        systemProperty("eye.debug.run", true)
     }
 
     // TODO: signPlugin

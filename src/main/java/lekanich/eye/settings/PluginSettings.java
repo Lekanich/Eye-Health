@@ -6,6 +6,7 @@ import java.time.LocalTime;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
 import com.intellij.ide.util.PropertiesComponent;
 import com.intellij.openapi.Disposable;
 import com.intellij.openapi.application.ApplicationManager;
@@ -32,6 +33,8 @@ import org.jetbrains.annotations.NotNull;
 public class PluginSettings implements PersistentStateComponent<PluginSettings.PluginAppState>, Disposable {
 	private final PluginAppState state = new PluginAppState();
 
+	private final AtomicBoolean disposed = new AtomicBoolean(false);
+
 	public static PluginSettings getInstance() {
 		return ApplicationManager.getApplication().getService(PluginSettings.class);
 	}
@@ -49,7 +52,11 @@ public class PluginSettings implements PersistentStateComponent<PluginSettings.P
 
 	@Override
 	public void dispose() {
-		/*NOP*/
+		disposed.set(true);
+	}
+
+	public boolean isDisposed() {
+		return disposed.get();
 	}
 
 	@Getter

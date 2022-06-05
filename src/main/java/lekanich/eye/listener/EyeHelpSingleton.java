@@ -1,18 +1,21 @@
 package lekanich.eye.listener;
 
 import java.awt.AWTEvent;
+import java.util.Optional;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 import com.intellij.openapi.Disposable;
 import com.intellij.openapi.util.Disposer;
 import com.intellij.util.concurrency.EdtScheduledExecutorService;
 import com.intellij.util.ui.UIUtil;
-import org.jetbrains.annotations.NotNull;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
 import lekanich.eye.settings.PluginSettings;
 import lekanich.eye.ui.EyeHelpDialog;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import org.jetbrains.annotations.NotNull;
 
 
 /**
@@ -39,34 +42,44 @@ public class EyeHelpSingleton implements EyeHelpListener {
 			future.get().cancel(false);
 		}
 
-		@NotNull Disposable parent = PluginSettings.getInstance();
-		AtomicReference<Disposable> disposableRef = new AtomicReference<>();
+		@NotNull PluginSettings parent = PluginSettings.getInstance();
+		ShowCommand command = new ShowCommand(future, parent);
 		future.set(EdtScheduledExecutorService.getInstance()
-				.schedule(() -> {
-					Disposable disposable = disposableRef.getAndSet(null);
-					if (disposable == null) {
-						return;
-					}
+				.schedule(command, delayInSeconds, TimeUnit.SECONDS));
 
-					Disposer.dispose(disposable);
-					if (Disposer.isDisposed(parent)) {
-						return;
-					}
+		UIUtil.addAwtListener(IDLE_LISTENER, EVENT_MASK, command);
 
-					long idleInMS = TimeUnit.SECONDS.toMillis(PluginSettings.getInstance().getState().getIdleTime());
-					IDLE_LISTENER.checkIdleAndDisableIfNeed(idleInMS);
+		Disposer.register(parent, command);
+	}
 
-					EyeHelpDialog.showForProject();
-				}, delayInSeconds, TimeUnit.SECONDS));
+	@RequiredArgsConstructor
+	private static class ShowCommand implements Runnable, Disposable {
+		private final AtomicBoolean disposed = new AtomicBoolean(false);
+		private final AtomicReference<ScheduledFuture<?>> future;
+		private final PluginSettings parent;
 
-		Disposable disposable = () -> {
-			disposableRef.set(null);
-			if (future.get() != null) {
-				future.get().cancel(false);
+		@Override
+		public void run() {
+			if (disposed.get()) {
+				// it was disposed
+				return;
 			}
-		};
-		disposableRef.set(disposable);
-		UIUtil.addAwtListener(IDLE_LISTENER, EVENT_MASK, disposable);
-		Disposer.register(parent, disposable);
+
+			Disposer.dispose(this);
+			if (parent.isDisposed()) {
+				return;
+			}
+
+			long idleInMS = TimeUnit.SECONDS.toMillis(PluginSettings.getInstance().getState().getIdleTime());
+			IDLE_LISTENER.checkIdleAndDisableIfNeed(idleInMS);
+
+			EyeHelpDialog.showForProject();
+		}
+
+		@Override
+		public void dispose() {
+			disposed.set(true);
+			Optional.ofNullable(future.get()).ifPresent(it -> it.cancel(false));
+		}
 	}
 }
