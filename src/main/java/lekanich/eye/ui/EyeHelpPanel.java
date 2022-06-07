@@ -2,7 +2,8 @@ package lekanich.eye.ui;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
-import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.IOException;
@@ -16,25 +17,19 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import javax.swing.JEditorPane;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
-import javax.swing.text.EditorKit;
 import javax.swing.text.html.HTMLEditorKit;
 import javax.swing.text.html.StyleSheet;
 import com.intellij.ide.util.TipUIUtil;
-import com.intellij.ide.util.TipUIUtil.Browser;
 import com.intellij.openapi.Disposable;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.util.Disposer;
 import com.intellij.ui.JBColor;
-import com.intellij.ui.ScrollPaneFactory;
 import com.intellij.ui.components.JBLabel;
 import com.intellij.ui.components.JBPanel;
 import com.intellij.ui.components.panels.VerticalLayout;
-import com.intellij.uiDesigner.core.GridConstraints;
-import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.util.concurrency.EdtExecutorService;
-import com.intellij.util.ui.JBDimension;
+import com.intellij.util.ui.HTMLEditorKitBuilder;
 import com.intellij.util.ui.JBUI;
 import com.intellij.util.ui.UIUtil;
 import lekanich.DeveloperUtil;
@@ -52,7 +47,6 @@ public class EyeHelpPanel extends JBPanel<EyeHelpPanel> implements Disposable {
 	private static final Logger log = Logger.getInstance(EyeHelpPanel.class);
 	private static final JBColor DIVIDER_COLOR = new JBColor(0xd9d9d9, 0x515151);
 	private static final int DEFAULT_WIDTH = 400;
-	private static final int DEFAULT_HEIGHT = 200;
 	private final EyeHelpDialog dialog;
 	private final JClockPanel clockPanel;
 
@@ -92,29 +86,47 @@ public class EyeHelpPanel extends JBPanel<EyeHelpPanel> implements Disposable {
 
 	public EyeHelpPanel(EyeHelpDialog eyeHelpDialog) {
 		this.dialog = eyeHelpDialog;
-		setLayout(new GridLayoutManager(3, 1));
 
-		String exercise = findExerciseMessage();
+		withPreferredWidth(DEFAULT_WIDTH);
+
+		final GridBagLayout layout = new GridBagLayout();
+		setLayout(layout);
+		setBorder(JBUI.Borders.empty());
+
+		final String exercise = findExerciseMessage();
 
 		// configure exercise panel
-		TipUIUtil.Browser browser = createBrowser();
+		final JEditorPane browser = createBrowser();
 		browser.setText(exercise);
-		browser.getComponent().setBorder(JBUI.Borders.empty(8, 12));
-		browser.getComponent().setBackground(UIUtil.getPanelBackground());
-		JScrollPane scrollPane = ScrollPaneFactory.createScrollPane(browser.getComponent(), true);
-		scrollPane.setBorder(JBUI.Borders.customLine(DIVIDER_COLOR, 0, 0, 1, 0));
+		browser.setBorder(JBUI.Borders.compound(
+				JBUI.Borders.customLine(DIVIDER_COLOR, 0, 0, 3, 0),
+				JBUI.Borders.empty(8, 12)
+		));
+		browser.setBackground(UIUtil.getPanelBackground());
 
-		JBLabel timerInfoLabel = new JBLabel(EyeBundle.message("eye.dialog.timer.topic.label"));
-
-		this.clockPanel = new JClockPanel(Optional.ofNullable(PluginSettings.getInstance()).map(PluginSettings::getState).map(PluginSettings.PluginAppState::getDurationBreak).orElse(0L));
-
-		add(scrollPane, new GridConstraints(0, 0, 2, 1, GridConstraints.ALIGN_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null));
+		add(browser);
+		layout.setConstraints(browser, new GridBagConstraints(0, 0,
+				1, 2,
+				0, 0,
+				GridBagConstraints.NORTH, GridBagConstraints.HORIZONTAL,
+				JBUI.emptyInsets(), 0, 0));
 
 		JPanel panel = new JPanel();
 		panel.setLayout(new VerticalLayout(10, SwingConstants.CENTER));
-		panel.add(timerInfoLabel, VerticalLayout.TOP);
+		panel.add(new JBLabel(EyeBundle.message("eye.dialog.timer.topic.label")), VerticalLayout.TOP);
+
+		this.clockPanel = new JClockPanel(Optional.ofNullable(PluginSettings.getInstance())
+				.map(PluginSettings::getState)
+				.map(PluginSettings.PluginAppState::getDurationBreak)
+				.orElse(0L));
 		panel.add(clockPanel, VerticalLayout.BOTTOM);
-		add(panel, new GridConstraints(2, 0, 1, 1, GridConstraints.ALIGN_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null));
+
+		add(panel);
+		layout.setConstraints(panel, new GridBagConstraints(0, 2,
+				1, 1,
+				0, 0,
+				GridBagConstraints.SOUTH, GridBagConstraints.NONE,
+				JBUI.insets(10), 0, 0));
 
 		dialog.addKeyListener(create(KeyListener.class, this, "closeParent", "keyCode", "keyPressed"));
 
@@ -133,7 +145,9 @@ public class EyeHelpPanel extends JBPanel<EyeHelpPanel> implements Disposable {
 			return EyeBundle.message("eye.dialog.exercises.dummy");
 		}
 
-		int index = DeveloperUtil.isDebugMode() ? 2 : (int) (exercises.size() * Math.random());
+		int index = DeveloperUtil.isDebugMode()
+				? 2
+				: (int) (exercises.size() * Math.random());
 		return exercises.get(index).getExerciseText();
 	}
 
@@ -155,34 +169,36 @@ public class EyeHelpPanel extends JBPanel<EyeHelpPanel> implements Disposable {
 		Disposer.register(this, service::shutdown);
 	}
 
-	@Override
-	public Dimension getPreferredSize() {
-		return new JBDimension(DEFAULT_WIDTH, DEFAULT_HEIGHT);
-	}
-
 	public void closeParent(Integer keyCode) {
 		if (KeyEvent.VK_ESCAPE == keyCode) {
 			dialog.doCancelAction();
 		}
 	}
 
-	private TipUIUtil.Browser createBrowser() {
-		Browser browser = TipUIUtil.createBrowser();
-		EditorKit kit = ((JEditorPane) browser.getComponent()).getEditorKit();
-		if (kit instanceof HTMLEditorKit) {
+	/**
+	 * Inspired by {@link TipUIUtil.Browser}
+	 *
+	 * @return pane-browser
+	 */
+	private JEditorPane createBrowser() {
+		JEditorPane pane = new JEditorPane();
+		pane.setEditable(false);
+		pane.setBackground(UIUtil.getTextFieldBackground());
+
+		HTMLEditorKit kit = new HTMLEditorKitBuilder()
+				.withGapsBetweenParagraphs()
+				.build();
+		pane.setEditorKit(kit);
+		try {
 			URL cssResource = EyeExercise.cssResource();
 			if (cssResource != null) {
-				try {
-					((HTMLEditorKit) kit).getStyleSheet().addStyleSheet(loadStyleSheet(cssResource));
-				} catch (IOException e) {
-					log.warn(e);
-				}
+				kit.getStyleSheet().addStyleSheet(loadStyleSheet(cssResource));
 			}
-		} else {
-			log.warn("Kit inside internal browser wasn't HTML. It was: " + kit.getClass().getCanonicalName());
+		} catch (IOException e) {
+			log.warn("Cannot load stylesheet ", e);
 		}
 
-		return browser;
+		return pane;
 	}
 
 	private static StyleSheet loadStyleSheet(URL url) throws IOException {
