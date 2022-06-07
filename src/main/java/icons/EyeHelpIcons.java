@@ -17,6 +17,7 @@ public class EyeHelpIcons {
 	public static final Icon EYE_ON = IconLoader.getIcon("/icons/action_eye.svg", EyeHelpIcons.class);
 	public static final Icon EYE_ON_WINTER = IconLoader.getIcon("/icons/action_eye_winter.svg", EyeHelpIcons.class);
 	public static final Icon EYE_ON_AUTUMN = IconLoader.getIcon("/icons/action_eye_autumn.svg", EyeHelpIcons.class);
+	public static final Icon EYE_ON_UKRAINE = IconLoader.getIcon("/icons/action_eye_ukraine.svg", EyeHelpIcons.class);
 	public static final Icon EYE_OFF = IconLoader.getIcon("/icons/inactive_action_eye.svg", EyeHelpIcons.class);
 
 	@Getter
@@ -24,7 +25,8 @@ public class EyeHelpIcons {
 	public enum EyeType implements Icon {
 		DEFAULT(EYE_ON),
 		AUTUMN(EYE_ON_AUTUMN),
-		WINTER(EYE_ON_WINTER);
+		WINTER(EYE_ON_WINTER),
+		UKRAINE(EYE_ON_UKRAINE);
 
 		@Delegate
 		private final Icon icon;
