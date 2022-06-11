@@ -6,6 +6,11 @@
 ### Changed
 - Just IDEA version bump
 
+## [2022.1.2]
+### Changed
+- Re-work exercise panel, get rid of Intellij Idea dependent code
+- Add new icon in Ukraine flag colors
+
 ## [2022.1.1]
 ### Changed
 - IDEA update to 2022.1

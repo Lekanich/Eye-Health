@@ -99,7 +99,7 @@ public class EyeHelpPanel extends JBPanel<EyeHelpPanel> implements Disposable {
 		final JEditorPane browser = createBrowser();
 		browser.setText(exercise);
 		browser.setBorder(JBUI.Borders.compound(
-				JBUI.Borders.customLine(DIVIDER_COLOR, 0, 0, 3, 0),
+				JBUI.Borders.customLine(DIVIDER_COLOR, 0, 0, 4, 0),
 				JBUI.Borders.empty(8, 12)
 		));
 		browser.setBackground(UIUtil.getPanelBackground());
