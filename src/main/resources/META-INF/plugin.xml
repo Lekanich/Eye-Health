@@ -1,7 +1,7 @@
 <idea-plugin>
 	<id>lekanich.eye-health</id>
 	<name>Eye Health</name>
-	<vendor email="lekan1992@gmail.com">Aleksandr Zhelezniak</vendor>
+	<vendor email="lekan1992@gmail.com">Oleksandr Zhelezniak</vendor>
 
 	<!-- please see https://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
 		 on how to target different products -->
