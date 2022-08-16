@@ -6,6 +6,10 @@
 ### Changed
 - Just IDEA version bump
 
+## [2022.2.1]
+### Changed
+- IDEA update to 2022.1
+
 ## [2022.1.2]
 ### Changed
 - Re-work exercise panel, get rid of Intellij Idea dependent code
