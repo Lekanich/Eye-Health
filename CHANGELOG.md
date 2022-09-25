@@ -6,6 +6,10 @@
 ### Changed
 - Just IDEA version bump
 
+## [2022.2.2]
+### Changed
+- IDEA update to 2022.2
+
 ## [2022.2.1]
 ### Changed
 - IDEA update to 2022.1

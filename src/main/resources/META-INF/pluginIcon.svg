@@ -1,9 +1,8 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40">
 	<defs>
-		<linearGradient id="eyehealthpluginicon-a" x1="5%" x2="90%" y1="90%" y2="5%">
-			<stop offset="0%" stop-color="#389FD6" stop-opacity=".9"/>
-			<stop offset="35%" stop-color="#59A869" stop-opacity=".9"/>
-			<stop offset="100%" stop-color="#DB5860"/>
+		<linearGradient id="eyehealthpluginicon-a" x1="5%" x2="50%" y1="50%" y2="10%">
+			<stop offset="0%" stop-color="#ffd700" stop-opacity=".9"/>
+			<stop offset="100%" stop-color="#0057b8"/>
 		</linearGradient>
 		<radialGradient id="pluginiconeye-b" cx="82.36%" cy="25.716%" r="144.737%" fx="82.36%" fy="25.716%" gradientTransform="rotate(16.284 .813 .256) scale(1 .98815)">
 			<stop offset="0%" stop-color="#FFF"/>
