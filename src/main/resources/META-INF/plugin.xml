@@ -10,7 +10,7 @@
 	<extensions defaultExtensionNs="com.intellij">
 		<postStartupActivity implementation="lekanich.eye.PluginStartupActivity"/>
 
-		<statusBarWidgetFactory implementation="lekanich.eye.EyeHelpTemporaryStatusBarWidgetFactory"/>
+		<statusBarWidgetFactory id="EyeHelpTemporaryDisable" implementation="lekanich.eye.EyeHelpTemporaryStatusBarWidgetFactory"/>
 
 		<applicationService serviceImplementation="lekanich.eye.settings.PluginSettings"/>
 
