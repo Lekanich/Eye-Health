@@ -6,7 +6,6 @@ import javax.swing.Icon;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.Messages;
-import com.intellij.openapi.util.Disposer;
 import com.intellij.openapi.wm.StatusBar;
 import com.intellij.openapi.wm.StatusBarWidget;
 import com.intellij.ui.UIBundle;
@@ -42,8 +41,6 @@ public class EyeTemporaryStatusBarWidget implements StatusBarWidget, StatusBarWi
 	public void install(@NotNull StatusBar statusBar) {
 		this.statusBar = statusBar;
 		statusBar.updateWidget(ID());
-
-		Disposer.register(statusBar, this);
 
 		ApplicationManager.getApplication().getMessageBus()
 				.connect()

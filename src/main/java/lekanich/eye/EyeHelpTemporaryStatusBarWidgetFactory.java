@@ -1,8 +1,6 @@
 package lekanich.eye;
 
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.Disposer;
-import com.intellij.openapi.wm.StatusBar;
 import com.intellij.openapi.wm.StatusBarWidget;
 import com.intellij.openapi.wm.StatusBarWidgetFactory;
 import org.jetbrains.annotations.Nls;
@@ -25,22 +23,7 @@ public class EyeHelpTemporaryStatusBarWidgetFactory implements StatusBarWidgetFa
 	}
 
 	@Override
-	public boolean isAvailable(@NotNull Project project) {
-		return true;
-	}
-
-	@Override
 	public @NotNull StatusBarWidget createWidget(@NotNull Project project) {
 		return new EyeTemporaryStatusBarWidget();
-	}
-
-	@Override
-	public void disposeWidget(@NotNull StatusBarWidget widget) {
-		Disposer.dispose(widget);
-	}
-
-	@Override
-	public boolean canBeEnabledOn(@NotNull StatusBar statusBar) {
-		return true;
 	}
 }

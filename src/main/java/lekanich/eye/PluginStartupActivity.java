@@ -3,19 +3,21 @@ package lekanich.eye;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.extensions.ExtensionNotApplicableException;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.startup.StartupActivity;
+import com.intellij.openapi.startup.ProjectActivity;
 import com.intellij.util.messages.MessageBus;
-import org.jetbrains.annotations.NotNull;
-import lombok.SneakyThrows;
+import kotlin.Unit;
+import kotlin.coroutines.Continuation;
 import lekanich.eye.listener.EyeHelpListener;
 import lekanich.eye.listener.EyeHelpSingleton;
 import lekanich.eye.ui.EyeHelpDialog;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 
 /**
  * @author Lekanich
  */
-public class PluginStartupActivity implements StartupActivity, StartupActivity.Background {
+public class PluginStartupActivity implements ProjectActivity {
 
 	public PluginStartupActivity() {
 		if (ApplicationManager.getApplication().isUnitTestMode()) {
@@ -28,9 +30,10 @@ public class PluginStartupActivity implements StartupActivity, StartupActivity.B
 				.subscribe(EyeHelpListener.EYE_HELP_TOPIC, EyeHelpSingleton.getInstance());
 	}
 
-	@SneakyThrows
+	@Nullable
 	@Override
-	public void runActivity(@NotNull Project project) {
+	public Object execute(@NotNull final Project project, @NotNull final Continuation<? super Unit> continuation) {
 		EyeHelpDialog.publishNextRestEvent();
+		return null;
 	}
 }

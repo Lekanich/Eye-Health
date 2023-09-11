@@ -135,7 +135,7 @@ public class EyeHelpDialog extends DialogWrapper {
         // if disabled start at application start
         PluginSettings instance = PluginSettings.getInstance();
         if (instance == null) {
-            log.warn("Cannot get state component, Thread: " + Thread.currentThread().toString());
+            log.warn("Cannot get state component, Thread: " + Thread.currentThread());
             return;
         }
 
@@ -153,6 +153,5 @@ public class EyeHelpDialog extends DialogWrapper {
     @Override
     protected void dispose() {
         super.dispose();
-        ourInstance = null;
     }
 }
