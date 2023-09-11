@@ -118,7 +118,7 @@ tasks {
     runIde {
 //        jvmArgs.add("-Didea.ProcessCanceledException=disabled")
 //        systemProperty 'idea.auto.reload.plugins', false
-        systemProperty("eye.debug.run", true)
+//        systemProperty("eye.debug.run", true)
     }
 
     // TODO: signPlugin
