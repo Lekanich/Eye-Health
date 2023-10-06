@@ -1,4 +1,5 @@
 import io.gitlab.arturbosch.detekt.Detekt
+import org.jetbrains.changelog.Changelog
 import org.jetbrains.changelog.date
 import org.jetbrains.changelog.markdownToHTML
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
@@ -110,8 +111,11 @@ tasks {
 
         // Get the latest available change notes from the changelog file
         changeNotes.set(provider {
-            changelog.getAll().filterKeys { it != "[Unreleased]" }
-                .values.joinToString("") { it.withHeader(true).toHTML() }
+            changelog.getAll()
+                .filterKeys { it != "[Unreleased]" }
+                .values.joinToString("") {
+                    changelog.renderItem(it.withHeader(true), Changelog.OutputType.HTML)
+                }
         })
     }
 
