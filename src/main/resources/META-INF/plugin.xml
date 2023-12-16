@@ -14,7 +14,7 @@
 
 		<applicationService serviceImplementation="lekanich.eye.settings.PluginSettings"/>
 
-		<applicationConfigurable instance="lekanich.eye.settings.PluginSettingsPage"/>
+		<applicationConfigurable displayName="Eye Help" instance="lekanich.eye.settings.PluginSettingsPage"/>
 	</extensions>
 
 	<actions>

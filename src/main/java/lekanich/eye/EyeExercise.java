@@ -11,21 +11,16 @@ import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.ui.ColorUtil;
 import com.intellij.util.ResourceUtil;
 import com.intellij.util.io.URLUtil;
+import com.intellij.util.ui.StartupUiUtil;
 import com.intellij.util.ui.UIUtil;
 import com.intellij.util.xmlb.annotations.Attribute;
-import lombok.RequiredArgsConstructor;
-import lombok.ToString;
 
 
 /**
  * @author Lekanich
  */
-@ToString
-@RequiredArgsConstructor
-public class EyeExercise {
-    private static final String MAIN_FOLDER = "/exercises";
-	@Attribute("file")
-	public final String fileName;
+public record EyeExercise(@Attribute("file") String fileName) {
+	private static final String MAIN_FOLDER = "/exercises";
 
 	public static List<EyeExercise> findExercises() {
 		String text;
@@ -56,7 +51,7 @@ public class EyeExercise {
 					return dummyMessage;
 				}
 				text.append(ResourceUtil.loadText(stream));
-				InputStream cssResourceStream = ResourceUtil.getResourceAsStream(getClass().getClassLoader(), "/tips/", UIUtil.isUnderDarcula()
+				InputStream cssResourceStream = ResourceUtil.getResourceAsStream(getClass().getClassLoader(), "/tips/", StartupUiUtil.isUnderDarcula()
 						? "css/tips_darcula.css" : "css/tips.css");
 				cssText = cssResourceStream != null ? ResourceUtil.loadText(cssResourceStream) : "";
 			}
@@ -69,7 +64,7 @@ public class EyeExercise {
 	}
 
 	public static URL cssResource() {
-		String cssFileName = UIUtil.isUnderDarcula() ? "exercise_darcula.css" : "exercise.css";
+		String cssFileName = StartupUiUtil.isUnderDarcula() ? "exercise_darcula.css" : "exercise.css";
 		return ResourceUtil.getResource(EyeExercise.class.getClassLoader(), "/exercises/css/", cssFileName);
 	}
 }

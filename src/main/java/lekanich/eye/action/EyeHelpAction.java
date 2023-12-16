@@ -1,5 +1,6 @@
 package lekanich.eye.action;
 
+import com.intellij.openapi.actionSystem.ActionUpdateThread;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.application.ApplicationManager;
@@ -24,6 +25,11 @@ public class EyeHelpAction extends AnAction {
 		ApplicationManager.getApplication().getMessageBus()
 				.syncPublisher(EyeHelpStatusListener.EYE_HELP_STATUS_TOPIC)
 				.statusChanged(EyeHelpStatusListener.Status.ACTIVE);
+	}
+
+	@Override
+	public @NotNull ActionUpdateThread getActionUpdateThread() {
+		return ActionUpdateThread.BGT;
 	}
 
 	@Override
