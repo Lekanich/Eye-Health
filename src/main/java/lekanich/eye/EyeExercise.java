@@ -51,8 +51,8 @@ public record EyeExercise(@Attribute("file") String fileName) {
 					return dummyMessage;
 				}
 				text.append(ResourceUtil.loadText(stream));
-				final InputStream cssResourceStream = ResourceUtil.getResourceAsStream(getClass().getClassLoader(), "/tips/", StartupUiUtil.INSTANCE.isDarkTheme()
-						? "css/tips_darcula.css" : "css/tips.css");
+				final String cssFileName = StartupUiUtil.INSTANCE.isDarkTheme() ? "css/tips_darcula.css" : "css/tips.css";
+				final InputStream cssResourceStream = ResourceUtil.getResourceAsStream(getClass().getClassLoader(), "/tips/", cssFileName);
 				cssText = cssResourceStream != null ? ResourceUtil.loadText(cssResourceStream) : "";
 			}
 
