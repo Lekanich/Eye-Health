@@ -3,7 +3,10 @@
 # Eye Health Plugin Changelog
 
 ## [Unreleased]
-- Update dependencies 
+- Update dependencies
+
+## [2023.3.1]
+- Update dependencies
 
 ## 2023.2.1
 
