@@ -19,7 +19,7 @@ public class EyeBundle extends AbstractBundle {
         super(BUNDLE_NAME);
     }
 
-    public static String message(@PropertyKey(resourceBundle = BUNDLE_NAME) String key, Object... params) {
+    public static String message(@PropertyKey(resourceBundle = BUNDLE_NAME) final String key, final Object... params) {
         return BUNDLE.getMessage(key, params);
     }
 }

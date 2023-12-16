@@ -9,7 +9,7 @@ import com.intellij.util.messages.Topic;
 public interface EyeHelpStatusListener {
 	Topic<EyeHelpStatusListener> EYE_HELP_STATUS_TOPIC = Topic.create("Topic to observe changes of the status", EyeHelpStatusListener.class);
 
-	void statusChanged(Status status);
+	void statusChanged(final Status status);
 
 	enum Status {
 		ACTIVE, TEMPORARY_DISABLED, DISABLED, ICON_CHANGE

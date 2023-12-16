@@ -34,7 +34,7 @@ public class EyeHelpDialog extends DialogWrapper {
     private final EyeHelpPanel centralPanel;
     private final boolean show;
 
-    public EyeHelpDialog(@NotNull Window parent) {
+    public EyeHelpDialog(@NotNull final Window parent) {
         super(parent, true);
         setModal(false);
         setTitle(EyeBundle.message("eye.dialog.title"));
@@ -88,7 +88,7 @@ public class EyeHelpDialog extends DialogWrapper {
 
     @NonNls
     private static Optional<Project> getActiveProject() {
-        @NotNull Project[] projects = ProjectManager.getInstance().getOpenProjects();
+        @NotNull final Project[] projects = ProjectManager.getInstance().getOpenProjects();
         return Stream.of(projects)
                 .filter(project -> Optional.ofNullable(
                         WindowManager.getInstance().getFrame(project))
@@ -99,7 +99,7 @@ public class EyeHelpDialog extends DialogWrapper {
     }
 
     public static void showForProject() {
-        Window w = getActiveProject()
+        final Window w = getActiveProject()
                 .map(project -> WindowManagerEx.getInstanceEx().suggestParentWindow(project))
                 .orElseGet(() -> Optional.ofNullable(WindowManagerEx.getInstanceEx().getMostRecentFocusedWindow())
                         .orElseGet(() -> WindowManagerEx.getInstanceEx().findVisibleFrame())
@@ -131,15 +131,15 @@ public class EyeHelpDialog extends DialogWrapper {
         publishNextRestEventWithDelay(0);
     }
 
-    public static void publishNextRestEventWithDelay(long delayInSeconds) {
+    public static void publishNextRestEventWithDelay(final long delayInSeconds) {
         // if disabled start at application start
-        PluginSettings instance = PluginSettings.getInstance();
+        final PluginSettings instance = PluginSettings.getInstance();
         if (instance == null) {
             log.warn("Cannot get state component, Thread: " + Thread.currentThread());
             return;
         }
 
-        PluginSettings.PluginAppState state = instance.getState();
+        final PluginSettings.PluginAppState state = instance.getState();
         // check if it is disabled
         if (!state.isEnable()) {
             return;

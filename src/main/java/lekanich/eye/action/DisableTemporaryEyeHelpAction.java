@@ -15,7 +15,7 @@ import lekanich.eye.settings.PluginSettings;
 public class DisableTemporaryEyeHelpAction extends AnAction {
 
 	@Override
-	public void actionPerformed(@NotNull AnActionEvent e) {
+	public void actionPerformed(@NotNull final AnActionEvent e) {
 		// notify about temporary disabling
 		ApplicationManager.getApplication().getMessageBus()
 				.syncPublisher(EyeHelpStatusListener.EYE_HELP_STATUS_TOPIC)
@@ -28,7 +28,7 @@ public class DisableTemporaryEyeHelpAction extends AnAction {
 	}
 
 	@Override
-	public void update(@NotNull AnActionEvent e) {
+	public void update(@NotNull final AnActionEvent e) {
 		super.update(e);
 		e.getPresentation().setEnabled(!PluginSettings.TemporaryDisableEyeHelpSetting.isTemporaryDisabled());
 	}

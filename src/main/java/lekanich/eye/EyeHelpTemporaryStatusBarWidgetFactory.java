@@ -23,7 +23,7 @@ public class EyeHelpTemporaryStatusBarWidgetFactory implements StatusBarWidgetFa
 	}
 
 	@Override
-	public @NotNull StatusBarWidget createWidget(@NotNull Project project) {
+	public @NotNull StatusBarWidget createWidget(@NotNull final Project project) {
 		return new EyeTemporaryStatusBarWidget();
 	}
 }

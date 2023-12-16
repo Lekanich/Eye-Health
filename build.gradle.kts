@@ -19,6 +19,7 @@ plugins {
     id("io.gitlab.arturbosch.detekt") version "1.23.0"
     // ktlint linter - read more: https://github.com/JLLeitschuh/ktlint-gradle
     id("org.jlleitschuh.gradle.ktlint") version "11.5.0"
+    checkstyle
 }
 
 group = properties("pluginGroup")
@@ -72,6 +73,15 @@ detekt {
         html.enabled = false
         xml.enabled = false
         txt.enabled = false
+    }
+}
+
+checkstyle {
+    toolVersion = "10.3.3"
+}
+tasks.withType<Checkstyle>().configureEach {
+    reports {
+        configFile = file("config/checkstyle/checkstyle.xml")
     }
 }
 

@@ -25,7 +25,7 @@ public class PluginStartupActivity implements ProjectActivity {
 		}
 
 		// register topic and subscribe listener to do payload
-		MessageBus messageBus = ApplicationManager.getApplication().getMessageBus();
+		final MessageBus messageBus = ApplicationManager.getApplication().getMessageBus();
 		messageBus.connect()
 				.subscribe(EyeHelpListener.EYE_HELP_TOPIC, EyeHelpSingleton.getInstance());
 	}

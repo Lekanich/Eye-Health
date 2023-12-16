@@ -13,6 +13,7 @@ import com.intellij.util.ui.UIUtil;
 import lekanich.eye.settings.PluginSettings;
 import lekanich.eye.ui.EyeHelpDialog;
 import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
@@ -28,22 +29,19 @@ public class EyeHelpSingleton implements EyeHelpListener {
 			| AWTEvent.MOUSE_WHEEL_EVENT_MASK
 			| AWTEvent.KEY_EVENT_MASK
 			| AWTEvent.FOCUS_EVENT_MASK;
+	@Getter
 	private static final EyeHelpSingleton instance = new EyeHelpSingleton();
 	private static final IdleListener IDLE_LISTENER = new IdleListener();
 	private final AtomicReference<ScheduledFuture<?>> future = new AtomicReference<>(null);
 
-	public static EyeHelpSingleton getInstance() {
-		return instance;
-	}
-
 	@Override
-	public synchronized void scheduleEyeHelp(long delayInSeconds) {
+	public synchronized void scheduleEyeHelp(final long delayInSeconds) {
 		if (future.get() != null) {
 			future.get().cancel(false);
 		}
 
-		@NotNull PluginSettings parent = PluginSettings.getInstance();
-		ShowCommand command = new ShowCommand(future, parent);
+		@NotNull final PluginSettings parent = PluginSettings.getInstance();
+		final ShowCommand command = new ShowCommand(future, parent);
 		future.set(EdtScheduledExecutorService.getInstance()
 				.schedule(command, delayInSeconds, TimeUnit.SECONDS));
 
@@ -70,7 +68,7 @@ public class EyeHelpSingleton implements EyeHelpListener {
 				return;
 			}
 
-			long idleInMS = TimeUnit.SECONDS.toMillis(PluginSettings.getInstance().getState().getIdleTime());
+			final long idleInMS = TimeUnit.SECONDS.toMillis(PluginSettings.getInstance().getState().getIdleTime());
 			IDLE_LISTENER.checkIdleAndDisableIfNeed(idleInMS);
 
 			EyeHelpDialog.showForProject();

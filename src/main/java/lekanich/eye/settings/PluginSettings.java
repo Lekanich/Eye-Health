@@ -46,7 +46,7 @@ public class PluginSettings implements PersistentStateComponent<PluginSettings.P
 	}
 
 	@Override
-	public void loadState(@NotNull PluginSettings.PluginAppState state) {
+	public void loadState(@NotNull final PluginSettings.PluginAppState state) {
 		XmlSerializerUtil.copyBean(state, this.state);
 	}
 
@@ -115,7 +115,7 @@ public class PluginSettings implements PersistentStateComponent<PluginSettings.P
 	}
 
 	public static boolean isDisabled() {
-		PluginAppState state = PluginSettings.getInstance().getState();
+		final PluginAppState state = PluginSettings.getInstance().getState();
 		// check if it is disabled
 		if (!state.isEnable()) {
 			return true;
@@ -142,7 +142,7 @@ public class PluginSettings implements PersistentStateComponent<PluginSettings.P
 		}
 
 		public static void deactivateEyeHelp() {
-			long untilTimeUTC = calcMidnightTodaySeconds();
+			final long untilTimeUTC = calcMidnightTodaySeconds();
 
 			// set properties to end of the date so we can set end of the day in your timezone
 			PropertiesComponent.getInstance()
@@ -153,8 +153,8 @@ public class PluginSettings implements PersistentStateComponent<PluginSettings.P
 		}
 
 		private static long calcMidnightTodaySeconds() {
-			LocalDate today = LocalDate.now(ZoneId.systemDefault());
-			LocalDateTime todayMidnight = LocalDateTime.of(today, LocalTime.MIDNIGHT).plusDays(1);
+			final LocalDate today = LocalDate.now(ZoneId.systemDefault());
+			final LocalDateTime todayMidnight = LocalDateTime.of(today, LocalTime.MIDNIGHT).plusDays(1);
 			return todayMidnight.toEpochSecond(ZoneOffset.UTC);
 		}
 
@@ -167,7 +167,7 @@ public class PluginSettings implements PersistentStateComponent<PluginSettings.P
 		}
 
 		public static boolean isTemporaryDisabled() {
-			long nowSecondsUTC = nowSeconds();
+			final long nowSecondsUTC = nowSeconds();
 			return getTimeToStopUntil() >= nowSecondsUTC;
 		}
 	}

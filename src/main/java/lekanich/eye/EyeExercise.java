@@ -25,7 +25,7 @@ public record EyeExercise(@Attribute("file") String fileName) {
 	public static List<EyeExercise> findExercises() {
 		String text;
 		try {
-			URL resource = ResourceUtil.getResource(EyeExercise.class.getClassLoader(), MAIN_FOLDER, "list.txt");
+			final URL resource = ResourceUtil.getResource(EyeExercise.class.getClassLoader(), MAIN_FOLDER, "list.txt");
 			text = ResourceUtil.loadText(URLUtil.openStream(resource));
 		} catch (IOException e) {
 			text = "";
@@ -36,27 +36,27 @@ public record EyeExercise(@Attribute("file") String fileName) {
 	}
 
 	public String getExerciseText() {
-		String dummyMessage = "Please report this to plugin provider";
+		final String dummyMessage = "Please report this to plugin provider";
 		try {
-			StringBuilder text = new StringBuilder();
+			final StringBuilder text = new StringBuilder();
 			String cssText;
-			File file = new File(fileName);
+			final File file = new File(fileName);
 			if (file.isAbsolute() && file.exists()) {
 				text.append(FileUtil.loadFile(file));
-				URL cssResource = cssResource();
+				final URL cssResource = cssResource();
 				cssText = ResourceUtil.loadText(URLUtil.openStream(cssResource));
 			} else {
-				InputStream stream = ResourceUtil.getResourceAsStream(getClass().getClassLoader(), MAIN_FOLDER, fileName);
+				final InputStream stream = ResourceUtil.getResourceAsStream(getClass().getClassLoader(), MAIN_FOLDER, fileName);
 				if (stream == null) {
 					return dummyMessage;
 				}
 				text.append(ResourceUtil.loadText(stream));
-				InputStream cssResourceStream = ResourceUtil.getResourceAsStream(getClass().getClassLoader(), "/tips/", StartupUiUtil.isUnderDarcula()
+				final InputStream cssResourceStream = ResourceUtil.getResourceAsStream(getClass().getClassLoader(), "/tips/", StartupUiUtil.INSTANCE.isDarkTheme()
 						? "css/tips_darcula.css" : "css/tips.css");
 				cssText = cssResourceStream != null ? ResourceUtil.loadText(cssResourceStream) : "";
 			}
 
-			String inlinedCSS = cssText + "\nbody {background-color:#" + ColorUtil.toHex(UIUtil.getTextFieldBackground()) + ";overflow:hidden;}";
+			final String inlinedCSS = cssText + "\nbody {background-color:#" + ColorUtil.toHex(UIUtil.getTextFieldBackground()) + ";overflow:hidden;}";
 			return text.toString().replaceFirst("<link.*\\.css\">", "<style type=\"text/css\">\n" + inlinedCSS + "\n</style>");
 		} catch (IOException e) {
 			return dummyMessage;
@@ -64,7 +64,7 @@ public record EyeExercise(@Attribute("file") String fileName) {
 	}
 
 	public static URL cssResource() {
-		String cssFileName = StartupUiUtil.isUnderDarcula() ? "exercise_darcula.css" : "exercise.css";
+		final String cssFileName = StartupUiUtil.INSTANCE.isDarkTheme() ? "exercise_darcula.css" : "exercise.css";
 		return ResourceUtil.getResource(EyeExercise.class.getClassLoader(), "/exercises/css/", cssFileName);
 	}
 }

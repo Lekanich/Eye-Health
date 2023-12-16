@@ -54,7 +54,7 @@ public class EyeHelpPanel extends JBPanel<EyeHelpPanel> implements Disposable {
 		private final JBLabel counterLabel;
 		private long secondsToRest;
 
-		public JClockPanel(long secondsToRest) {
+		public JClockPanel(final long secondsToRest) {
 			this.secondsToRest = secondsToRest;
 
 			setLayout(new BorderLayout());
@@ -84,7 +84,7 @@ public class EyeHelpPanel extends JBPanel<EyeHelpPanel> implements Disposable {
 		}
 	}
 
-	public EyeHelpPanel(EyeHelpDialog eyeHelpDialog) {
+	public EyeHelpPanel(final EyeHelpDialog eyeHelpDialog) {
 		this.dialog = eyeHelpDialog;
 
 		withPreferredWidth(DEFAULT_WIDTH);
@@ -111,7 +111,7 @@ public class EyeHelpPanel extends JBPanel<EyeHelpPanel> implements Disposable {
 				GridBagConstraints.NORTH, GridBagConstraints.HORIZONTAL,
 				JBUI.emptyInsets(), 0, 0));
 
-		JPanel panel = new JPanel();
+		final JPanel panel = new JPanel();
 		panel.setLayout(new VerticalLayout(10, SwingConstants.CENTER));
 		panel.add(new JBLabel(EyeBundle.message("eye.dialog.timer.topic.label")), VerticalLayout.TOP);
 
@@ -140,12 +140,12 @@ public class EyeHelpPanel extends JBPanel<EyeHelpPanel> implements Disposable {
 
 	@NotNull
 	private String findExerciseMessage() {
-		List<EyeExercise> exercises = EyeExercise.findExercises();
+		final List<EyeExercise> exercises = EyeExercise.findExercises();
 		if (exercises.isEmpty()) {
 			return EyeBundle.message("eye.dialog.exercises.dummy");
 		}
 
-		int index = DeveloperUtil.isDebugMode()
+		final int index = DeveloperUtil.isDebugMode()
 				? 2
 				: (int) (exercises.size() * Math.random());
 		return exercises.get(index).getExerciseText();
@@ -157,7 +157,7 @@ public class EyeHelpPanel extends JBPanel<EyeHelpPanel> implements Disposable {
 		}
 
 		// should be stopped if dialog is not visible
-		ScheduledExecutorService service = Executors.newScheduledThreadPool(1);
+		final ScheduledExecutorService service = Executors.newScheduledThreadPool(1);
 		service.scheduleAtFixedRate(() -> {
 			if (!clockPanel.tick()) {
 				// close dialog after counter is down
@@ -169,7 +169,7 @@ public class EyeHelpPanel extends JBPanel<EyeHelpPanel> implements Disposable {
 		Disposer.register(this, service::shutdown);
 	}
 
-	public void closeParent(Integer keyCode) {
+	public void closeParent(final Integer keyCode) {
 		if (KeyEvent.VK_ESCAPE == keyCode) {
 			dialog.doCancelAction();
 		}
@@ -181,16 +181,16 @@ public class EyeHelpPanel extends JBPanel<EyeHelpPanel> implements Disposable {
 	 * @return pane-browser
 	 */
 	private JEditorPane createBrowser() {
-		JEditorPane pane = new JEditorPane();
+		final JEditorPane pane = new JEditorPane();
 		pane.setEditable(false);
 		pane.setBackground(UIUtil.getTextFieldBackground());
 
-		HTMLEditorKit kit = new HTMLEditorKitBuilder()
+		final HTMLEditorKit kit = new HTMLEditorKitBuilder()
 				.withGapsBetweenParagraphs()
 				.build();
 		pane.setEditorKit(kit);
 		try {
-			URL cssResource = EyeExercise.cssResource();
+			final URL cssResource = EyeExercise.cssResource();
 			if (cssResource != null) {
 				kit.getStyleSheet().addStyleSheet(loadStyleSheet(cssResource));
 			}
@@ -201,8 +201,8 @@ public class EyeHelpPanel extends JBPanel<EyeHelpPanel> implements Disposable {
 		return pane;
 	}
 
-	private static StyleSheet loadStyleSheet(URL url) throws IOException {
-		StyleSheet result = new StyleSheet();
+	private static StyleSheet loadStyleSheet(final URL url) throws IOException {
+		final StyleSheet result = new StyleSheet();
 		result.loadRules(new InputStreamReader(url.openStream(), StandardCharsets.UTF_8), url);
 		return result;
 	}

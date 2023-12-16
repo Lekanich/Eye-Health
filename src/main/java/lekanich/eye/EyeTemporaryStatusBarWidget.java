@@ -38,7 +38,7 @@ public class EyeTemporaryStatusBarWidget implements StatusBarWidget, StatusBarWi
 	}
 
 	@Override
-	public void install(@NotNull StatusBar statusBar) {
+	public void install(@NotNull final StatusBar statusBar) {
 		this.statusBar = statusBar;
 		statusBar.updateWidget(ID());
 
@@ -48,7 +48,7 @@ public class EyeTemporaryStatusBarWidget implements StatusBarWidget, StatusBarWi
 	}
 
 	@Override
-	public void statusChanged(Status status) {
+	public void statusChanged(final Status status) {
 		if (status == Status.ACTIVE) {
 			PluginSettings.TemporaryDisableEyeHelpSetting.reactivate();
 		} else if (status == Status.TEMPORARY_DISABLED) {

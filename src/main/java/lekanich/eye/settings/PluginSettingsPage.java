@@ -14,7 +14,6 @@ import icons.EyeHelpIcons.EyeType;
 import lekanich.eye.EyeBundle;
 import lekanich.eye.listener.EyeHelpStatusListener;
 import lekanich.eye.ui.EyeHelpDialog;
-import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -50,7 +49,7 @@ public class PluginSettingsPage implements SearchableConfigurable {
 	}
 
 	@Override
-	public @Nls(capitalization = Nls.Capitalization.Title) String getDisplayName() {
+	public @Nls(capitalization = Nls.Capitalization.Title) final String getDisplayName() {
 		return PAGE_NAME;
 	}
 
@@ -69,7 +68,7 @@ public class PluginSettingsPage implements SearchableConfigurable {
 		durationOfRestTextField.setInputVerifier(POSITIVE_INTEGER_VERIFIER);
 		idleTextField.setInputVerifier(new InputVerifier() {
 			@Override
-			public boolean verify(JComponent input) {
+			public boolean verify(final JComponent input) {
 				return POSITIVE_INTEGER_VERIFIER.verify(input)
 						&& Long.parseLong(durationBetweenRestTextField.getText()) > Long.parseLong(((JTextField) input).getText());
 			}
@@ -78,7 +77,7 @@ public class PluginSettingsPage implements SearchableConfigurable {
 		return mainPanel;
 	}
 
-	private void updateStatusLabel(JLabel label, boolean enable) {
+	private void updateStatusLabel(final JLabel label, final boolean enable) {
 		if (enable) {
 			label.setText(EyeBundle.message("eye.settings.status.enabled"));
 			label.setForeground(JBColor.GREEN);
@@ -90,7 +89,7 @@ public class PluginSettingsPage implements SearchableConfigurable {
 
 	@Override
 	public boolean isModified() {
-		PluginSettings.PluginAppState state = settings.getState();
+		final PluginSettings.PluginAppState state = settings.getState();
 
 		return enablePluginCheckBox.isSelected() != state.isEnable()
 				|| allowPostponeTheEyeCheckBox.isSelected() != state.isPostpone()
@@ -104,7 +103,7 @@ public class PluginSettingsPage implements SearchableConfigurable {
 
 	@Override
 	public void apply() throws ConfigurationException {
-		PluginSettings.PluginAppState state = settings.getState();
+		final PluginSettings.PluginAppState state = settings.getState();
 
 		if (state.isEnable() != enablePluginCheckBox.isSelected()) {
 			notifyAboutTurnOn();
@@ -142,7 +141,7 @@ public class PluginSettingsPage implements SearchableConfigurable {
 	@Override
 	public void reset() {
 		// init from config
-		PluginSettings.PluginAppState state = settings.getState();
+		final PluginSettings.PluginAppState state = settings.getState();
 
 		iconComboBox.setSelectedItem(state.getEyeType());
 		enablePluginCheckBox.setSelected(state.isEnable());
@@ -161,18 +160,20 @@ public class PluginSettingsPage implements SearchableConfigurable {
 	private static class IntegerNumberVerifier extends InputVerifier {
 
 		@Override
-		public boolean verify(JComponent input) {
+		public boolean verify(final JComponent input) {
 			return StringUtil.isNotNegativeNumber(((JTextField) input).getText());
 		}
 	}
 
-	@RequiredArgsConstructor
-	private static class IconTextDecorator implements ListCellRenderer<EyeHelpIcons.EyeType> {
-		private final ListCellRenderer<? super EyeHelpIcons.EyeType> delegate;
-
+	private record IconTextDecorator(ListCellRenderer<? super EyeType> delegate) implements ListCellRenderer<EyeType> {
 		@Override
-		public Component getListCellRendererComponent(final JList<? extends EyeType> list, final EyeType value, final int index, final boolean isSelected, final boolean cellHasFocus) {
-			Component component = delegate.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+		public Component getListCellRendererComponent(
+				final JList<? extends EyeType> list,
+				final EyeType value,
+				final int index,
+				final boolean isSelected,
+				final boolean cellHasFocus) {
+			final Component component = delegate.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
 			if (component instanceof JLabel) {
 				((JLabel) component).setIcon(value.getIcon());
 				((JLabel) component).setText(value.toString().toLowerCase());

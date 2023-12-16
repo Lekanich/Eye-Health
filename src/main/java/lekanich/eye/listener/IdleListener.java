@@ -14,7 +14,7 @@ public class IdleListener implements AWTEventListener {
 	private boolean isIdleDisabled = true;
 
 	@Override
-	public void eventDispatched(AWTEvent event) {
+	public void eventDispatched(final AWTEvent event) {
 		// we will track all UI events and will save the date
 		lastEventTime = System.currentTimeMillis();
 		if (isIdleDisabled) {
@@ -29,9 +29,9 @@ public class IdleListener implements AWTEventListener {
 	/**
 	 * @param idleTimeMs time after which plugin decide that it was idle time (in ms)
 	 */
-	public void checkIdleAndDisableIfNeed(long idleTimeMs) {
-		long dTimeInMs = System.currentTimeMillis() - lastEventTime;
-		boolean isIdle = dTimeInMs > idleTimeMs;
+	public void checkIdleAndDisableIfNeed(final long idleTimeMs) {
+		final long dTimeInMs = System.currentTimeMillis() - lastEventTime;
+		final boolean isIdle = dTimeInMs > idleTimeMs;
 		if (isIdle && !PluginSettings.isDisabled()) {
 			isIdleDisabled = true;
 

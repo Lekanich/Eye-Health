@@ -15,7 +15,7 @@ import lekanich.eye.settings.PluginSettings;
 public class EyeHelpAction extends AnAction {
 
 	@Override
-	public void actionPerformed(@NotNull AnActionEvent e) {
+	public void actionPerformed(@NotNull final AnActionEvent e) {
 		// automatic enable functionality
 		PluginSettings.getInstance()
 				.getState()
@@ -33,7 +33,7 @@ public class EyeHelpAction extends AnAction {
 	}
 
 	@Override
-	public void update(@NotNull AnActionEvent e) {
+	public void update(@NotNull final AnActionEvent e) {
 		super.update(e);
 
 		e.getPresentation().setEnabled(PluginSettings.isDisabled());
