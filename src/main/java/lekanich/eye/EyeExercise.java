@@ -65,12 +65,12 @@ public record EyeExercise(@Attribute("file") String fileName) {
 	}
 
 	public static URL cssResource() {
-		final String cssFileName = cssResourceFileName();
+		final String cssFileName = StartupUiUtil.INSTANCE.isDarkTheme() ? "exercise_darcula.css" : "exercise.css";
 		return ResourceUtil.getResource(EyeExercise.class.getClassLoader(), "/exercises/css/", cssFileName);
 	}
 
 	@NotNull
 	public static String cssResourceFileName() {
-		return StartupUiUtil.INSTANCE.isDarkTheme() ? "exercise_darcula.css" : "exercise.css";
+		return "exercises/css/" + (StartupUiUtil.INSTANCE.isDarkTheme() ? "exercise_darcula.css" : "exercise.css");
 	}
 }
