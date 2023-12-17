@@ -52,7 +52,7 @@ public record EyeExercise(@Attribute("file") String fileName) {
 					return dummyMessage;
 				}
 				text.append(ResourceUtil.loadText(stream));
-				final String cssFileName = StartupUiUtil.INSTANCE.isDarkTheme() ? "css/tips_darcula.css" : "css/tips.css";
+				final String cssFileName = StartupUiUtil.isUnderDarcula() ? "css/tips_darcula.css" : "css/tips.css";
 				final InputStream cssResourceStream = ResourceUtil.getResourceAsStream(getClass().getClassLoader(), "/tips/", cssFileName);
 				cssText = cssResourceStream != null ? ResourceUtil.loadText(cssResourceStream) : "";
 			}
@@ -65,12 +65,12 @@ public record EyeExercise(@Attribute("file") String fileName) {
 	}
 
 	public static URL cssResource() {
-		final String cssFileName = StartupUiUtil.INSTANCE.isDarkTheme() ? "exercise_darcula.css" : "exercise.css";
+		final String cssFileName = StartupUiUtil.isUnderDarcula() ? "exercise_darcula.css" : "exercise.css";
 		return ResourceUtil.getResource(EyeExercise.class.getClassLoader(), "/exercises/css/", cssFileName);
 	}
 
 	@NotNull
 	public static String cssResourceFileName() {
-		return "exercises/css/" + (StartupUiUtil.INSTANCE.isDarkTheme() ? "exercise_darcula.css" : "exercise.css");
+		return "exercises/css/" + (StartupUiUtil.isUnderDarcula() ? "exercise_darcula.css" : "exercise.css");
 	}
 }
