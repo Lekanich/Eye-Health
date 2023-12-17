@@ -14,6 +14,7 @@ import com.intellij.util.io.URLUtil;
 import com.intellij.util.ui.StartupUiUtil;
 import com.intellij.util.ui.UIUtil;
 import com.intellij.util.xmlb.annotations.Attribute;
+import org.jetbrains.annotations.NotNull;
 
 
 /**
@@ -64,7 +65,12 @@ public record EyeExercise(@Attribute("file") String fileName) {
 	}
 
 	public static URL cssResource() {
-		final String cssFileName = StartupUiUtil.INSTANCE.isDarkTheme() ? "exercise_darcula.css" : "exercise.css";
+		final String cssFileName = cssResourceFileName();
 		return ResourceUtil.getResource(EyeExercise.class.getClassLoader(), "/exercises/css/", cssFileName);
+	}
+
+	@NotNull
+	public static String cssResourceFileName() {
+		return StartupUiUtil.INSTANCE.isDarkTheme() ? "exercise_darcula.css" : "exercise.css";
 	}
 }

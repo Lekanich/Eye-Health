@@ -6,10 +6,8 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.URL;
-import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.Executors;
@@ -28,9 +26,11 @@ import com.intellij.ui.JBColor;
 import com.intellij.ui.components.JBLabel;
 import com.intellij.ui.components.JBPanel;
 import com.intellij.ui.components.panels.VerticalLayout;
+import com.intellij.util.ResourceUtil;
 import com.intellij.util.concurrency.EdtExecutorService;
 import com.intellij.util.ui.HTMLEditorKitBuilder;
 import com.intellij.util.ui.JBUI;
+import com.intellij.util.ui.StyleSheetUtil;
 import com.intellij.util.ui.UIUtil;
 import lekanich.DeveloperUtil;
 import lekanich.eye.EyeBundle;
@@ -163,10 +163,14 @@ public class EyeHelpPanel extends JBPanel<EyeHelpPanel> implements Disposable {
 				// close dialog after counter is down
 				EdtExecutorService.getInstance().execute(dialog::doCancelAction);
 				service.shutdown();
+				service.close();
 			}
 		}, 0, 1, TimeUnit.SECONDS);
 
-		Disposer.register(this, service::shutdown);
+		Disposer.register(this, () -> {
+			service.shutdown();
+			service.close();
+		});
 	}
 
 	public void closeParent(final Integer keyCode) {
@@ -188,22 +192,26 @@ public class EyeHelpPanel extends JBPanel<EyeHelpPanel> implements Disposable {
 		final HTMLEditorKit kit = new HTMLEditorKitBuilder()
 				.withGapsBetweenParagraphs()
 				.build();
-		pane.setEditorKit(kit);
 		try {
-			final URL cssResource = EyeExercise.cssResource();
-			if (cssResource != null) {
-				kit.getStyleSheet().addStyleSheet(loadStyleSheet(cssResource));
+			final String cssResource = EyeExercise.cssResourceFileName();
+			final StyleSheet styleSheet = loadStyleSheet(cssResource);
+			if (styleSheet != null) {
+				kit.getStyleSheet().addStyleSheet(styleSheet);
 			}
 		} catch (IOException e) {
 			log.warn("Cannot load stylesheet ", e);
 		}
 
+		pane.setEditorKit(kit);
 		return pane;
 	}
 
-	private static StyleSheet loadStyleSheet(final URL url) throws IOException {
-		final StyleSheet result = new StyleSheet();
-		result.loadRules(new InputStreamReader(url.openStream(), StandardCharsets.UTF_8), url);
-		return result;
+	private static StyleSheet loadStyleSheet(final String fileName) throws IOException {
+		final byte[] data = ResourceUtil.getResourceAsBytes(fileName, EyeHelpPanel.class.getClassLoader());
+		if (data == null) {
+			return null;
+		}
+
+		return StyleSheetUtil.loadStyleSheet(new ByteArrayInputStream(data));
 	}
 }

@@ -66,14 +66,8 @@ changelog {
 // Configure detekt plugin.
 // Read more: https://detekt.github.io/detekt/kotlindsl.html
 detekt {
-    config = files("./detekt-config.yml")
+    config.setFrom("./detekt-config.yml")
     buildUponDefaultConfig = true
-
-    reports {
-        html.enabled = false
-        xml.enabled = false
-        txt.enabled = false
-    }
 }
 
 checkstyle {
@@ -97,6 +91,17 @@ tasks {
 
     withType<Detekt> {
         jvmTarget = "17"
+        reports {
+            // Enable/Disable XML report (default: true)
+            xml.required.set(false)
+            xml.outputLocation.set(file("build/reports/detekt.xml"))
+            // Enable/Disable HTML report (default: true)
+            html.required.set(true)
+            html.outputLocation.set(file("build/reports/detekt.html"))
+            // Enable/Disable TXT report (default: true)
+            txt.required.set(false)
+            txt.outputLocation.set(file("build/reports/detekt.txt"))
+        }
     }
 
     patchPluginXml {
@@ -132,7 +137,7 @@ tasks {
     runIde {
 //        jvmArgs.add("-Didea.ProcessCanceledException=disabled")
 //        systemProperty 'idea.auto.reload.plugins', false
-//        systemProperty("eye.debug.run", true)
+        systemProperty("eye.debug.run", true)
     }
 
     // TODO: signPlugin
