@@ -163,13 +163,11 @@ public class EyeHelpPanel extends JBPanel<EyeHelpPanel> implements Disposable {
 				// close dialog after counter is down
 				EdtExecutorService.getInstance().execute(dialog::doCancelAction);
 				service.shutdown();
-				service.close();
 			}
 		}, 0, 1, TimeUnit.SECONDS);
 
 		Disposer.register(this, () -> {
 			service.shutdown();
-			service.close();
 		});
 	}
 
