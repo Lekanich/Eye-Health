@@ -146,7 +146,7 @@ public class EyeHelpPanel extends JBPanel<EyeHelpPanel> implements Disposable {
 		}
 
 		final int index = DeveloperUtil.isDebugMode()
-				? 9
+				? 9 % exercises.size()
 				: (int) (exercises.size() * Math.random());
 		return exercises.get(index).getExerciseText();
 	}
