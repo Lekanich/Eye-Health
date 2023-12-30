@@ -32,9 +32,11 @@ repositories {
     mavenCentral()
 }
 dependencies {
+    val lombokDependency = "org.projectlombok:lombok:1.18.30"
+    compileOnly(lombokDependency)
+    annotationProcessor(lombokDependency)
+
     detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.23.4")
-    compileOnly("org.projectlombok:lombok:1.18.30")
-    annotationProcessor("org.projectlombok:lombok:1.18.30")
 
     testImplementation("junit:junit:4.13.2")
     testImplementation("org.hamcrest:hamcrest:2.2")
