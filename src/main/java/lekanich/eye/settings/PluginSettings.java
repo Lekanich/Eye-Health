@@ -105,6 +105,16 @@ public class PluginSettings implements PersistentStateComponent<PluginSettings.P
 		 */
 		private boolean showWhenMinimized = true;
 
+		/**
+		 * Enable lunchtime specific settings
+		 */
+		private boolean enableLunchTime = false;
+
+		/**
+		 * Lunchtime in the minutes from the start of the day
+		 */
+		private int lunchTimeInMinutes = -1;
+
 		public long getDurationWorkBeforeBreak() {
 			return DeveloperUtil.isDebugMode() ? 8 : durationWorkBeforeBreak;
 		}

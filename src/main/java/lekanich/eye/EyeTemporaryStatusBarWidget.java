@@ -23,7 +23,8 @@ import org.jetbrains.annotations.Nullable;
 /**
  * @author Lekanich
  */
-public class EyeTemporaryStatusBarWidget implements StatusBarWidget, StatusBarWidget.Multiframe, StatusBarWidget.IconPresentation, EyeHelpStatusListener {
+public class EyeTemporaryStatusBarWidget
+		implements StatusBarWidget, StatusBarWidget.Multiframe, StatusBarWidget.IconPresentation, EyeHelpStatusListener {
 	public static final String WIDGET_ID = "EyeHelpTemporaryDisable";
 	private StatusBar statusBar;
 
@@ -68,6 +69,7 @@ public class EyeTemporaryStatusBarWidget implements StatusBarWidget, StatusBarWi
 		statusBar = null;
 	}
 
+	@NotNull
 	@Override
 	public StatusBarWidget copy() {
 		return new EyeTemporaryStatusBarWidget();
@@ -108,9 +110,9 @@ public class EyeTemporaryStatusBarWidget implements StatusBarWidget, StatusBarWi
 		return PluginSettings.TemporaryDisableEyeHelpSetting.isTemporaryDisabled()
 				? EyeHelpIcons.EYE_OFF
 				: Optional.ofNullable(PluginSettings.getInstance())
-					.map(PluginSettings::getState)
-					.map(PluginSettings.PluginAppState::getEyeType)
-					.map(EyeType::getIcon)
-					.orElse(EyeHelpIcons.EYE_ON);
+				.map(PluginSettings::getState)
+				.map(PluginSettings.PluginAppState::getEyeType)
+				.map(EyeType::getIcon)
+				.orElse(EyeHelpIcons.EYE_ON);
 	}
 }

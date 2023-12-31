@@ -1,7 +1,9 @@
 package lekanich.eye.settings;
 
 import java.awt.Component;
+import java.time.LocalTime;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 import javax.swing.*;
 import com.intellij.openapi.application.ApplicationManager;
@@ -38,6 +40,9 @@ public class PluginSettingsPage implements SearchableConfigurable {
 	private JComboBox<EyeType> iconComboBox;
 	private JCheckBox showMinimizedCheckBox;
 	private JLabel statusLabelMinimized;
+	private JCheckBox enableLunchTime;
+	private JComboBox<LocalTime> timeComboBox;
+	private JLabel statusLunchtime;
 
 	public PluginSettingsPage() {
 		this.settings = PluginSettings.getInstance();
@@ -49,7 +54,8 @@ public class PluginSettingsPage implements SearchableConfigurable {
 	}
 
 	@Override
-	public @Nls(capitalization = Nls.Capitalization.Title) final String getDisplayName() {
+	public @Nls(capitalization = Nls.Capitalization.Title)
+	final String getDisplayName() {
 		return PAGE_NAME;
 	}
 
@@ -60,6 +66,11 @@ public class PluginSettingsPage implements SearchableConfigurable {
 		Stream.of(EyeHelpIcons.EyeType.values())
 				.forEach(iconComboBox::addItem);
 		iconComboBox.setRenderer(new IconTextDecorator(iconComboBox.getRenderer()));
+		// every 30 minutes, from 11:00
+		final int hourOffset = 60 * 11;
+		IntStream.range(0, 9)
+				.map(i -> i * 30 + hourOffset)
+				.forEach(i -> timeComboBox.addItem(LocalTime.of(i / 60, i % 60)));
 
 		reset();
 
@@ -98,7 +109,9 @@ public class PluginSettingsPage implements SearchableConfigurable {
 				|| !durationPostponeTextField.getText().equals(String.valueOf(state.getDurationPostpone()))
 				|| !idleTextField.getText().equals(String.valueOf(TimeUnit.SECONDS.toMinutes(state.getIdleTime())))
 				|| iconComboBox.getSelectedItem() != state.getEyeType()
-				|| showMinimizedCheckBox.isSelected() != state.isShowWhenMinimized();
+				|| showMinimizedCheckBox.isSelected() != state.isShowWhenMinimized()
+				|| enableLunchTime.isSelected() != state.isEnableLunchTime()
+				|| toMinute((LocalTime) timeComboBox.getSelectedItem()) != state.getLunchTimeInMinutes();
 	}
 
 	@Override
@@ -117,9 +130,13 @@ public class PluginSettingsPage implements SearchableConfigurable {
 		}
 
 		state.setEyeType((EyeType) iconComboBox.getSelectedItem());
+
+		// statuses
 		state.setEnable(enablePluginCheckBox.isSelected());
 		state.setShowWhenMinimized(showMinimizedCheckBox.isSelected());
 		state.setPostpone(allowPostponeTheEyeCheckBox.isSelected());
+		state.setEnableLunchTime(enableLunchTime.isSelected());
+
 		try {
 			state.setDurationBreak(Long.parseLong(durationOfRestTextField.getText()));
 			state.setDurationWorkBeforeBreak(TimeUnit.MINUTES.toSeconds(Long.parseLong(durationBetweenRestTextField.getText())));
@@ -129,9 +146,12 @@ public class PluginSettingsPage implements SearchableConfigurable {
 			throw new ConfigurationException("Cannot apply that values", e, EyeBundle.message("eye.settings.config.error.duration"));
 		}
 
-		updateStatusLabel(statusPlugin, state.isEnable());
-		updateStatusLabel(statusLabelPostpone, state.isPostpone());
-		updateStatusLabel(statusLabelMinimized, state.isShowWhenMinimized());
+		Object lunchTime = timeComboBox.getSelectedItem();
+		if (lunchTime instanceof LocalTime) {
+			state.setLunchTimeInMinutes(toMinute((LocalTime) lunchTime));
+		}
+
+		changeStatus(state);
 	}
 
 	private void notifyAboutTurnOn() {
@@ -151,10 +171,24 @@ public class PluginSettingsPage implements SearchableConfigurable {
 		durationBetweenRestTextField.setText(String.valueOf(TimeUnit.SECONDS.toMinutes(state.getDurationWorkBeforeBreak())));
 		durationPostponeTextField.setText(String.valueOf(state.getDurationPostpone()));
 		idleTextField.setText(String.valueOf(TimeUnit.SECONDS.toMinutes(state.getIdleTime())));
+		// Lunchtime settings
+		enableLunchTime.setSelected(state.isEnableLunchTime());
+		if (state.getLunchTimeInMinutes() > 0) {
+			timeComboBox.setSelectedItem(LocalTime.of(state.getLunchTimeInMinutes() / 60, state.getLunchTimeInMinutes() % 60));
+		}
 
+		changeStatus(state);
+	}
+
+	private void changeStatus(final PluginSettings.PluginAppState state) {
 		updateStatusLabel(statusPlugin, state.isEnable());
 		updateStatusLabel(statusLabelPostpone, state.isPostpone());
 		updateStatusLabel(statusLabelMinimized, state.isShowWhenMinimized());
+		updateStatusLabel(statusLunchtime, state.isEnableLunchTime());
+	}
+
+	private static int toMinute(final LocalTime time) {
+		return time == null ? -1 : time.getHour() * 60 + time.getMinute();
 	}
 
 	private static class IntegerNumberVerifier extends InputVerifier {

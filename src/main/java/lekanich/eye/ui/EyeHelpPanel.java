@@ -151,6 +151,10 @@ public class EyeHelpPanel extends JBPanel<EyeHelpPanel> implements Disposable {
 		return exercises.get(index).getExerciseText();
 	}
 
+	private String getLunchTimeText() {
+		return EyeExercise.LUNCH_TIME.getExerciseText();
+	}
+
 	private void startRefreshSeconds() {
 		if (!clockPanel.isUp()) {
 			return;

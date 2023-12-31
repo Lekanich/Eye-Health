@@ -23,6 +23,8 @@ import org.jetbrains.annotations.NotNull;
 public record EyeExercise(@Attribute("file") String fileName) {
 	private static final String MAIN_FOLDER = "/exercises";
 
+	public static final EyeExercise LUNCH_TIME = new EyeExercise("lunch.html");
+
 	public static List<EyeExercise> findExercises() {
 		String text;
 		try {
