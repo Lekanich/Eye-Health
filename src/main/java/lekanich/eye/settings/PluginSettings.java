@@ -122,6 +122,10 @@ public class PluginSettings implements PersistentStateComponent<PluginSettings.P
 		public long getIdleTime() {
 			return DeveloperUtil.isDebugMode() ? 5 : idleTime;
 		}
+
+		public LocalTime getLunchTime() {
+			return lunchTimeInMinutes > 0 ? LocalTime.of(lunchTimeInMinutes / 60, lunchTimeInMinutes % 60) : null;
+		}
 	}
 
 	public static boolean isDisabled() {

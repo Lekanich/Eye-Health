@@ -2,6 +2,7 @@ package lekanich.eye.settings;
 
 import java.awt.Component;
 import java.time.LocalTime;
+import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -15,6 +16,7 @@ import icons.EyeHelpIcons;
 import icons.EyeHelpIcons.EyeType;
 import lekanich.eye.EyeBundle;
 import lekanich.eye.listener.EyeHelpStatusListener;
+import lekanich.eye.logic.ExerciseTuple;
 import lekanich.eye.ui.EyeHelpDialog;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;
@@ -111,7 +113,7 @@ public class PluginSettingsPage implements SearchableConfigurable {
 				|| iconComboBox.getSelectedItem() != state.getEyeType()
 				|| showMinimizedCheckBox.isSelected() != state.isShowWhenMinimized()
 				|| enableLunchTime.isSelected() != state.isEnableLunchTime()
-				|| toMinute((LocalTime) timeComboBox.getSelectedItem()) != state.getLunchTimeInMinutes();
+				|| ExerciseTuple.toMinute((LocalTime) timeComboBox.getSelectedItem()) != state.getLunchTimeInMinutes();
 	}
 
 	@Override
@@ -148,7 +150,7 @@ public class PluginSettingsPage implements SearchableConfigurable {
 
 		Object lunchTime = timeComboBox.getSelectedItem();
 		if (lunchTime instanceof LocalTime) {
-			state.setLunchTimeInMinutes(toMinute((LocalTime) lunchTime));
+			state.setLunchTimeInMinutes(ExerciseTuple.toMinute((LocalTime) lunchTime));
 		}
 
 		changeStatus(state);
@@ -173,9 +175,8 @@ public class PluginSettingsPage implements SearchableConfigurable {
 		idleTextField.setText(String.valueOf(TimeUnit.SECONDS.toMinutes(state.getIdleTime())));
 		// Lunchtime settings
 		enableLunchTime.setSelected(state.isEnableLunchTime());
-		if (state.getLunchTimeInMinutes() > 0) {
-			timeComboBox.setSelectedItem(LocalTime.of(state.getLunchTimeInMinutes() / 60, state.getLunchTimeInMinutes() % 60));
-		}
+		Optional.ofNullable(state.getLunchTime())
+				.ifPresent(it -> timeComboBox.setSelectedItem(it));
 
 		changeStatus(state);
 	}
@@ -185,10 +186,6 @@ public class PluginSettingsPage implements SearchableConfigurable {
 		updateStatusLabel(statusLabelPostpone, state.isPostpone());
 		updateStatusLabel(statusLabelMinimized, state.isShowWhenMinimized());
 		updateStatusLabel(statusLunchtime, state.isEnableLunchTime());
-	}
-
-	private static int toMinute(final LocalTime time) {
-		return time == null ? -1 : time.getHour() * 60 + time.getMinute();
 	}
 
 	private static class IntegerNumberVerifier extends InputVerifier {

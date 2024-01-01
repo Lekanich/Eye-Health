@@ -8,8 +8,6 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.util.List;
-import java.util.Optional;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -32,11 +30,9 @@ import com.intellij.util.ui.HTMLEditorKitBuilder;
 import com.intellij.util.ui.JBUI;
 import com.intellij.util.ui.StyleSheetUtil;
 import com.intellij.util.ui.UIUtil;
-import lekanich.DeveloperUtil;
 import lekanich.eye.EyeBundle;
 import lekanich.eye.EyeExercise;
-import lekanich.eye.settings.PluginSettings;
-import org.jetbrains.annotations.NotNull;
+import lekanich.eye.logic.ExerciseTuple;
 import static java.beans.EventHandler.create;
 
 
@@ -93,11 +89,11 @@ public class EyeHelpPanel extends JBPanel<EyeHelpPanel> implements Disposable {
 		setLayout(layout);
 		setBorder(JBUI.Borders.empty());
 
-		final String exercise = findExerciseMessage();
+		final ExerciseTuple exercise = ExerciseTuple.findExercise();
 
 		// configure exercise panel
 		final JEditorPane browser = createBrowser();
-		browser.setText(exercise);
+		browser.setText(exercise.exercise());
 		browser.setBorder(JBUI.Borders.compound(
 				JBUI.Borders.customLine(DIVIDER_COLOR, 0, 0, 4, 0),
 				JBUI.Borders.empty(8, 12)
@@ -115,10 +111,7 @@ public class EyeHelpPanel extends JBPanel<EyeHelpPanel> implements Disposable {
 		panel.setLayout(new VerticalLayout(10, SwingConstants.CENTER));
 		panel.add(new JBLabel(EyeBundle.message("eye.dialog.timer.topic.label")), VerticalLayout.TOP);
 
-		this.clockPanel = new JClockPanel(Optional.ofNullable(PluginSettings.getInstance())
-				.map(PluginSettings::getState)
-				.map(PluginSettings.PluginAppState::getDurationBreak)
-				.orElse(0L));
+		this.clockPanel = new JClockPanel(exercise.durationBreak());
 		panel.add(clockPanel, VerticalLayout.BOTTOM);
 
 		add(panel);
@@ -138,22 +131,6 @@ public class EyeHelpPanel extends JBPanel<EyeHelpPanel> implements Disposable {
 		/*NOP*/
 	}
 
-	@NotNull
-	private String findExerciseMessage() {
-		final List<EyeExercise> exercises = EyeExercise.findExercises();
-		if (exercises.isEmpty()) {
-			return EyeBundle.message("eye.dialog.exercises.dummy");
-		}
-
-		final int index = DeveloperUtil.isDebugMode()
-				? 9 % exercises.size()
-				: (int) (exercises.size() * Math.random());
-		return exercises.get(index).getExerciseText();
-	}
-
-	private String getLunchTimeText() {
-		return EyeExercise.LUNCH_TIME.getExerciseText();
-	}
 
 	private void startRefreshSeconds() {
 		if (!clockPanel.isUp()) {
