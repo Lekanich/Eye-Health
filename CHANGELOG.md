@@ -3,6 +3,7 @@
 # Eye Health Plugin Changelog
 
 ## [Unreleased]
+- Lunchtime feature. It's a special break that will appear in the special range.
 - Update dependencies
 
 ## 2023.3.5

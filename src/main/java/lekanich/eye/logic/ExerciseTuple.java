@@ -1,8 +1,9 @@
 package lekanich.eye.logic;
 
+import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.Optional;
 import lekanich.DeveloperUtil;
 import lekanich.eye.EyeBundle;
 import lekanich.eye.EyeExercise;
@@ -14,23 +15,32 @@ import org.jetbrains.annotations.NotNull;
  */
 public record ExerciseTuple(String exercise, long durationBreak) {
 	public static ExerciseTuple findExercise() {
-		final LocalTime lunchTime = Optional.ofNullable(PluginSettings.getInstance())
-				.map(PluginSettings::getState)
-				.map(PluginSettings.PluginAppState::getLunchTime)
-				.orElse(null);
-		final int delta = toMinute(LocalTime.now()) - toMinute(lunchTime);
-		final boolean isLunch = delta > 0 && delta < 60;
-		final String message = isLunch
+		final PluginSettings.PluginAppState state = PluginSettings.getInstance().getState();
+
+		final int delta = toMinute(LocalTime.now()) - toMinute(state.getLunchTime());
+
+		boolean isLunchExercise = showLunch(delta > 0 && delta < 60, state);
+		final String message = isLunchExercise
 				? getLunchTimeText()
 				: findExerciseMessage();
 
-		long durationBreak = Optional.ofNullable(PluginSettings.getInstance())
-				.map(PluginSettings::getState)
-				.map(PluginSettings.PluginAppState::getDurationBreak)
-				.orElse(0L);
-		durationBreak *= isLunch ? 2 : 1;
-
+		final long durationBreak = state.getDurationBreak() * (isLunchExercise ? 2 : 1);
 		return new ExerciseTuple(message, durationBreak);
+	}
+
+	private static boolean showLunch(final boolean isLunchTime, final PluginSettings.PluginAppState state) {
+		if (!isLunchTime) {
+			return false;
+		}
+
+		final String lastLunchDate = state.getLastLunchDate();
+		final String dateNow = LocalDate.now().format(DateTimeFormatter.ISO_LOCAL_DATE);
+		if (!dateNow.equals(lastLunchDate)) {
+			state.setLastLunchDate(dateNow);
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 	@NotNull

@@ -115,6 +115,11 @@ public class PluginSettings implements PersistentStateComponent<PluginSettings.P
 		 */
 		private int lunchTimeInMinutes = -1;
 
+		/**
+		 * To keep if we should show the lunchtime exercise today
+		 */
+		private String lastLunchDate = null;
+
 		public long getDurationWorkBeforeBreak() {
 			return DeveloperUtil.isDebugMode() ? 8 : durationWorkBeforeBreak;
 		}

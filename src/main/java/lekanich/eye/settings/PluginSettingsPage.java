@@ -2,6 +2,7 @@ package lekanich.eye.settings;
 
 import java.awt.Component;
 import java.time.LocalTime;
+import java.util.Locale;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.IntStream;
@@ -69,8 +70,8 @@ public class PluginSettingsPage implements SearchableConfigurable {
 				.forEach(iconComboBox::addItem);
 		iconComboBox.setRenderer(new IconTextDecorator(iconComboBox.getRenderer()));
 		// every 30 minutes, from 11:00
-		final int hourOffset = 60 * 11;
-		IntStream.range(0, 9)
+		final int hourOffset = 60 * 8;
+		IntStream.range(0, 9 * 2)
 				.map(i -> i * 30 + hourOffset)
 				.forEach(i -> timeComboBox.addItem(LocalTime.of(i / 60, i % 60)));
 
@@ -207,7 +208,7 @@ public class PluginSettingsPage implements SearchableConfigurable {
 			final Component component = delegate.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
 			if (component instanceof JLabel) {
 				((JLabel) component).setIcon(value.getIcon());
-				((JLabel) component).setText(value.toString().toLowerCase());
+				((JLabel) component).setText(value.toString().toUpperCase(Locale.ENGLISH));
 			}
 			return component;
 		}
