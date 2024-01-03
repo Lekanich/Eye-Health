@@ -59,7 +59,7 @@ intellij {
 // Read more: https://github.com/JetBrains/gradle-changelog-plugin
 changelog {
     version.set(properties("pluginVersion"))
-    header.set(provider { "[${version.get()}] - ${date()}" })
+    header.set(provider(version::get))
     itemPrefix.set("-")
     keepUnreleasedSection.set(false)
     groups.set(listOf("Added", "Changed", "Deprecated", "Removed", "Fixed", "Security"))
@@ -74,11 +74,6 @@ detekt {
 
 checkstyle {
     toolVersion = "10.3.3"
-}
-tasks.withType<Checkstyle>().configureEach {
-    reports {
-        configFile = file("config/checkstyle/checkstyle.xml")
-    }
 }
 
 tasks {
@@ -106,7 +101,18 @@ tasks {
         }
     }
 
+    withType<Checkstyle>().configureEach {
+        reports {
+            configFile = file("config/checkstyle/checkstyle.xml")
+        }
+    }
+
     patchPluginXml {
+        dependsOn("patchChangelog")
+        doLast {
+            println("I'm Gradle")
+        }
+
         version.set(properties("pluginVersion"))
         sinceBuild.set(properties("pluginSinceBuild"))
         if (project.hasProperty("pluginUntilBuild")) {
