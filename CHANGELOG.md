@@ -2,7 +2,11 @@
 
 # Eye Health Plugin Changelog
 
-## [Unreleased]
+## 2023.3.7
+ 
+- Rewrite one exercise
+
+## 2023.3.6
 
 - Lunchtime feature. It's a special break that will appear in the special range.
 - Update dependencies
