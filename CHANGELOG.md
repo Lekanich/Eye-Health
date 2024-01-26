@@ -3,7 +3,7 @@
 # Eye Health Plugin Changelog
 
 ## 2023.3.7
- 
+
 - Rewrite one exercise
 
 ## 2023.3.6
