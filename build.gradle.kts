@@ -1,24 +1,19 @@
 import io.gitlab.arturbosch.detekt.Detekt
 import org.jetbrains.changelog.Changelog
-import org.jetbrains.changelog.date
 import org.jetbrains.changelog.markdownToHTML
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
-fun properties(key: String) = project.findProperty(key).toString()
+fun properties(key: String) = providers.gradleProperty(key)
+fun environment(key: String) = providers.environmentVariable(key)
 
 plugins {
     // Java support
     id("java")
-    // Kotlin support
-    id("org.jetbrains.kotlin.jvm") version "1.9.22"
-    // gradle-intellij-plugin - read more: https://github.com/JetBrains/gradle-intellij-plugin
-    id("org.jetbrains.intellij") version "1.17.0"
-    // gradle-changelog-plugin - read more: https://github.com/JetBrains/gradle-changelog-plugin
-    id("org.jetbrains.changelog") version "2.2.0"
-    // detekt linter - read more: https://detekt.github.io/detekt/gradle.html
-    id("io.gitlab.arturbosch.detekt") version "1.23.4"
-    // ktlint linter - read more: https://github.com/JLLeitschuh/ktlint-gradle
-    id("org.jlleitschuh.gradle.ktlint") version "12.1.0"
+    alias(libs.plugins.kotlin)
+    alias(libs.plugins.intellij)
+    alias(libs.plugins.changelog)
+    alias(libs.plugins.detekt)
+    alias(libs.plugins.ktlint)
     checkstyle
 }
 
@@ -32,37 +27,34 @@ repositories {
     mavenCentral()
 }
 dependencies {
-    val lombokDependency = "org.projectlombok:lombok:1.18.30"
-    compileOnly(lombokDependency)
-    annotationProcessor(lombokDependency)
+    compileOnly(libs.lombok)
+    annotationProcessor(libs.lombok)
 
-    detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.23.4")
-
-    testImplementation("junit:junit:4.13.2")
-    testImplementation("org.hamcrest:hamcrest:2.2")
+    detektPlugins(libs.detektFormatting)
 }
 
 // Configure gradle-intellij-plugin plugin.
 // Read more: https://github.com/JetBrains/gradle-intellij-plugin
 intellij {
-    pluginName.set(properties("pluginName"))
-    version.set(properties("platformVersion"))
-    type.set(properties("platformType"))
-    downloadSources.set(properties("platformDownloadSources").toBoolean())
-    updateSinceUntilBuild.set(true)
+    pluginName = properties("pluginName")
+    version = properties("platformVersion")
+    type = properties("platformType")
+    downloadSources = properties("platformDownloadSources").map { it.toBoolean() }
+    updateSinceUntilBuild = true
 
     // Plugin Dependencies. Uses `platformPlugins` property from the gradle.properties file.
-    plugins.set(properties("platformPlugins").split(',').map(String::trim).filter(String::isNotEmpty))
+    plugins = properties("platformPlugins")
+        .map { it.split(',').map(String::trim).filter(String::isNotEmpty) }
 }
 
 // Configure gradle-changelog-plugin plugin.
 // Read more: https://github.com/JetBrains/gradle-changelog-plugin
 changelog {
-    version.set(properties("pluginVersion"))
-    header.set(provider(version::get))
-    itemPrefix.set("-")
-    keepUnreleasedSection.set(false)
-    groups.set(listOf("Added", "Changed", "Deprecated", "Removed", "Fixed", "Security"))
+    version = properties("pluginVersion")
+    header = provider(version::get)
+    itemPrefix = "-"
+    keepUnreleasedSection = false
+    groups = listOf("Added", "Changed", "Deprecated", "Removed", "Fixed", "Security")
 }
 
 // Configure detekt plugin.
@@ -90,14 +82,14 @@ tasks {
         jvmTarget = "17"
         reports {
             // Enable/Disable XML report (default: true)
-            xml.required.set(false)
-            xml.outputLocation.set(file("build/reports/detekt.xml"))
+            xml.required = false
+            xml.outputLocation = file("build/reports/detekt.xml")
             // Enable/Disable HTML report (default: true)
-            html.required.set(true)
-            html.outputLocation.set(file("build/reports/detekt.html"))
+            html.required = true
+            html.outputLocation = file("build/reports/detekt.html")
             // Enable/Disable TXT report (default: true)
-            txt.required.set(false)
-            txt.outputLocation.set(file("build/reports/detekt.txt"))
+            txt.required = false
+            txt.outputLocation = file("build/reports/detekt.txt")
         }
     }
 
@@ -113,33 +105,31 @@ tasks {
             println("I'm Gradle")
         }
 
-        version.set(properties("pluginVersion"))
-        sinceBuild.set(properties("pluginSinceBuild"))
+        version = properties("pluginVersion")
+        sinceBuild = properties("pluginSinceBuild")
         if (project.hasProperty("pluginUntilBuild")) {
-            untilBuild.set(properties("pluginUntilBuild"))
+            untilBuild = properties("pluginUntilBuild")
         }
 
         // Extract the <!-- Plugin description --> section from README.md and provide for the plugin's manifest
-        pluginDescription.set(
-            File(projectDir, "README.MD").readText().lines().run {
-                val start = "<!-- Plugin description -->"
-                val end = "<!-- Plugin description end -->"
+        pluginDescription = File(projectDir, "README.MD").readText().lines().run {
+            val start = "<!-- Plugin description -->"
+            val end = "<!-- Plugin description end -->"
 
-                if (!containsAll(listOf(start, end))) {
-                    throw GradleException("Plugin description section not found in README.md:\n$start ... $end")
-                }
-                subList(indexOf(start) + 1, indexOf(end))
-            }.joinToString("\n").run { markdownToHTML(this) }
-        )
+            if (!containsAll(listOf(start, end))) {
+                throw GradleException("Plugin description section not found in README.md:\n$start ... $end")
+            }
+            subList(indexOf(start) + 1, indexOf(end))
+        }.joinToString("\n").run { markdownToHTML(this) }
 
         // Get the latest available change notes from the changelog file
-        changeNotes.set(provider {
+        changeNotes = provider {
             changelog.getAll()
                 .filterKeys { it != "[Unreleased]" }
                 .values.joinToString("") {
                     changelog.renderItem(it.withHeader(true), Changelog.OutputType.HTML)
                 }
-        })
+        }
     }
 
     runIde {
@@ -152,18 +142,18 @@ tasks {
 
 //    //https://data.services.jetbrains.com/products?fields=code,name,releases.downloads,releases.version,releases.build,releases.type&code=IIC,IIU
     runPluginVerifier {
-        ideVersions.set(properties("pluginVerifierIdeVersions").split(',').map(String::trim).filter(String::isNotEmpty))
+        ideVersions = properties("pluginVerifierIdeVersions").map { it.split(',').map(String::trim).filter(String::isNotEmpty) }
     }
 
     publishPlugin {
         dependsOn("patchChangelog")
         if (File("token.txt").exists()) {
-            token.set(File("token.txt").readText(Charsets.UTF_8))
+            token = File("token.txt").readText(Charsets.UTF_8)
         }
 //        token.set(System.getenv("PUBLISH_TOKEN"))
         // pluginVersion is based on the SemVer (https://semver.org) and supports pre-release labels, like 2.1.7-alpha.3
         // Specify pre-release label to publish the plugin in a custom Release Channel automatically. Read more:
         // https://plugins.jetbrains.com/docs/intellij/deployment.html#specifying-a-release-channel
-        channels.set(listOf(properties("pluginVersion").split('-').getOrElse(1) { "default" }.split('.').first()))
+        channels = properties("pluginVersion").map { listOf(it.split('-').getOrElse(1) { "default" }.split('.').first()) }
     }
 }

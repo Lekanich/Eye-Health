@@ -1,0 +1,27 @@
+[versions]
+#libraries
+lombok = "1.18.30"
+
+#plugins
+kotlin = "1.9.22"
+changelog = "2.2.0"
+intellij = "1.17.0"
+detekt = "1.23.4"
+ktlint = "12.1.0"
+
+[libraries]
+lombok = { group = "org.projectlombok", name = "lombok", version.ref = "lombok" }
+detektFormatting = { group = "io.gitlab.arturbosch.detekt", name = "detekt-formatting", version.ref = "detekt" }
+
+
+[plugins]
+# Kotlin support
+kotlin = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+# gradle-changelog-plugin - read more: https://github.com/JetBrains/gradle-changelog-plugin
+changelog = { id = "org.jetbrains.changelog", version.ref = "changelog" }
+# gradle-intellij-plugin - read more: https://github.com/JetBrains/gradle-intellij-plugin
+intellij = { id = "org.jetbrains.intellij", version.ref = "intellij" }
+# detekt linter - read more: https://detekt.github.io/detekt/gradle.html
+detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
+# ktlint linter - read more: https://github.com/JLLeitschuh/ktlint-gradle
+ktlint = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "ktlint" }
