@@ -107,10 +107,11 @@ tasks {
         }
 
         version = properties("pluginVersion")
+        // like to put a major version here, instead of the specific
         sinceBuild = properties("pluginSinceBuild")
-        if (project.hasProperty("pluginUntilBuild")) {
-            untilBuild = properties("pluginUntilBuild")
-        }
+        // remove until build
+        // Maybe it's not very safe but the plugin is simple, and it shouldn't require an every platform release update.
+        untilBuild = ""
 
         // Extract the <!-- Plugin description --> section from README.md and provide for the plugin's manifest
         pluginDescription = File(projectDir, "README.MD").readText().lines().run {

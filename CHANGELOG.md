@@ -2,6 +2,10 @@
 
 # Eye Health Plugin Changelog
 
+## 2024.1.1
+
+- Update dependencies
+
 ## 2023.3.7
 
 - Rewrite one exercise
