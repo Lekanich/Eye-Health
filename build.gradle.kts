@@ -1,4 +1,5 @@
 import io.gitlab.arturbosch.detekt.Detekt
+import org.gradle.api.internal.provider.sources.GradlePropertyValueSource
 import org.jetbrains.changelog.Changelog
 import org.jetbrains.changelog.markdownToHTML
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
@@ -20,7 +21,7 @@ plugins {
 group = properties("pluginGroup")
 version = properties("pluginVersion")
 
-println("ArtifactVersion is : $version")
+println("ArtifactVersion is : ${properties("pluginVersion").get()}")
 
 // Configure project's dependencies
 repositories {
