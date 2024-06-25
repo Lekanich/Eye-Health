@@ -7,7 +7,7 @@ kotlin = "1.9.23"
 changelog = "2.2.0"
 intellij = "1.17.4"
 detekt = "1.23.6"
-ktlint = "12.1.0"
+ktlint = "12.1.1"
 
 [libraries]
 lombok = { group = "org.projectlombok", name = "lombok", version.ref = "lombok" }
