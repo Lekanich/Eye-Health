@@ -6,7 +6,7 @@ lombok = "1.18.32"
 kotlin = "1.9.23"
 changelog = "2.2.0"
 intellij = "1.17.4"
-detekt = "1.23.6"
+detekt = "1.23.7"
 ktlint = "12.1.1"
 
 [libraries]
