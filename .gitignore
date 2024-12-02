@@ -29,4 +29,3 @@ hs_err_pid*
 .intellijPlatform
 .qodana
 build
-gradle/wrapper
