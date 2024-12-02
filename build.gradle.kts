@@ -66,7 +66,7 @@ dependencies {
 intellijPlatform {
     pluginConfiguration {
         name = properties("pluginName")
-        version = properties("platformVersion")
+        version = properties("pluginVersion")
 
         // Extract the <!-- Plugin description --> section from README.md and provide for the plugin's manifest
         description =
@@ -88,9 +88,7 @@ intellijPlatform {
             properties("pluginVersion").map { pluginVersion ->
                 with(changelog) {
                     renderItem(
-                        (getOrNull(pluginVersion) ?: getUnreleased())
-                            .withHeader(false)
-                            .withEmptySections(false),
+                        (getOrNull(pluginVersion) ?: getUnreleased()).withHeader(false),
                         Changelog.OutputType.HTML,
                     )
                 }
@@ -100,9 +98,7 @@ intellijPlatform {
             // like to put a major version here, instead of the specific
             sinceBuild = properties("pluginSinceBuild")
             // remove until build
-            // Maybe it's not very safe but the plugin is simple, and it shouldn't require an every platform release update.
-            // properties("pluginUntilBuild")
-            untilBuild = ""
+            untilBuild = properties("pluginUntilBuild")
         }
     }
 
