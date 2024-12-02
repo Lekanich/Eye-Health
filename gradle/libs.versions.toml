@@ -5,9 +5,9 @@ lombok = "1.18.36"
 #plugins
 kotlin = "2.1.0"
 changelog = "2.2.1"
-intellij = "1.17.4"
+intelliJPlatform = "2.1.0"
 detekt = "1.23.7"
-ktlint = "12.1.1"
+ktlint = "12.1.2"
 
 [libraries]
 lombok = { group = "org.projectlombok", name = "lombok", version.ref = "lombok" }
@@ -20,7 +20,7 @@ kotlin = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 # gradle-changelog-plugin - read more: https://github.com/JetBrains/gradle-changelog-plugin
 changelog = { id = "org.jetbrains.changelog", version.ref = "changelog" }
 # gradle-intellij-plugin - read more: https://github.com/JetBrains/gradle-intellij-plugin
-intellij = { id = "org.jetbrains.intellij", version.ref = "intellij" }
+intelliJPlatform = { id = "org.jetbrains.intellij.platform", version.ref = "intelliJPlatform" }
 # detekt linter - read more: https://detekt.github.io/detekt/gradle.html
 detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
 # ktlint linter - read more: https://github.com/JLLeitschuh/ktlint-gradle
