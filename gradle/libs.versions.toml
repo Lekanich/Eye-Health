@@ -3,7 +3,7 @@
 lombok = "1.18.36"
 
 #plugins
-kotlin = "1.9.23"
+kotlin = "2.1.0"
 changelog = "2.2.1"
 intellij = "1.17.4"
 detekt = "1.23.7"
