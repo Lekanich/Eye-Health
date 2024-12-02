@@ -22,6 +22,11 @@
 hs_err_pid*
 
 /token.txt
-/build/
-/.idea/
-/.gradle/
+
+# IntelliJ IDEA
+.gradle
+.idea
+.intellijPlatform
+.qodana
+build
+gradle/wrapper
