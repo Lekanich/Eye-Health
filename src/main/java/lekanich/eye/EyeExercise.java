@@ -77,6 +77,6 @@ public record EyeExercise(@Attribute("file") String fileName) {
 	}
 
 	private static boolean isDark() {
-		return StartupUiUtil.isUnderDarcula();
+		return StartupUiUtil.INSTANCE.isDarkTheme();
 	}
 }
