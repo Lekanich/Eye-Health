@@ -5,6 +5,7 @@
 ## [Unreleased]
  
 - Update dependencies
+- Add EU icon
 
 ## 2024.1.1
 
