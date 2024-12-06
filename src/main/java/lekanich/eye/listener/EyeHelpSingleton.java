@@ -8,7 +8,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 import com.intellij.openapi.Disposable;
 import com.intellij.openapi.util.Disposer;
-import com.intellij.util.concurrency.EdtScheduledExecutorService;
+import com.intellij.util.concurrency.EdtExecutorService;
 import com.intellij.util.ui.UIUtil;
 import lekanich.eye.settings.PluginSettings;
 import lekanich.eye.ui.EyeHelpDialog;
@@ -42,7 +42,7 @@ public class EyeHelpSingleton implements EyeHelpListener {
 
 		@NotNull final PluginSettings parent = PluginSettings.getInstance();
 		final ShowCommand command = new ShowCommand(future, parent);
-		future.set(EdtScheduledExecutorService.getInstance()
+		future.set(EdtExecutorService.getScheduledExecutorInstance()
 				.schedule(command, delayInSeconds, TimeUnit.SECONDS));
 
 		UIUtil.addAwtListener(IDLE_LISTENER, EVENT_MASK, command);
