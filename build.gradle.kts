@@ -1,7 +1,9 @@
 import io.gitlab.arturbosch.detekt.Detekt
 import org.jetbrains.changelog.Changelog
 import org.jetbrains.changelog.markdownToHTML
+import org.jetbrains.intellij.platform.gradle.IntelliJPlatformType
 import org.jetbrains.intellij.platform.gradle.TestFrameworkType
+import org.jetbrains.intellij.platform.gradle.models.ProductRelease
 
 fun properties(key: String) = providers.gradleProperty(key)
 
@@ -102,14 +104,6 @@ intellijPlatform {
         }
     }
 
-    /*
-    signing {
-        certificateChain = environment("CERTIFICATE_CHAIN")
-        privateKey = environment("PRIVATE_KEY")
-        password = environment("PRIVATE_KEY_PASSWORD")
-    }
-    */
-
     publishing {
         if (File("token.txt").exists()) {
             token = File("token.txt").readText(Charsets.UTF_8)
@@ -121,13 +115,16 @@ intellijPlatform {
         channels = properties("pluginVersion").map { listOf(it.substringAfter('-', "").substringBefore('.').ifEmpty { "default" }) }
     }
 
-    //    //https://data.services.jetbrains.com/products?fields=code,name,releases.downloads,releases.version,releases.build,releases.type&code=IIC,IIU
+    //https://plugins.jetbrains.com/docs/intellij/tools-intellij-platform-gradle-plugin-extension.html#intellijPlatform-pluginVerification-ides
     pluginVerification {
-//        ides {
-//            properties("pluginVerifierIdeVersions").map { it.split(',').map(String::trim).filter(String::isNotEmpty) }
-//        }
         ides {
             recommended()
+            select {
+                types = listOf(IntelliJPlatformType.IntellijIdeaCommunity)
+                channels = listOf(ProductRelease.Channel.RELEASE)
+                sinceBuild = properties("pluginSinceBuild")
+                untilBuild = "241.*"
+            }
         }
     }
 }
