@@ -2,8 +2,12 @@
 
 # Eye Health Plugin Changelog
 
-## [Unreleased]
- 
+[Unreleased]: 
+
+- Update dependencies
+
+## 2024.3.1
+
 - Update dependencies
 - Add EU icon
 

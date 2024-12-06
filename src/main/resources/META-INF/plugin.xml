@@ -3,8 +3,6 @@
 	<name>Eye Health</name>
 	<vendor email="lekan1992@gmail.com">Oleksandr Zhelezniak</vendor>
 
-	<!-- please see https://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
-		 on how to target different products -->
 	<depends>com.intellij.modules.platform</depends>
 
 	<extensions defaultExtensionNs="com.intellij">

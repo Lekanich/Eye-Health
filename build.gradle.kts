@@ -20,8 +20,8 @@ plugins {
     checkstyle
 }
 
-group = properties("pluginGroup")
-version = properties("pluginVersion")
+group = properties("pluginGroup").get()
+version = properties("pluginVersion").get()
 
 println("ArtifactVersion is : ${properties("pluginVersion").get()}")
 
@@ -49,7 +49,7 @@ dependencies {
 
     // IntelliJ Platform Gradle Plugin Dependencies Extension - read more: https://plugins.jetbrains.com/docs/intellij/tools-intellij-platform-gradle-plugin-dependencies-extension.html
     intellijPlatform {
-        create(properties("platformType"), properties("platformVersion"))
+        create(properties("platformType").get(), properties("platformVersion").get())
 
         // Plugin Dependencies. Uses `platformBundledPlugins` property from the gradle.properties file for bundled IntelliJ Platform plugins.
         bundledPlugins(properties("platformBundledPlugins").map { it.split(',') })
@@ -67,8 +67,8 @@ dependencies {
 // Configure IntelliJ Platform Gradle Plugin - read more: https://plugins.jetbrains.com/docs/intellij/tools-intellij-platform-gradle-plugin-extension.html
 intellijPlatform {
     pluginConfiguration {
-        name = properties("pluginName")
-        version = properties("pluginVersion")
+        name = properties("pluginName").get()
+        version = properties("pluginVersion").get()
 
         // Extract the <!-- Plugin description --> section from README.md and provide for the plugin's manifest
         description =
@@ -115,15 +115,14 @@ intellijPlatform {
         channels = properties("pluginVersion").map { listOf(it.substringAfter('-', "").substringBefore('.').ifEmpty { "default" }) }
     }
 
-    //https://plugins.jetbrains.com/docs/intellij/tools-intellij-platform-gradle-plugin-extension.html#intellijPlatform-pluginVerification-ides
+    // https://plugins.jetbrains.com/docs/intellij/tools-intellij-platform-gradle-plugin-extension.html#intellijPlatform-pluginVerification-ides
     pluginVerification {
         ides {
             recommended()
             select {
                 types = listOf(IntelliJPlatformType.IntellijIdeaCommunity)
                 channels = listOf(ProductRelease.Channel.RELEASE)
-                sinceBuild = properties("pluginSinceBuild")
-                untilBuild = "241.*"
+                sinceBuild = properties("pluginSinceBuild").get()
             }
         }
     }
@@ -131,7 +130,7 @@ intellijPlatform {
 
 // Configure Gradle Changelog Plugin - read more: https://github.com/JetBrains/gradle-changelog-plugin
 changelog {
-    version = properties("pluginVersion")
+    version = properties("pluginVersion").get()
     header = provider(version::get)
     itemPrefix = "-"
     keepUnreleasedSection = false
@@ -170,9 +169,7 @@ tasks {
     }
 
     withType<Checkstyle>().configureEach {
-        reports {
-            configFile = file("config/checkstyle/checkstyle.xml")
-        }
+        configFile = file("config/checkstyle/checkstyle.xml")
     }
 
     runIde {
