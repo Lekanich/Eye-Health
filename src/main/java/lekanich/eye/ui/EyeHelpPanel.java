@@ -30,11 +30,12 @@ import com.intellij.util.ResourceUtil;
 import com.intellij.util.concurrency.EdtExecutorService;
 import com.intellij.util.ui.HTMLEditorKitBuilder;
 import com.intellij.util.ui.JBUI;
+import com.intellij.util.ui.StartupUiUtil;
 import com.intellij.util.ui.StyleSheetUtil;
 import com.intellij.util.ui.UIUtil;
 import lekanich.eye.EyeBundle;
-import lekanich.eye.EyeExercise;
 import lekanich.eye.logic.ExerciseTuple;
+import org.jetbrains.annotations.NotNull;
 import static java.beans.EventHandler.create;
 
 
@@ -181,7 +182,7 @@ public class EyeHelpPanel extends JBPanel<EyeHelpPanel> implements Disposable {
 				.withGapsBetweenParagraphs()
 				.build();
 		try {
-			final String cssResource = EyeExercise.cssResourceFileName();
+			final String cssResource = cssResourceFileName();
 			final StyleSheet styleSheet = loadStyleSheet(cssResource);
 			if (styleSheet != null) {
 				kit.getStyleSheet().addStyleSheet(styleSheet);
@@ -201,5 +202,14 @@ public class EyeHelpPanel extends JBPanel<EyeHelpPanel> implements Disposable {
 		}
 
 		return StyleSheetUtil.loadStyleSheet(new ByteArrayInputStream(data));
+	}
+
+	@NotNull
+	public static String cssResourceFileName() {
+		return "exercises/css/" + (isDark() ? "exercise_darcula.css" : "exercise.css");
+	}
+
+	private static boolean isDark() {
+		return StartupUiUtil.INSTANCE.isDarkTheme();
 	}
 }

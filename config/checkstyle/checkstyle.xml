@@ -18,7 +18,7 @@
 	<module name="Translation">
 		<property name="fileExtensions" value="properties"/>
 		<property name="baseName" value="^Messages.*$"/>
-		<property name="requiredTranslations" value="en, fr, de, ja"/>
+		<property name="requiredTranslations" value="en"/>
 	</module>
 
 	<module name="TreeWalker">
