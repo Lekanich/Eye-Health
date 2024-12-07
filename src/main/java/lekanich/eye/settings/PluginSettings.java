@@ -121,11 +121,15 @@ public class PluginSettings implements PersistentStateComponent<PluginSettings.P
 		private String lastLunchDate = null;
 
 		public long getDurationWorkBeforeBreak() {
-			return DeveloperUtil.isDebugMode() ? 8 : durationWorkBeforeBreak;
+			return DeveloperUtil.isDebugMode() ? 15 : durationWorkBeforeBreak;
 		}
 
 		public long getIdleTime() {
-			return DeveloperUtil.isDebugMode() ? 5 : idleTime;
+			return DeveloperUtil.isDebugMode() ? 13 : idleTime;
+		}
+
+		public long getDurationBreak() {
+			return DeveloperUtil.isDebugMode() ? 10 : durationBreak;
 		}
 
 		public LocalTime getLunchTime() {

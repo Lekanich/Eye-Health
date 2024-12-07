@@ -14,6 +14,8 @@ import java.util.concurrent.TimeUnit;
 import javax.swing.JEditorPane;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
+import javax.swing.text.Caret;
+import javax.swing.text.DefaultCaret;
 import javax.swing.text.html.HTMLEditorKit;
 import javax.swing.text.html.StyleSheet;
 import com.intellij.ide.util.TipUIUtil;
@@ -56,6 +58,7 @@ public class EyeHelpPanel extends JBPanel<EyeHelpPanel> implements Disposable {
 			setLayout(new BorderLayout());
 
 			this.counterLabel = new JBLabel(UIUtil.ComponentStyle.LARGE);
+			this.counterLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 			this.counterLabel.setBorder(JBUI.Borders.empty(0, 4, 20, 4));
 			add(counterLabel, BorderLayout.CENTER);
 		}
@@ -67,8 +70,8 @@ public class EyeHelpPanel extends JBPanel<EyeHelpPanel> implements Disposable {
 			if (secondsToRest > 0) {
 				String value = String.valueOf(secondsToRest--);
 				counterLabel.setText(value);
-				counterLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-				updateUI();
+				revalidate();
+				repaint();
 				return true;
 			} else {
 				return false;
@@ -147,9 +150,7 @@ public class EyeHelpPanel extends JBPanel<EyeHelpPanel> implements Disposable {
 			}
 		}, 0, 1, TimeUnit.SECONDS);
 
-		Disposer.register(this, () -> {
-			service.shutdown();
-		});
+		Disposer.register(this, service::shutdown);
 	}
 
 	public void closeParent(final Integer keyCode) {
@@ -164,7 +165,15 @@ public class EyeHelpPanel extends JBPanel<EyeHelpPanel> implements Disposable {
 	 * @return pane-browser
 	 */
 	private JEditorPane createBrowser() {
-		final JEditorPane pane = new JEditorPane();
+		final JEditorPane pane = new JEditorPane() {
+			@Override
+			public Caret getCaret() {
+				final DefaultCaret caret = new DefaultCaret();
+				caret.setVisible(false);
+				caret.setSelectionVisible(false);
+				return caret;
+			}
+		};
 		pane.setEditable(false);
 		pane.setBackground(UIUtil.getTextFieldBackground());
 
