@@ -2,7 +2,7 @@
 
 # Eye Health Plugin Changelog
 
-[Unreleased]: 
+## [Unreleased]
 
 - Update dependencies
 
