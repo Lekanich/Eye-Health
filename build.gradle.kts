@@ -16,7 +16,6 @@ plugins {
     alias(libs.plugins.intelliJPlatform)
     alias(libs.plugins.changelog)
     alias(libs.plugins.detekt)
-    alias(libs.plugins.ktlint)
     checkstyle
 }
 
@@ -83,6 +82,7 @@ intellijPlatform {
                     subList(indexOf(start) + 1, indexOf(end)).joinToString("\n").let(::markdownToHTML)
                 }
             }
+
 
         val changelog = project.changelog // local variable for configuration cache compatibility
         // Get the latest available change notes from the changelog file
