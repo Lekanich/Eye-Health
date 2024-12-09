@@ -30,7 +30,6 @@ import com.intellij.util.ResourceUtil;
 import com.intellij.util.concurrency.EdtExecutorService;
 import com.intellij.util.ui.HTMLEditorKitBuilder;
 import com.intellij.util.ui.JBUI;
-import com.intellij.util.ui.StartupUiUtil;
 import com.intellij.util.ui.StyleSheetUtil;
 import com.intellij.util.ui.UIUtil;
 import lekanich.eye.EyeBundle;
@@ -210,6 +209,6 @@ public class EyeHelpPanel extends JBPanel<EyeHelpPanel> implements Disposable {
 	}
 
 	private static boolean isDark() {
-		return StartupUiUtil.isUnderDarcula();
+		return !JBColor.isBright();
 	}
 }
