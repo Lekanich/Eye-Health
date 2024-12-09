@@ -210,6 +210,6 @@ public class EyeHelpPanel extends JBPanel<EyeHelpPanel> implements Disposable {
 	}
 
 	private static boolean isDark() {
-		return StartupUiUtil.INSTANCE.isDarkTheme();
+		return StartupUiUtil.isUnderDarcula();
 	}
 }
