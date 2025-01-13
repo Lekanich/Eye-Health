@@ -99,7 +99,7 @@ intellijPlatform {
             // like to put a major version here, instead of the specific
             sinceBuild = properties("pluginSinceBuild")
             // remove until build
-            untilBuild = properties("pluginUntilBuild")
+            untilBuild = provider { null }
         }
     }
 
