@@ -4,6 +4,9 @@
 
 ## [Unreleased]
 
+- Update dependencies
+- Cache exercise data to improve performance
+
 ## 2024.3.3
 
 - Update dependencies
