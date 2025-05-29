@@ -7,6 +7,8 @@ import com.intellij.openapi.startup.ProjectActivity;
 import com.intellij.util.messages.MessageBus;
 import kotlin.Unit;
 import kotlin.coroutines.Continuation;
+import lekanich.eye.exercise.ExerciseKeeper;
+import lekanich.eye.exercise.EyeExercise;
 import lekanich.eye.listener.EyeHelpListener;
 import lekanich.eye.listener.EyeHelpSingleton;
 import lekanich.eye.ui.EyeHelpDialog;
@@ -33,6 +35,9 @@ public class PluginStartupActivity implements ProjectActivity {
 	@Nullable
 	@Override
 	public Object execute(@NotNull final Project project, @NotNull final Continuation<? super Unit> continuation) {
+		// load list of exercises
+		EyeHelpSingleton.getInstance().setExercises(new ExerciseKeeper(EyeExercise.findExercises()));
+
 		EyeHelpDialog.publishNextRestEvent();
 		return null;
 	}

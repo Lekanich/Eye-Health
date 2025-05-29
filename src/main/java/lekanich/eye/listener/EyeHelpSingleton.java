@@ -1,15 +1,17 @@
 package lekanich.eye.listener;
 
+import com.intellij.openapi.Disposable;
+import com.intellij.openapi.util.Disposer;
+import com.intellij.util.concurrency.EdtExecutorService;
+import com.intellij.util.ui.UIUtil;
 import java.awt.AWTEvent;
+import java.util.Collections;
 import java.util.Optional;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
-import com.intellij.openapi.Disposable;
-import com.intellij.openapi.util.Disposer;
-import com.intellij.util.concurrency.EdtExecutorService;
-import com.intellij.util.ui.UIUtil;
+import lekanich.eye.exercise.ExerciseKeeper;
 import lekanich.eye.settings.PluginSettings;
 import lekanich.eye.ui.EyeHelpDialog;
 import lombok.AccessLevel;
@@ -33,6 +35,16 @@ public class EyeHelpSingleton implements EyeHelpListener {
 	private static final EyeHelpSingleton instance = new EyeHelpSingleton();
 	private static final IdleListener IDLE_LISTENER = new IdleListener();
 	private final AtomicReference<ScheduledFuture<?>> future = new AtomicReference<>(null);
+	private final AtomicReference<ExerciseKeeper> exercises = new AtomicReference<>(new ExerciseKeeper(Collections.emptyList()));
+
+	@NotNull
+	public ExerciseKeeper getExercises() {
+		return exercises.get();
+	}
+
+	public void setExercises(@NotNull final ExerciseKeeper exercises) {
+		this.exercises.set(exercises);
+	}
 
 	@Override
 	public synchronized void scheduleEyeHelp(final long delayInSeconds) {

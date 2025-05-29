@@ -1,16 +1,5 @@
 package lekanich.eye.ui;
 
-import java.awt.BorderLayout;
-import java.awt.Component;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 import javax.swing.JEditorPane;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
@@ -32,9 +21,22 @@ import com.intellij.util.ui.HTMLEditorKitBuilder;
 import com.intellij.util.ui.JBUI;
 import com.intellij.util.ui.StyleSheetUtil;
 import com.intellij.util.ui.UIUtil;
+import java.awt.BorderLayout;
+import java.awt.Component;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 import lekanich.eye.EyeBundle;
+import lekanich.eye.exercise.ExerciseKeeper;
 import lekanich.eye.logic.ExerciseTuple;
 import org.jetbrains.annotations.NotNull;
+
 import static java.beans.EventHandler.create;
 
 
@@ -83,7 +85,7 @@ public class EyeHelpPanel extends JBPanel<EyeHelpPanel> implements Disposable {
 		}
 	}
 
-	public EyeHelpPanel(final EyeHelpDialog eyeHelpDialog) {
+	public EyeHelpPanel(final EyeHelpDialog eyeHelpDialog, final ExerciseKeeper exercises) {
 		this.dialog = eyeHelpDialog;
 
 		withPreferredWidth(DEFAULT_WIDTH);
@@ -92,7 +94,7 @@ public class EyeHelpPanel extends JBPanel<EyeHelpPanel> implements Disposable {
 		setLayout(layout);
 		setBorder(JBUI.Borders.empty());
 
-		final ExerciseTuple exercise = ExerciseTuple.findExercise();
+		final ExerciseTuple exercise = ExerciseTuple.findExercise(exercises);
 
 		// configure exercise panel
 		final JEditorPane browser = createBrowser();

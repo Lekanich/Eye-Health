@@ -1,8 +1,5 @@
 package lekanich.eye.ui;
 
-import java.awt.Window;
-import java.util.Optional;
-import java.util.stream.Stream;
 import javax.swing.Action;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
@@ -15,8 +12,12 @@ import com.intellij.openapi.ui.DialogWrapper;
 import com.intellij.openapi.util.Disposer;
 import com.intellij.openapi.wm.WindowManager;
 import com.intellij.openapi.wm.ex.WindowManagerEx;
+import java.awt.Window;
+import java.util.Optional;
+import java.util.stream.Stream;
 import lekanich.eye.EyeBundle;
 import lekanich.eye.listener.EyeHelpListener;
+import lekanich.eye.listener.EyeHelpSingleton;
 import lekanich.eye.listener.EyeHelpStatusListener;
 import lekanich.eye.settings.PluginSettings;
 import org.jetbrains.annotations.NonNls;
@@ -40,7 +41,7 @@ public class EyeHelpDialog extends DialogWrapper {
         setTitle(EyeBundle.message("eye.dialog.title"));
         this.show = parent.isActive() || PluginSettings.isActiveWhenMinimized();
         log.warn("Window '" + parent.getName() + "' is " + this.show);
-        this.centralPanel = new EyeHelpPanel(this);
+        this.centralPanel = new EyeHelpPanel(this, EyeHelpSingleton.getInstance().getExercises());
         Optional.ofNullable(PluginSettings.getInstance())
                 .ifPresent(it -> Disposer.register(it, centralPanel));
         setCancelButtonText(EyeBundle.message("eye.dialog.later.button.txt"));
