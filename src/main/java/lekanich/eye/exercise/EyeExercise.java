@@ -8,14 +8,12 @@ import com.intellij.util.xmlb.annotations.Attribute;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.ref.SoftReference;
 import java.net.URL;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
-import org.jetbrains.annotations.Nullable;
 
 
 /**
@@ -31,7 +29,7 @@ public class EyeExercise {
 	@Attribute("file")
 	private final String fileName;
 
-	private volatile SoftReference<String> cache = null;
+	private volatile String cache = null;
 
 	public static List<EyeExercise> findExercises() {
 		String text;
@@ -45,15 +43,13 @@ public class EyeExercise {
 	}
 
 	public String getExerciseText() {
-		final String value = getCachedValue();
-		if (value != null) {
-			return value;
+		if (cache != null) {
+			return cache;
 		}
 
 		synchronized (this) {
-			final String value2 = getCachedValue();
-			if (value2 != null) {
-				return value2;
+			if (cache != null) {
+				return cache;
 			}
 
 			final String loaded = loadExerciseText();
@@ -63,13 +59,9 @@ public class EyeExercise {
 				return dummyMessage;
 			}
 
-			cache = new SoftReference<>(loaded);
+			cache = loaded;
 			return loaded;
 		}
-	}
-
-	private @Nullable String getCachedValue() {
-		return cache != null ? cache.get() : null;
 	}
 
 	private String loadExerciseText() {
