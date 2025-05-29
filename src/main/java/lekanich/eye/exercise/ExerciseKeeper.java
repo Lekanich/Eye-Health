@@ -19,7 +19,7 @@ public class ExerciseKeeper {
 	}
 
 	public EyeExercise getRandom() {
-		final int index = DeveloperUtil.isDebugMode() && false
+		final int index = DeveloperUtil.isDebugMode()
 				? 9 % exercises.size()
 				: (int) (Math.random() * exercises.size());
 		return exercises.get(index);
