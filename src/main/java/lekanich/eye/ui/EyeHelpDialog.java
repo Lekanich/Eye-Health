@@ -40,7 +40,7 @@ public class EyeHelpDialog extends DialogWrapper {
         setModal(false);
         setTitle(EyeBundle.message("eye.dialog.title"));
         this.show = parent.isActive() || PluginSettings.isActiveWhenMinimized();
-        log.warn("Window '" + parent.getName() + "' is " + this.show);
+        log.info("Window '" + parent.getName() + "' is " + this.show);
         this.centralPanel = new EyeHelpPanel(this, EyeHelpSingleton.getInstance().getExercises());
         Optional.ofNullable(PluginSettings.getInstance())
                 .ifPresent(it -> Disposer.register(it, centralPanel));
