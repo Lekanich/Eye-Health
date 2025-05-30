@@ -1,5 +1,6 @@
 package lekanich.eye.exercise;
 
+import com.intellij.openapi.application.ReadAction;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.util.ResourceUtil;
@@ -52,7 +53,7 @@ public class EyeExercise {
 				return cache;
 			}
 
-			final String loaded = loadExerciseText();
+			final String loaded = ReadAction.compute(this::loadExerciseText);
 			final String dummyMessage = "Please report this to plugin provider";
 			if (loaded == null) {
 				log.warn("Exercise text for '" + fileName + "' is not found. " + dummyMessage);
@@ -66,19 +67,16 @@ public class EyeExercise {
 
 	private String loadExerciseText() {
 		try {
-			final StringBuilder text = new StringBuilder();
 			final File file = new File(fileName);
 			if (file.isAbsolute() && file.exists()) {
-				text.append(FileUtil.loadFile(file));
+				return FileUtil.loadFile(file);
 			} else {
 				final InputStream stream = ResourceUtil.getResourceAsStream(getClass().getClassLoader(), MAIN_FOLDER, fileName);
 				if (stream == null) {
 					return null;
 				}
-				text.append(ResourceUtil.loadText(stream));
+				return ResourceUtil.loadText(stream);
 			}
-
-			return text.toString();
 		} catch (IOException e) {
 			log.error("Error loading exercise text from " + fileName, e);
 			return null;
