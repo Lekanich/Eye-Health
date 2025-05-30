@@ -4,6 +4,8 @@
 
 ## Unreleased
 
+- Performance improvements: read files in the background
+
 ## 2025.1.1
 
 - Update dependencies
