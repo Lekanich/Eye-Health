@@ -4,6 +4,20 @@
 
 ## Unreleased
 
+### Added
+
+### Changed
+
+### Deprecated
+
+### Removed
+
+### Fixed
+
+### Security
+
+## 2025.1.2 - 2025-05-30
+
 - Performance improvements: read files in the background
 
 ## 2025.1.1
