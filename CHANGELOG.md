@@ -2,6 +2,8 @@
 
 # Eye Health Plugin Changelog
 
+## Unreleased
+
 ## 2025.1.1
 
 - Update dependencies

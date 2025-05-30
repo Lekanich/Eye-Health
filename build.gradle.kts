@@ -2,6 +2,7 @@ import io.gitlab.arturbosch.detekt.Detekt
 import org.jetbrains.changelog.Changelog
 import org.jetbrains.changelog.markdownToHTML
 import org.jetbrains.intellij.platform.gradle.TestFrameworkType
+import java.time.LocalDate
 
 fun properties(key: String) = providers.gradleProperty(key)
 
@@ -94,9 +95,7 @@ intellijPlatform {
             }
 
         ideaVersion {
-            // like to put a major version here, instead of the specific
             sinceBuild = properties("pluginSinceBuild")
-            // remove until build
             untilBuild = provider { null }
         }
     }
@@ -123,9 +122,9 @@ intellijPlatform {
 // Configure Gradle Changelog Plugin - read more: https://github.com/JetBrains/gradle-changelog-plugin
 changelog {
     version = properties("pluginVersion").get()
-    header = provider(version::get)
+    header = provider { "${version.get()} - ${LocalDate.now()}" }
     itemPrefix = "-"
-    keepUnreleasedSection = false
+    keepUnreleasedSection = true
     groups = listOf("Added", "Changed", "Deprecated", "Removed", "Fixed", "Security")
 }
 
@@ -146,7 +145,7 @@ tasks {
     }
 
     withType<Detekt> {
-        jvmTarget = "17"
+        jvmTarget = "21"
         reports {
             // Enable/Disable XML report (default: true)
             xml.required = false
