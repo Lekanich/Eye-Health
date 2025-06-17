@@ -6,8 +6,6 @@
 
 ### Added
 
-- Support Error Report Submitter
-
 ### Changed
 
 ### Deprecated
@@ -17,6 +15,12 @@
 ### Fixed
 
 ### Security
+
+## 2025.1.3 - 2025-06-17
+
+### Added
+
+- Support Error Report Submitter
 
 ## 2025.1.2 - 2025-05-30
 
