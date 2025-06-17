@@ -6,6 +6,8 @@
 
 ### Added
 
+- Support Error Report Submitter
+
 ### Changed
 
 ### Deprecated

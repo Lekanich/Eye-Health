@@ -5,6 +5,8 @@
 
 	<depends>com.intellij.modules.platform</depends>
 
+	<resource-bundle>messages.EyeBundle</resource-bundle>
+
 	<extensions defaultExtensionNs="com.intellij">
 		<postStartupActivity implementation="lekanich.eye.PluginStartupActivity"/>
 
@@ -13,6 +15,8 @@
 		<applicationService serviceImplementation="lekanich.eye.settings.PluginSettings"/>
 
 		<applicationConfigurable displayName="Eye Help" instance="lekanich.eye.settings.PluginSettingsPage"/>
+
+		<errorHandler implementation="com.intellij.diagnostic.JetBrainsMarketplaceErrorReportSubmitter"/>
 	</extensions>
 
 	<actions>
