@@ -8,6 +8,8 @@
 
 ### Changed
 
+- Changed default setting value for the "Show when minimized" option to `false`. This will prevent the eye help panel from showing up when the IDE is minimized, which can be distracting. Users can still enable this option if they prefer to have the panel visible in minimized state.
+
 ### Deprecated
 
 ### Removed

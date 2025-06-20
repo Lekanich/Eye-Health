@@ -85,7 +85,7 @@ public class PluginSettings implements PersistentStateComponent<PluginSettings.P
 		private long durationBreak = 30;
 
 		/**
-		 * It should be less then durationWorkBeforeBreak
+		 * It should be less than durationWorkBeforeBreak
 		 * in seconds
 		 */
 		private long idleTime = TimeUnit.MINUTES.toSeconds(10);
@@ -103,7 +103,7 @@ public class PluginSettings implements PersistentStateComponent<PluginSettings.P
 		/**
 		 * Show when the window of IDE is minimized
 		 */
-		private boolean showWhenMinimized = true;
+		private boolean showWhenMinimized = false;
 
 		/**
 		 * Enable lunchtime specific settings
