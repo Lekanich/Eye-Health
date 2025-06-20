@@ -1,12 +1,5 @@
 package lekanich.eye.settings;
 
-import java.awt.Component;
-import java.time.LocalTime;
-import java.util.Locale;
-import java.util.Optional;
-import java.util.concurrent.TimeUnit;
-import java.util.stream.IntStream;
-import java.util.stream.Stream;
 import javax.swing.*;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.options.ConfigurationException;
@@ -15,6 +8,13 @@ import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.ui.JBColor;
 import icons.EyeHelpIcons;
 import icons.EyeHelpIcons.EyeType;
+import java.awt.Component;
+import java.time.LocalTime;
+import java.util.Locale;
+import java.util.Optional;
+import java.util.concurrent.TimeUnit;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 import lekanich.eye.EyeBundle;
 import lekanich.eye.listener.EyeHelpStatusListener;
 import lekanich.eye.logic.ExerciseTuple;
@@ -176,6 +176,7 @@ public class PluginSettingsPage implements SearchableConfigurable {
 		idleTextField.setText(String.valueOf(TimeUnit.SECONDS.toMinutes(state.getIdleTime())));
 		// Lunchtime settings
 		enableLunchTime.setSelected(state.isEnableLunchTime());
+		enableLunchTime.addActionListener(e -> changeLunchStatus());
 		Optional.ofNullable(state.getLunchTime())
 				.ifPresent(it -> timeComboBox.setSelectedItem(it));
 
@@ -186,7 +187,12 @@ public class PluginSettingsPage implements SearchableConfigurable {
 		updateStatusLabel(statusPlugin, state.isEnable());
 		updateStatusLabel(statusLabelPostpone, state.isPostpone());
 		updateStatusLabel(statusLabelMinimized, state.isShowWhenMinimized());
-		updateStatusLabel(statusLunchtime, state.isEnableLunchTime());
+		changeLunchStatus();
+	}
+
+	private void changeLunchStatus() {
+		updateStatusLabel(statusLunchtime, enableLunchTime.isSelected());
+		timeComboBox.setEnabled(enableLunchTime.isSelected());
 	}
 
 	private static class IntegerNumberVerifier extends InputVerifier {
