@@ -154,7 +154,7 @@ public class PluginSettingsPage implements SearchableConfigurable {
 			state.setLunchTimeInMinutes(ExerciseTuple.toMinute((LocalTime) lunchTime));
 		}
 
-		changeStatus(state);
+		changeStatus();
 	}
 
 	private void notifyAboutTurnOn() {
@@ -167,30 +167,49 @@ public class PluginSettingsPage implements SearchableConfigurable {
 		final PluginSettings.PluginAppState state = settings.getState();
 
 		iconComboBox.setSelectedItem(state.getEyeType());
+		//
 		enablePluginCheckBox.setSelected(state.isEnable());
+		enablePluginCheckBox.addActionListener(e -> updatePluginStatusLabel());
+		//
 		showMinimizedCheckBox.setSelected(state.isShowWhenMinimized());
+		showMinimizedCheckBox.addActionListener(e -> updateMinimizedLabel());
+		//
 		allowPostponeTheEyeCheckBox.setSelected(state.isPostpone());
+		allowPostponeTheEyeCheckBox.addActionListener(e -> updatePostponeLabel());
+		//
 		durationOfRestTextField.setText(String.valueOf(state.getDurationBreak()));
 		durationBetweenRestTextField.setText(String.valueOf(TimeUnit.SECONDS.toMinutes(state.getDurationWorkBeforeBreak())));
 		durationPostponeTextField.setText(String.valueOf(state.getDurationPostpone()));
 		idleTextField.setText(String.valueOf(TimeUnit.SECONDS.toMinutes(state.getIdleTime())));
 		// Lunchtime settings
 		enableLunchTime.setSelected(state.isEnableLunchTime());
-		enableLunchTime.addActionListener(e -> changeLunchStatus());
+		enableLunchTime.addActionListener(e -> updateLunchStatusLabel());
 		Optional.ofNullable(state.getLunchTime())
 				.ifPresent(it -> timeComboBox.setSelectedItem(it));
 
-		changeStatus(state);
+		changeStatus();
 	}
 
-	private void changeStatus(final PluginSettings.PluginAppState state) {
-		updateStatusLabel(statusPlugin, state.isEnable());
-		updateStatusLabel(statusLabelPostpone, state.isPostpone());
-		updateStatusLabel(statusLabelMinimized, state.isShowWhenMinimized());
-		changeLunchStatus();
+	private void changeStatus() {
+		updatePluginStatusLabel();
+		updatePostponeLabel();
+		updateMinimizedLabel();
+		updateLunchStatusLabel();
 	}
 
-	private void changeLunchStatus() {
+	private void updateMinimizedLabel() {
+		updateStatusLabel(statusLabelMinimized, showMinimizedCheckBox.isSelected());
+	}
+
+	private void updatePostponeLabel() {
+		updateStatusLabel(statusLabelPostpone, allowPostponeTheEyeCheckBox.isSelected());
+	}
+
+	private void updatePluginStatusLabel() {
+		updateStatusLabel(statusPlugin, enablePluginCheckBox.isSelected());
+	}
+
+	private void updateLunchStatusLabel() {
 		updateStatusLabel(statusLunchtime, enableLunchTime.isSelected());
 		timeComboBox.setEnabled(enableLunchTime.isSelected());
 	}
