@@ -23,6 +23,8 @@ version = properties("pluginVersion").get()
 val jdkVersion = 21
 
 println("ArtifactVersion is : ${properties("pluginVersion").get()}")
+println("Java version is : ${System.getProperty("java.version")}")
+println("Java runtime version is : ${System.getProperty("java.runtime.version")}")
 
 // Set the JVM language level used to build the project.
 kotlin {
