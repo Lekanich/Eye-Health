@@ -14,7 +14,7 @@
 
 		<applicationService serviceImplementation="lekanich.eye.settings.PluginSettings"/>
 
-		<applicationConfigurable displayName="Eye Help" instance="lekanich.eye.settings.PluginSettingsPage"/>
+		<applicationConfigurable groupId="tools" instance="lekanich.eye.settings.PluginSettingsPage" key="eye.declaration.name"/>
 
 		<errorHandler implementation="com.intellij.diagnostic.JetBrainsMarketplaceErrorReportSubmitter"/>
 	</extensions>
