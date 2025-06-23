@@ -20,12 +20,19 @@ plugins {
 
 group = properties("pluginGroup").get()
 version = properties("pluginVersion").get()
+val jdkVersion = 21
 
 println("ArtifactVersion is : ${properties("pluginVersion").get()}")
 
 // Set the JVM language level used to build the project.
 kotlin {
-    jvmToolchain(21)
+    jvmToolchain(jdkVersion)
+}
+
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(jdkVersion))
+    }
 }
 
 // Configure project's dependencies
@@ -145,7 +152,7 @@ tasks {
     }
 
     withType<Detekt> {
-        jvmTarget = "21"
+        jvmTarget = "$jdkVersion"
         reports {
             // Enable/Disable XML report (default: true)
             xml.required = false
