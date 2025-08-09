@@ -4,7 +4,7 @@ lombok = "1.18.38"
 
 #plugins
 kotlin = "2.2.0"
-changelog = "2.2.1"
+changelog = "2.3.0"
 intelliJPlatform = "2.6.0"
 detekt = "1.23.8"
 
