@@ -29,3 +29,6 @@ hs_err_pid*
 .intellijPlatform
 .qodana
 build
+
+#mac
+.DS_Store
