@@ -14,16 +14,19 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           KEEP=10
-          WORKFLOW_ID=$(gh api repos/${{ github.repository }}/actions/workflows | jq -r '.workflows[0].id')
-          RUN_IDS=$(gh api repos/${{ github.repository }}/actions/workflows/$WORKFLOW_ID/runs \
-            --paginate -q '.workflow_runs[].id')
+          WORKFLOW_IDS=$(gh api repos/${{ github.repository }}/actions/workflows | jq -r '.workflows[].id')
 
-          COUNT=0
-          for run_id in $RUN_IDS; do
-            COUNT=$((COUNT+1))
-            if [ $COUNT -gt $KEEP ]; then
-              echo "Deleting run $run_id"
-              gh api repos/${{ github.repository }}/actions/runs/$run_id -X DELETE
-            fi
+          for WORKFLOW_ID in $WORKFLOW_IDS; do
+            RUN_IDS=$(gh api repos/${{ github.repository }}/actions/workflows/$WORKFLOW_ID/runs \
+              --paginate -q '.workflow_runs[].id')
+
+            COUNT=0
+            for run_id in $RUN_IDS; do
+              COUNT=$((COUNT+1))
+              if [ $COUNT -gt $KEEP ]; then
+                echo "Deleting run $run_id from workflow $WORKFLOW_ID"
+                gh api repos/${{ github.repository }}/actions/runs/$run_id -X DELETE
+              fi
+            done
           done
         shell: bash
