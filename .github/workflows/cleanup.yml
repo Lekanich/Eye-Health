@@ -3,7 +3,7 @@ name: Cleanup old workflow runs
 on:
   workflow_dispatch: # manually trigger cleanup
   schedule:
-    - cron: "0 0 * * 0" # weekly
+    - cron: "0 0 1 * *" # monthly
 
 jobs:
   cleanup:
