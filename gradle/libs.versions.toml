@@ -1,6 +1,6 @@
 [versions]
 #libraries
-lombok = "1.18.40"
+lombok = "1.18.42"
 
 #plugins
 kotlin = "2.2.20"
