@@ -9,8 +9,8 @@ intelliJPlatform = "2.9.0"
 detekt = "1.23.8"
 
 [libraries]
-lombok = { group = "org.projectlombok", name = "lombok", version.ref = "lombok" }
-detektFormatting = { group = "io.gitlab.arturbosch.detekt", name = "detekt-formatting", version.ref = "detekt" }
+lombok = { module = "org.projectlombok:lombok", version.ref = "lombok" }
+detektFormatting = { module = "io.gitlab.arturbosch.detekt:detekt-formatting", version.ref = "detekt" }
 
 
 [plugins]
