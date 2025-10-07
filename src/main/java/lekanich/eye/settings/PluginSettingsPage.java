@@ -10,7 +10,6 @@ import icons.EyeHelpIcons;
 import icons.EyeHelpIcons.EyeType;
 import java.awt.Component;
 import java.time.LocalTime;
-import java.util.Locale;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.IntStream;
@@ -67,13 +66,13 @@ public class PluginSettingsPage implements SearchableConfigurable {
 		// status bar icons
 		iconComboBox.removeAllItems();
 		Stream.of(EyeHelpIcons.EyeType.values())
-				.forEach(iconComboBox::addItem);
+			.forEach(iconComboBox::addItem);
 		iconComboBox.setRenderer(new IconTextDecorator(iconComboBox.getRenderer()));
 		// every 30 minutes, from 11:00
 		final int hourOffset = 60 * 8;
 		IntStream.range(0, 9 * 2)
-				.map(i -> i * 30 + hourOffset)
-				.forEach(i -> timeComboBox.addItem(LocalTime.of(i / 60, i % 60)));
+			.map(i -> i * 30 + hourOffset)
+			.forEach(i -> timeComboBox.addItem(LocalTime.of(i / 60, i % 60)));
 
 		reset();
 
@@ -84,7 +83,7 @@ public class PluginSettingsPage implements SearchableConfigurable {
 			@Override
 			public boolean verify(final JComponent input) {
 				return POSITIVE_INTEGER_VERIFIER.verify(input)
-						&& Long.parseLong(durationBetweenRestTextField.getText()) > Long.parseLong(((JTextField) input).getText());
+					&& Long.parseLong(durationBetweenRestTextField.getText()) > Long.parseLong(((JTextField) input).getText());
 			}
 		});
 
@@ -106,15 +105,15 @@ public class PluginSettingsPage implements SearchableConfigurable {
 		final PluginSettings.PluginAppState state = settings.getState();
 
 		return enablePluginCheckBox.isSelected() != state.isEnable()
-				|| allowPostponeTheEyeCheckBox.isSelected() != state.isPostpone()
-				|| !durationOfRestTextField.getText().equals(String.valueOf(state.getDurationBreak()))
-				|| !durationBetweenRestTextField.getText().equals(String.valueOf(TimeUnit.SECONDS.toMinutes(state.getDurationWorkBeforeBreak())))
-				|| !durationPostponeTextField.getText().equals(String.valueOf(state.getDurationPostpone()))
-				|| !idleTextField.getText().equals(String.valueOf(TimeUnit.SECONDS.toMinutes(state.getIdleTime())))
-				|| iconComboBox.getSelectedItem() != state.getEyeType()
-				|| showMinimizedCheckBox.isSelected() != state.isShowWhenMinimized()
-				|| enableLunchTime.isSelected() != state.isEnableLunchTime()
-				|| ExerciseTuple.toMinute((LocalTime) timeComboBox.getSelectedItem()) != state.getLunchTimeInMinutes();
+			|| allowPostponeTheEyeCheckBox.isSelected() != state.isPostpone()
+			|| !durationOfRestTextField.getText().equals(String.valueOf(state.getDurationBreak()))
+			|| !durationBetweenRestTextField.getText().equals(String.valueOf(TimeUnit.SECONDS.toMinutes(state.getDurationWorkBeforeBreak())))
+			|| !durationPostponeTextField.getText().equals(String.valueOf(state.getDurationPostpone()))
+			|| !idleTextField.getText().equals(String.valueOf(TimeUnit.SECONDS.toMinutes(state.getIdleTime())))
+			|| iconComboBox.getSelectedItem() != state.getEyeType()
+			|| showMinimizedCheckBox.isSelected() != state.isShowWhenMinimized()
+			|| enableLunchTime.isSelected() != state.isEnableLunchTime()
+			|| ExerciseTuple.toMinute((LocalTime) timeComboBox.getSelectedItem()) != state.getLunchTimeInMinutes();
 	}
 
 	@Override
@@ -128,8 +127,8 @@ public class PluginSettingsPage implements SearchableConfigurable {
 		if (state.getEyeType() != iconComboBox.getSelectedItem()) {
 			// notify about widget icon change
 			ApplicationManager.getApplication().getMessageBus()
-					.syncPublisher(EyeHelpStatusListener.EYE_HELP_STATUS_TOPIC)
-					.statusChanged(EyeHelpStatusListener.Status.ICON_CHANGE);
+				.syncPublisher(EyeHelpStatusListener.EYE_HELP_STATUS_TOPIC)
+				.statusChanged(EyeHelpStatusListener.Status.ICON_CHANGE);
 		}
 
 		state.setEyeType((EyeType) iconComboBox.getSelectedItem());
@@ -185,7 +184,7 @@ public class PluginSettingsPage implements SearchableConfigurable {
 		enableLunchTime.setSelected(state.isEnableLunchTime());
 		enableLunchTime.addActionListener(e -> updateLunchStatusLabel());
 		Optional.ofNullable(state.getLunchTime())
-				.ifPresent(it -> timeComboBox.setSelectedItem(it));
+			.ifPresent(it -> timeComboBox.setSelectedItem(it));
 
 		changeStatus();
 	}
@@ -225,15 +224,16 @@ public class PluginSettingsPage implements SearchableConfigurable {
 	private record IconTextDecorator(ListCellRenderer<? super EyeType> delegate) implements ListCellRenderer<EyeType> {
 		@Override
 		public Component getListCellRendererComponent(
-				final JList<? extends EyeType> list,
-				final EyeType value,
-				final int index,
-				final boolean isSelected,
-				final boolean cellHasFocus) {
+			final JList<? extends EyeType> list,
+			final EyeType value,
+			final int index,
+			final boolean isSelected,
+			final boolean cellHasFocus) {
+
 			final Component component = delegate.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-			if (component instanceof JLabel) {
-				((JLabel) component).setIcon(value.getIcon());
-				((JLabel) component).setText(value.toString().toUpperCase(Locale.ENGLISH));
+			if (component instanceof final JLabel label) {
+				label.setIcon(value.getIcon());
+				label.setText(value.getName());
 			}
 			return component;
 		}

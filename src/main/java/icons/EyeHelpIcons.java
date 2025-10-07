@@ -31,15 +31,17 @@ public class EyeHelpIcons {
 	@Getter
 	@RequiredArgsConstructor
 	public enum EyeType implements Icon {
-		DEFAULT(EYE_ON),
-		AUTUMN(EYE_ON_AUTUMN),
-		WINTER(EYE_ON_WINTER),
-		UKRAINE(EYE_ON_UKRAINE),
-		USA(EYE_USA),
-		EU(EYE_EU),
-		CHINA(EYE_CHINA);
+		DEFAULT(EYE_ON, "Default"),
+		AUTUMN(EYE_ON_AUTUMN, "Autumn"),
+		WINTER(EYE_ON_WINTER, "Winter"),
+		UKRAINE(EYE_ON_UKRAINE, "Ukraine"),
+		USA(EYE_USA, "USA"),
+		EU(EYE_EU, "EU"),
+		CHINA(EYE_CHINA, "China");
 
 		@Delegate
 		private final Icon icon;
+
+		private final String name;
 	}
 }
