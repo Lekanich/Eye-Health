@@ -13,7 +13,7 @@ fun canCreateTag(): Boolean = properties("createTag").map { it.toBoolean() }.get
 
 plugins {
 	// Java support
-	id("java")
+	java
 	alias(libs.plugins.kotlin)
 	alias(libs.plugins.intelliJPlatform)
 	alias(libs.plugins.changelog)
