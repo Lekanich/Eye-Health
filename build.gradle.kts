@@ -1,6 +1,7 @@
 import io.gitlab.arturbosch.detekt.Detekt
 import org.jetbrains.changelog.Changelog
 import org.jetbrains.changelog.markdownToHTML
+import org.jetbrains.intellij.platform.gradle.IntelliJPlatformType
 import org.jetbrains.intellij.platform.gradle.TestFrameworkType
 import java.io.ByteArrayOutputStream
 import java.time.LocalDate
@@ -265,6 +266,8 @@ tasks {
 intellijPlatformTesting {
 	runIde {
 		register("runIdeForUiTests") {
+			type = IntelliJPlatformType.IntellijIdeaCommunity
+			version = properties("testPlatformVersion").get()
 			task {
 				jvmArgumentProviders +=
 					CommandLineArgumentProvider {
