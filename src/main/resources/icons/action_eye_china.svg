@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
+	<defs>
+		<linearGradient id="eye-color" x1="45%" x2="0%" y1="100%" y2="93%">
+			<stop offset="0%" stop-color="#EE1C25" stop-opacity=".9"/>
+			<stop offset="100%" stop-color="#FFFF00"/>
+		</linearGradient>
+	</defs>
+	<g fill="none" fill-rule="evenodd">
+		<rect width="16" height="16"/>
+		<path fill="url(#eye-color)" fill-rule="nonzero"
+			  d="M8,3 C4.81818182,3 2.10090909,5.07333333 1,8 C2.10090909,10.9266667 4.81818182,13 8,13 C11.1818182,13 13.8990909,10.9266667 15,8 C13.8990909,5.07333333 11.1818182,3 8,3 Z M8,11.5 C6.068,11.5 4.5,9.932 4.5,8 C4.5,6.068 6.068,4.5 8,4.5 C9.932,4.5 11.5,6.068 11.5,8 C11.5,9.932 9.932,11.5 8,11.5 Z"/>
+		<circle cx="8" cy="8" r="1.5" fill="#000" stroke="#FFFF00"/>
+	</g>
+</svg>

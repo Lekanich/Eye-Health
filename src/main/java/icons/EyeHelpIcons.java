@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.Delegate;
+import org.jetbrains.annotations.NotNull;
 
 
 /**
@@ -14,13 +15,18 @@ import lombok.experimental.Delegate;
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class EyeHelpIcons {
-	public static final Icon EYE_ON = IconLoader.getIcon("/icons/action_eye.svg", EyeHelpIcons.class);
-	public static final Icon EYE_ON_WINTER = IconLoader.getIcon("/icons/action_eye_winter.svg", EyeHelpIcons.class);
-	public static final Icon EYE_ON_AUTUMN = IconLoader.getIcon("/icons/action_eye_autumn.svg", EyeHelpIcons.class);
-	public static final Icon EYE_ON_UKRAINE = IconLoader.getIcon("/icons/action_eye_ukraine.svg", EyeHelpIcons.class);
-	public static final Icon EYE_OFF = IconLoader.getIcon("/icons/inactive_action_eye.svg", EyeHelpIcons.class);
-	public static final Icon EYE_USA = IconLoader.getIcon("/icons/action_eye_usa.svg", EyeHelpIcons.class);
-	public static final Icon EYE_EU = IconLoader.getIcon("/icons/action_eye_eu.svg", EyeHelpIcons.class);
+	public static final Icon EYE_ON = getIcon("/icons/action_eye.svg");
+	public static final Icon EYE_ON_WINTER = getIcon("/icons/action_eye_winter.svg");
+	public static final Icon EYE_ON_AUTUMN = getIcon("/icons/action_eye_autumn.svg");
+	public static final Icon EYE_ON_UKRAINE = getIcon("/icons/action_eye_ukraine.svg");
+	public static final Icon EYE_OFF = getIcon("/icons/inactive_action_eye.svg");
+	public static final Icon EYE_USA = getIcon("/icons/action_eye_usa.svg");
+	public static final Icon EYE_EU = getIcon("/icons/action_eye_eu.svg");
+	public static final Icon EYE_CHINA = getIcon("/icons/action_eye_china.svg");
+
+	private static @NotNull Icon getIcon(final String path) {
+		return IconLoader.getIcon(path, EyeHelpIcons.class);
+	}
 
 	@Getter
 	@RequiredArgsConstructor
@@ -30,7 +36,8 @@ public class EyeHelpIcons {
 		WINTER(EYE_ON_WINTER),
 		UKRAINE(EYE_ON_UKRAINE),
 		USA(EYE_USA),
-		EU(EYE_EU);
+		EU(EYE_EU),
+		CHINA(EYE_CHINA);
 
 		@Delegate
 		private final Icon icon;
