@@ -12,6 +12,9 @@ updates:
       interval: "monthly"
     commit-message:
       prefix: "chore"
+    groups:
+      support-dependencies:
+        applies-to: version-updates
 # Maintain dependencies for GitHub Actions
   - package-ecosystem: "github-actions"
     directory: "/"
@@ -21,3 +24,6 @@ updates:
       interval: "monthly"
     commit-message:
       prefix: "chore"
+    groups:
+      support-dependencies:
+        applies-to: version-updates
