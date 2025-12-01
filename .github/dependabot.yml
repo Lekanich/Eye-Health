@@ -13,7 +13,7 @@ updates:
     commit-message:
       prefix: "chore"
     groups:
-      support-dependencies:
+      dependencies:
         applies-to: version-updates
 # Maintain dependencies for GitHub Actions
   - package-ecosystem: "github-actions"
@@ -25,5 +25,5 @@ updates:
     commit-message:
       prefix: "chore"
     groups:
-      support-dependencies:
+      dependencies:
         applies-to: version-updates
