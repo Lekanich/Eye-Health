@@ -133,17 +133,14 @@ intellijPlatform {
 	// https://plugins.jetbrains.com/docs/intellij/tools-intellij-platform-gradle-plugin-extension.html#intellijPlatform-pluginVerification-ides
 	pluginVerification {
 		ides {
-			select {
-				types = listOf(IntelliJPlatformType.IntellijIdeaCommunity)
-				channels = listOf(Channel.RELEASE)
-				sinceBuild = properties("pluginSinceBuild")
-				untilBuild = properties("pluginSinceBuild").get() + ".*"
+			if (isNotCI()) {
+				create(IntelliJPlatformType.IntellijIdeaCommunity, "2024.3.7")
+				create(IntelliJPlatformType.IntellijIdea, "2025.3")
 			}
-			// try to simulate latest release
 			select {
 				types = listOf(IntelliJPlatformType.IntellijIdea)
-				channels = listOf(Channel.RELEASE)
-				sinceBuild = "252"
+				channels = listOf(Channel.EAP, Channel.RC)
+				sinceBuild = "253"
 			}
 		}
 	}
