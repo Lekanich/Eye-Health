@@ -13,6 +13,8 @@ fun environment(key: String) = providers.environmentVariable(key)
 
 fun canCreateTag(): Boolean = properties("createTag").map { it.toBoolean() }.getOrElse(true)
 
+fun isNotCI(): Boolean = System.getenv("CI") == null
+
 plugins {
 	// Java support
 	java
@@ -143,6 +145,21 @@ intellijPlatform {
 				channels = listOf(Channel.RELEASE)
 				sinceBuild = "252"
 			}
+		}
+	}
+
+	// Enable IDE caching for plugin verification
+	// Cache path is configured via org.jetbrains.intellij.platform.intellijPlatformCache in gradle.properties
+	caching {
+		ides {
+			enabled = isNotCI()
+		}
+	}
+
+	idea {
+		module {
+			isDownloadSources = isNotCI()
+			isDownloadJavadoc = isNotCI()
 		}
 	}
 }
