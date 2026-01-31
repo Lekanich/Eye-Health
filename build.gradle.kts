@@ -135,12 +135,12 @@ intellijPlatform {
 		ides {
 			if (isNotCI()) {
 				create(IntelliJPlatformType.IntellijIdeaCommunity, "2024.3.7")
-				create(IntelliJPlatformType.IntellijIdea, "2025.3")
+				create(IntelliJPlatformType.IntellijIdea, "2025.3.2")
 			}
 			select {
 				types = listOf(IntelliJPlatformType.IntellijIdea)
 				channels = listOf(Channel.EAP, Channel.RC)
-				sinceBuild = "253"
+				sinceBuild = "253.30387.90"
 			}
 		}
 	}
