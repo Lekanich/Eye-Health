@@ -6,6 +6,8 @@
 
 ### Added
 
+- Add more lunchtime time slots
+
 ### Changed
 
 ### Deprecated
@@ -13,6 +15,8 @@
 ### Removed
 
 ### Fixed
+
+- Disable lunchtime when the UI option is disabled. (issue #121, thanks for reporting)
 
 ### Security
 

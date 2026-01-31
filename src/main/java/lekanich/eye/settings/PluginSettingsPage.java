@@ -1,6 +1,5 @@
 package lekanich.eye.settings;
 
-import javax.swing.*;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.openapi.options.SearchableConfigurable;
@@ -8,12 +7,6 @@ import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.ui.JBColor;
 import icons.EyeHelpIcons;
 import icons.EyeHelpIcons.EyeType;
-import java.awt.Component;
-import java.time.LocalTime;
-import java.util.Optional;
-import java.util.concurrent.TimeUnit;
-import java.util.stream.IntStream;
-import java.util.stream.Stream;
 import lekanich.eye.EyeBundle;
 import lekanich.eye.listener.EyeHelpStatusListener;
 import lekanich.eye.logic.ExerciseTuple;
@@ -21,6 +14,14 @@ import lekanich.eye.ui.EyeHelpDialog;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import javax.swing.*;
+import java.awt.*;
+import java.time.LocalTime;
+import java.util.Optional;
+import java.util.concurrent.TimeUnit;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 
 /**
@@ -70,7 +71,7 @@ public class PluginSettingsPage implements SearchableConfigurable {
 		iconComboBox.setRenderer(new IconTextDecorator(iconComboBox.getRenderer()));
 		// every 30 minutes, from 11:00
 		final int hourOffset = 60 * 8;
-		IntStream.range(0, 9 * 2)
+		IntStream.range(0, 12 * 2 + 1)
 			.map(i -> i * 30 + hourOffset)
 			.forEach(i -> timeComboBox.addItem(LocalTime.of(i / 60, i % 60)));
 

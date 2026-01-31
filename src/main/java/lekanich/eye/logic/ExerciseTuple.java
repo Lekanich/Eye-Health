@@ -1,13 +1,14 @@
 package lekanich.eye.logic;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 import lekanich.eye.EyeBundle;
 import lekanich.eye.exercise.ExerciseKeeper;
 import lekanich.eye.exercise.EyeExercise;
 import lekanich.eye.settings.PluginSettings;
 import org.jetbrains.annotations.NotNull;
+
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 
 /**
  * @author Lekanich
@@ -15,10 +16,10 @@ import org.jetbrains.annotations.NotNull;
 public record ExerciseTuple(String exercise, long durationBreak) {
 	public static ExerciseTuple findExercise(final ExerciseKeeper exercises) {
 		final PluginSettings.PluginAppState state = PluginSettings.getInstance().getState();
-
 		final int delta = toMinute(LocalTime.now()) - toMinute(state.getLunchTime());
 
-		boolean isLunchExercise = showLunch(delta > 0 && delta < 60, state);
+		final boolean isLunchTime = delta > 0 && delta < 60;
+		boolean isLunchExercise = state.isEnableLunchTime() && showLunch(isLunchTime, state);
 		final String message = isLunchExercise
 				? exercises.getLunchExercise().getExerciseText()
 				: findExerciseMessage(exercises);
