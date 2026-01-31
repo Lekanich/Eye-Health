@@ -21,8 +21,8 @@ public record ExerciseTuple(String exercise, long durationBreak) {
 		final boolean isLunchTime = delta > 0 && delta < 60;
 		boolean isLunchExercise = state.isEnableLunchTime() && showLunch(isLunchTime, state);
 		final String message = isLunchExercise
-				? exercises.getLunchExercise().getExerciseText()
-				: findExerciseMessage(exercises);
+			? exercises.getLunchExercise().getExerciseText()
+			: findExerciseMessage(exercises);
 
 		final long durationBreak = state.getDurationBreak() * (isLunchExercise ? 2 : 1);
 		return new ExerciseTuple(message, durationBreak);
@@ -54,6 +54,6 @@ public record ExerciseTuple(String exercise, long durationBreak) {
 	}
 
 	public static int toMinute(final LocalTime time) {
-		return time == null ? -1 : time.getHour() * 60 + time.getMinute();
+		return time == null ? Integer.MIN_VALUE : time.getHour() * 60 + time.getMinute();
 	}
 }

@@ -16,7 +16,8 @@
 
 ### Fixed
 
-- Disable lunchtime when the UI option is disabled. (issue #121, thanks for reporting)
+- Lunchtime is disabled when the UI option is turned off. (discovered during issue #121 investigation)
+- Prevent lunchtime message from appearing at midnight. (issue #121, thank you for reporting)
 
 ### Security
 
