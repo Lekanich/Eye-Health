@@ -6,8 +6,6 @@
 
 ### Added
 
-- Add more lunchtime time slots
-
 ### Changed
 
 ### Deprecated
@@ -16,10 +14,18 @@
 
 ### Fixed
 
+### Security
+
+## 2025.1.5 - 2026-01-31
+
+### Added
+
+- Add more lunchtime time slots
+
+### Fixed
+
 - Lunchtime is disabled when the UI option is turned off. (discovered during issue #121 investigation)
 - Prevent lunchtime message from appearing at midnight. (issue #121, thank you for reporting)
-
-### Security
 
 ## 2025.1.4 - 2025-06-23
 
