@@ -7,6 +7,7 @@ kotlin = "2.3.0"
 changelog = "2.5.0"
 intelliJPlatform = "2.11.0"
 detekt = "1.23.8"
+git-tool = "1.1.0"
 
 [libraries]
 lombok = { module = "org.projectlombok:lombok", version.ref = "lombok" }
@@ -22,3 +23,5 @@ changelog = { id = "org.jetbrains.changelog", version.ref = "changelog" }
 intelliJPlatform = { id = "org.jetbrains.intellij.platform", version.ref = "intelliJPlatform" }
 # detekt linter - read more: https://detekt.github.io/detekt/gradle.html
 detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
+git-tool = { id = "io.github.lekanich.git-tool", version.ref = "git-tool" }
+git-statistic = { id = "io.github.lekanich.git-statistic", version = "1.0.0" }

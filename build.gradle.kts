@@ -23,6 +23,8 @@ plugins {
 	alias(libs.plugins.changelog)
 	alias(libs.plugins.detekt)
 	checkstyle
+	alias(libs.plugins.git.statistic)
+	alias(libs.plugins.git.tool)
 }
 
 group = properties("pluginGroup").get()
@@ -211,81 +213,16 @@ tasks {
 		systemProperty("eye.debug.run", true)
 	}
 
-	val gitCheckStatus by register<Exec>("gitCheckStatus") {
-		description = "Check git working directory status"
-		group = PublishingPlugin.PUBLISH_TASK_GROUP
-
-		outputs.upToDateWhen { false }
-
-		commandLine("git", "status", "--porcelain")
-		doFirst {
-			standardOutput = ByteArrayOutputStream()
-		}
-
-		doLast {
-			val output = standardOutput.toString().trim()
-			check(output.isEmpty()) {
-				"Workspace is dirty. Please commit or stash changes:\n$output"
-			}
-			println("Git workspace is clean")
-		}
-	}
-
-	val gitCheckTag by register<Exec>("gitCheckTag") {
-		description = "Check git tag if exists"
-		group = PublishingPlugin.PUBLISH_TASK_GROUP
-		dependsOn(gitCheckStatus)
-		outputs.upToDateWhen { false }
+	gitReleaseTag {
+		tagName.set("v${properties("pluginVersion").get()}")
 
 		val canCreateTag = canCreateTag()
 		onlyIf { canCreateTag }
-
-		val tagName = "v${properties("pluginVersion").get()}"
-		commandLine("git", "tag", "-l", tagName)
-		isIgnoreExitValue = true
-
-		doFirst {
-			standardOutput = ByteArrayOutputStream()
-		}
-		doLast {
-			val output = standardOutput.toString().trim()
-			check(output.isEmpty()) {
-				"Git tag $tagName already exists\n$output"
-			}
-		}
-	}
-
-	val gitCreateTag by register<Exec>("gitCreateTag") {
-		description = "Create git tag"
-		group = PublishingPlugin.PUBLISH_TASK_GROUP
-		dependsOn(gitCheckTag)
-
-		outputs.upToDateWhen { false }
-
-		val tagName = "v${properties("pluginVersion").get()}"
-		commandLine("git", "tag", "-a", tagName, "-m", "Gradle created tag for $tagName")
-
-		doLast {
-			println("Created git tag: $tagName")
-		}
-	}
-
-	val gitPushTag by register<Exec>("gitPushTag") {
-		description = "Push git tag to origin"
-		group = PublishingPlugin.PUBLISH_TASK_GROUP
-		dependsOn(gitCreateTag)
-
-		val tagName = "v${properties("pluginVersion").get()}"
-		commandLine("git", "push", "origin", "refs/tags/$tagName")
-
-		doLast {
-			println("Pushed tag $tagName to origin")
-		}
 	}
 
 	publishPlugin {
 		dependsOn(patchChangelog)
-		finalizedBy(gitPushTag)
+		finalizedBy(gitReleaseTag)
 	}
 }
 
