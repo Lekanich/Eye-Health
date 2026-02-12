@@ -8,6 +8,8 @@
 
 ### Changed
 
+- Update wording for exercises.
+
 ### Deprecated
 
 ### Removed
