@@ -8,8 +8,6 @@
 
 ### Changed
 
-- Update wording for exercises.
-
 ### Deprecated
 
 ### Removed
@@ -17,6 +15,12 @@
 ### Fixed
 
 ### Security
+
+## 2025.1.6 - 2026-02-14
+
+### Changed
+
+- Update wording for exercises (#123 thank you for pointing).
 
 ## 2025.1.5 - 2026-01-31
 
