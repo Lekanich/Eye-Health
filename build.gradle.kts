@@ -3,17 +3,30 @@ import org.jetbrains.changelog.Changelog
 import org.jetbrains.changelog.markdownToHTML
 import org.jetbrains.intellij.platform.gradle.IntelliJPlatformType
 import org.jetbrains.intellij.platform.gradle.TestFrameworkType
-import org.jetbrains.intellij.platform.gradle.models.ProductRelease.Channel
-import java.io.ByteArrayOutputStream
 import java.time.LocalDate
 
-fun properties(key: String) = providers.gradleProperty(key)
+fun properties(key: String): Provider<String> = providers.gradleProperty(key)
 
-fun environment(key: String) = providers.environmentVariable(key)
+fun environment(key: String): Provider<String> = providers.environmentVariable(key)
 
-fun canCreateTag(): Boolean = properties("createTag").map { it.toBoolean() }.getOrElse(true)
+fun canCreateTag(): Boolean = isProperty("createTag", true)
 
-fun isNotCI(): Boolean = System.getenv("CI") == null
+fun isProperty(key: String, defaultValue: Boolean = false): Boolean =
+	getBooleanValue(providers.gradleProperty(key), key, "Property", defaultValue)
+
+fun isEnv(key: String, defaultValue: Boolean = false): Boolean =
+	getBooleanValue(providers.environmentVariable(key), key, "Environment", defaultValue)
+
+private fun getBooleanValue(provider: Provider<String>, key: String, label: String, defaultValue: Boolean): Boolean {
+	val result = provider.map { it.toBoolean() }.getOrElse(defaultValue)
+	println("$label '$key' = $result")
+	return result
+}
+
+val isCI: Boolean by lazy { isEnv("CI") }
+
+val isNotCI: Boolean
+	get() = !isCI
 
 plugins {
 	// Java support
@@ -135,15 +148,12 @@ intellijPlatform {
 	// https://plugins.jetbrains.com/docs/intellij/tools-intellij-platform-gradle-plugin-extension.html#intellijPlatform-pluginVerification-ides
 	pluginVerification {
 		ides {
-			if (isNotCI()) {
+			if (isNotCI) {
 				create(IntelliJPlatformType.IntellijIdeaCommunity, "2024.3.7")
-				create(IntelliJPlatformType.IntellijIdea, "2025.3.2")
+				create(IntelliJPlatformType.IntellijIdea, "2025.3.4")
+				create(IntelliJPlatformType.IntellijIdea, "2026.1.1")
 			}
-			select {
-				types = listOf(IntelliJPlatformType.IntellijIdea)
-				channels = listOf(Channel.EAP, Channel.RC)
-				sinceBuild = "253.30387.90"
-			}
+			latest()
 		}
 	}
 
@@ -151,14 +161,14 @@ intellijPlatform {
 	// Cache path is configured via org.jetbrains.intellij.platform.intellijPlatformCache in gradle.properties
 	caching {
 		ides {
-			enabled = isNotCI()
+			enabled = isNotCI
 		}
 	}
 
 	idea {
 		module {
-			isDownloadSources = isNotCI()
-			isDownloadJavadoc = isNotCI()
+			isDownloadSources = isNotCI
+			isDownloadJavadoc = isNotCI
 		}
 	}
 }
