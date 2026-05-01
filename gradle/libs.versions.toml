@@ -5,7 +5,7 @@ lombok = "1.18.44"
 #plugins
 kotlin = "2.3.20"
 changelog = "2.5.0"
-intelliJPlatform = "2.13.1"
+intelliJPlatform = "2.15.0"
 detekt = "1.23.8"
 git-tool = "1.1.0"
 
