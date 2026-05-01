@@ -150,6 +150,7 @@ intellijPlatform {
 		ides {
 			if (isNotCI) {
 				create(IntelliJPlatformType.IntellijIdeaCommunity, "2024.3.7")
+				create(IntelliJPlatformType.IntellijIdeaCommunity, "2025.2.6.2")
 				create(IntelliJPlatformType.IntellijIdea, "2025.3.4")
 				create(IntelliJPlatformType.IntellijIdea, "2026.1.1")
 			}
