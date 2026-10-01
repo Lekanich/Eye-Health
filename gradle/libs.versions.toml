@@ -1,11 +1,11 @@
 [versions]
 #libraries
-lombok = "1.18.46"
+lombok = "1.18.48"
 
 #plugins
-kotlin = "2.4.10"
+kotlin = "2.4.20"
 changelog = "2.5.0"
-intelliJPlatform = "2.18.1"
+intelliJPlatform = "2.19.0"
 detekt = "1.23.8"
 git-tool = "1.1.0"
 
