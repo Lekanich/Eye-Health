@@ -9,8 +9,6 @@ fun properties(key: String): Provider<String> = providers.gradleProperty(key)
 
 fun environment(key: String): Provider<String> = providers.environmentVariable(key)
 
-fun canCreateTag(): Boolean = isProperty("createTag", true)
-
 fun isProperty(key: String, defaultValue: Boolean = false): Boolean =
 	getBooleanValue(providers.gradleProperty(key), key, "Property", defaultValue)
 
@@ -37,7 +35,6 @@ plugins {
 	alias(libs.plugins.detekt)
 	checkstyle
 	alias(libs.plugins.git.statistic)
-	alias(libs.plugins.git.tool)
 }
 
 group = properties("pluginGroup").get()
@@ -220,16 +217,8 @@ tasks {
 		systemProperty("eye.debug.run", true)
 	}
 
-	gitReleaseTag {
-		tagName.set("v${properties("pluginVersion").get()}")
-
-		val canCreateTag = canCreateTag()
-		onlyIf { canCreateTag }
-	}
-
 	publishPlugin {
 		dependsOn(patchChangelog)
-		finalizedBy(gitReleaseTag)
 	}
 }
 
