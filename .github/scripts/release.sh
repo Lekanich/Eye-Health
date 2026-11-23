@@ -11,7 +11,7 @@ if [[ -n "$status" ]]; then
 	exit 1
 fi
 
-version="$(awk -F= '$1 == "pluginVersion" { sub(/^[^=]*=/, ""); print; exit }' gradle.properties)"
+version="$(./gradlew properties | sed -n 's/^pluginVersion:[[:space:]]*//p' | sed 's/[[:space:]]*$//')"
 if [[ -z "$version" ]]; then
 	printf 'Error: pluginVersion is missing from gradle.properties.\n' >&2
 	exit 1
